@@ -10,6 +10,8 @@ import {
   LogOut,
   Package,
   LayoutDashboard,
+  MessageCircle,
+  type LucideIcon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -32,11 +34,22 @@ import {
 import { CartBadge } from "@/components/product/CartBadge";
 import type { CurrentAuth } from "@/lib/auth";
 
-const NAV_ITEMS = [
+interface NavItem {
+  label: string;
+  href: string;
+  external?: boolean;
+  Icon?: LucideIcon;
+}
+
+const NAV_ITEMS: NavItem[] = [
   { label: "상품", href: "/products" },
-  { label: "가이드", href: "/guide" },
-  { label: "문의", href: "/contact" },
-] as const;
+  {
+    label: "카카오톡 문의",
+    href: "https://pf.kakao.com/_xhHWgn",
+    external: true,
+    Icon: MessageCircle,
+  },
+];
 
 interface HeaderProps {
   auth: CurrentAuth | null;
@@ -83,15 +96,28 @@ export function Header({ auth }: HeaderProps) {
             className="hidden md:flex items-center gap-8"
             aria-label="주요 메뉴"
           >
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm font-medium text-foreground hover:text-accent-gold transition-gold"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.external ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-foreground hover:text-accent-gold transition-gold inline-flex items-center gap-1.5"
+                >
+                  {item.Icon && <item.Icon className="h-4 w-4" />}
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm font-medium text-foreground hover:text-accent-gold transition-gold"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* ─── 우측 ─── */}
@@ -241,21 +267,33 @@ export function Header({ auth }: HeaderProps) {
                   className="flex flex-col px-6 py-6 gap-5 flex-1"
                   aria-label="모바일 메뉴"
                 >
-                  {NAV_ITEMS.map((item) => (
-                    <SheetClose asChild key={item.href}>
-                      <Link
+                  {NAV_ITEMS.map((item) =>
+                    item.external ? (
+                      <a
+                        key={item.href}
                         href={item.href}
-                        className="text-h3 font-semibold hover:text-accent-gold transition-gold"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-h3 font-semibold hover:text-accent-gold transition-gold inline-flex items-center gap-2"
                       >
+                        {item.Icon && <item.Icon className="h-5 w-5" />}
                         {item.label}
-                      </Link>
-                    </SheetClose>
-                  ))}
+                      </a>
+                    ) : (
+                      <SheetClose asChild key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="text-h3 font-semibold hover:text-accent-gold transition-gold"
+                        >
+                          {item.label}
+                        </Link>
+                      </SheetClose>
+                    )
+                  )}
 
-                  <div className="my-2 h-px bg-border" />
-
-                  {auth ? (
+                  {auth && (
                     <>
+                      <div className="my-2 h-px bg-border" />
                       <SheetClose asChild>
                         <Link
                           href="/account"
@@ -286,15 +324,6 @@ export function Header({ auth }: HeaderProps) {
                         </SheetClose>
                       )}
                     </>
-                  ) : (
-                    <SheetClose asChild>
-                      <Link
-                        href="/products"
-                        className="text-body font-medium text-muted-foreground hover:text-accent-gold transition-gold"
-                      >
-                        검색
-                      </Link>
-                    </SheetClose>
                   )}
                 </nav>
 
