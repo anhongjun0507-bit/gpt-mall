@@ -47,7 +47,7 @@ const COMPANY_INFO = [
   { label: "통신판매업신고번호", value: "제0000-서울-0000호" },
   { label: "주소", value: "서울특별시 강남구" },
   { label: "고객센터", value: "02-0000-0000" },
-  { label: "이메일", value: "support@digitalstore.kr" },
+  { label: "이메일", value: "support@digitalst.kr" },
 ] as const;
 
 const SOCIAL_LINKS = [

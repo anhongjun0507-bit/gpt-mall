@@ -69,7 +69,7 @@
 | `#{결제금액}` | `orders.total.toLocaleString('ko-KR')` |
 | `#{결제수단}` | `orders.payment_method` 한글 매핑 (kakaopay → 카카오페이) |
 | `#{배송메모}` | `orders.memo ?? '(없음)'` |
-| `#{관리자링크}` | `https://gpt-mall.vercel.app/admin/orders/{orders.id}` |
+| `#{관리자링크}` | `https://digitalst.kr/admin/orders/{orders.id}` |
 
 **버튼 (선택):**
 - "주문 확인하기" → `#{관리자링크}` 로 이동
@@ -93,7 +93,7 @@
 ```
 
 **버튼 (선택):**
-- "주문 내역 보기" → 회원: `https://gpt-mall.vercel.app/account/orders/{id}`, 비회원: 주문번호 조회 페이지
+- "주문 내역 보기" → 회원: `https://digitalst.kr/account/orders/{id}`, 비회원: 주문번호 조회 페이지
 
 ## 검수 시 주의사항
 - **광고성 표현 금지** (할인, 이벤트, 추천 등 단어). 정보성 알림톡만 발송.

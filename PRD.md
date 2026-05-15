@@ -1,11 +1,12 @@
 # PRD — AI 소프트웨어 라이센스 쇼핑몰
 
 ## 1. 개요
-- **프로젝트명:** AI 소프트웨어 라이센스 판매 쇼핑몰 (가칭 gpt-mall)
+- **프로젝트명:** 디지털스토어
 - **클라이언트:** 이현석
 - **참고 사이트:** [ssolasoft.com](https://ssolasoft.com)
 - **납기:** 2026-05-17
 - **목적:** AI 소프트웨어(GPT 기반 도구, 라이센스형 SaaS 등) 의 온라인 판매 채널 구축
+- **URL:** 정식 `https://digitalst.kr` · 임시 alias `https://gpt-mall.vercel.app` · GitHub `anhongjun0507-bit/gpt-mall` (역사적 이름 유지)
 
 ## 2. 기술 스택
 | 구분 | 선택 | 비고 |

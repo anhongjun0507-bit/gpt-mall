@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://digitalst.kr"),
   title: {
     default: "디지털스토어 — 프리미엄 AI 소프트웨어 라이센스",
     template: "%s | 디지털스토어",
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     siteName: "디지털스토어",
     title: "디지털스토어 — 프리미엄 AI 소프트웨어 라이센스",
     description: "공식 라이센스, 즉시 발급. AI 시대의 모든 도구를 한 곳에서.",
+    url: "https://digitalst.kr",
   },
   // 배포 전이라 검색엔진 인덱싱 차단. 정식 오픈 시 제거.
   robots: { index: false, follow: false },
