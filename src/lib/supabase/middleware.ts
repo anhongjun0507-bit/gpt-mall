@@ -45,6 +45,20 @@ export async function updateSession(request: NextRequest) {
     console.error("[middleware] supabase session refresh 실패", e);
   }
 
+  // ─── /account/* 로그인 가드 ─────────────────────────────────────────
+  // 미로그인이면 /login?next=현재경로 로 redirect. layout 의 requireUser() 가
+  // defense in depth 로 한 번 더 검증한다.
+  if (request.nextUrl.pathname.startsWith("/account")) {
+    if (!user) {
+      const url = request.nextUrl.clone();
+      const target = request.nextUrl.pathname + request.nextUrl.search;
+      url.pathname = "/login";
+      url.search = "";
+      url.searchParams.set("next", target);
+      return NextResponse.redirect(url);
+    }
+  }
+
   // ─── /admin/* 권한 가드 ────────────────────────────────────────────
   // 운영자 페이지 접근 제어. 페이지 레벨에서도 requireAdmin() 으로 한 번 더 검증.
   if (request.nextUrl.pathname.startsWith("/admin")) {
