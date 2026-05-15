@@ -18,47 +18,50 @@ import { Section } from "@/components/ui/section";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { ProductCard, type ProductCardData } from "@/components/product/ProductCard";
+import { createClient } from "@/lib/supabase/server";
+import { getCategoryShortLabel } from "@/lib/product-categories";
+import type { Product } from "@/types/database";
 
-// ─── 더미 데이터 (홈 페이지 데모용 — 관리자 등록 전까지 시각 placeholder) ───
-const FEATURED_PRODUCTS: ProductCardData[] = [
-  {
-    id: "1",
-    slug: "claude-pro-1month",
-    name: "Claude Pro 1개월",
-    category: "AI Assistant",
-    price: 28000,
-    originalPrice: 35000,
-    image: "https://picsum.photos/600/600?random=1",
-    badge: "BEST",
-  },
-  {
-    id: "2",
-    slug: "chatgpt-plus-1month",
-    name: "ChatGPT Plus 1개월",
-    category: "AI Assistant",
-    price: 28000,
-    originalPrice: 35000,
-    image: "https://picsum.photos/600/600?random=2",
-    badge: "BEST",
-  },
-  {
-    id: "3",
-    slug: "midjourney-standard",
-    name: "Midjourney Standard",
-    category: "AI Image",
-    price: 35000,
-    image: "https://picsum.photos/600/600?random=3",
-    badge: "NEW",
-  },
-  {
-    id: "4",
-    slug: "cursor-pro",
-    name: "Cursor Pro",
-    category: "AI Coding",
-    price: 28000,
-    image: "https://picsum.photos/600/600?random=4",
-  },
-];
+// 홈 인기 상품 — DB 실시간 조회 (sort_order 우선, 활성 상품만, 최대 4건).
+// 관리자에서 상품 수정/이미지 교체 시 즉시 반영되도록 dynamic.
+async function fetchFeaturedProducts(): Promise<ProductCardData[]> {
+  try {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("products")
+      .select(
+        "id, slug, name, category, price, original_price, image_url, badge"
+      )
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .limit(4);
+    if (error) throw error;
+    const rows = (data ?? []) as Pick<
+      Product,
+      | "id"
+      | "slug"
+      | "name"
+      | "category"
+      | "price"
+      | "original_price"
+      | "image_url"
+      | "badge"
+    >[];
+    return rows.map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      category: getCategoryShortLabel(p.category),
+      price: p.price,
+      originalPrice: p.original_price ?? undefined,
+      image: p.image_url ?? "",
+      badge: p.badge ?? undefined,
+    }));
+  } catch (e) {
+    console.error("[home/featured] 인기 상품 조회 실패", e);
+    return [];
+  }
+}
 
 const WHY_REASONS = [
   {
@@ -119,7 +122,8 @@ function GoldLineLabel({
 }
 
 // ─── Page ────────────────────────────────────────────────────
-export default function HomePage() {
+export default async function HomePage() {
+  const featured = await fetchFeaturedProducts();
   return (
     <>
       {/* ═══ Section 1: Hero ════════════════════════════════ */}
@@ -208,11 +212,17 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURED_PRODUCTS.map((p) => (
-              <ProductCard key={p.id} {...p} />
-            ))}
-          </div>
+          {featured.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">
+              등록된 상품이 아직 없습니다.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {featured.map((p) => (
+                <ProductCard key={p.id} {...p} />
+              ))}
+            </div>
+          )}
         </Container>
       </Section>
 
