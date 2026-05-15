@@ -68,9 +68,11 @@ export function Header({ auth }: HeaderProps) {
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-200 ease-out",
+        // 스크롤 0 에서도 카드/푸터 위로 헤더가 묻히지 않도록 항상 backdrop-blur
+        // + 옅은 보더 — 폴드 영역은 거의 보이지 않지만 인터랙티브 영역의 기준선 유지.
         isScrolled
           ? "bg-header-bg backdrop-blur-md border-b border-border/40"
-          : "bg-transparent border-b border-transparent"
+          : "bg-background/40 backdrop-blur-sm border-b border-transparent"
       )}
     >
       <Container>
@@ -125,12 +127,11 @@ export function Header({ auth }: HeaderProps) {
             <Button
               variant="ghost"
               size="icon"
-              aria-label="장바구니"
               className="relative text-foreground hover:text-accent-gold hover:bg-transparent transition-gold"
               asChild
             >
-              <Link href="/cart">
-                <ShoppingBag className="h-5 w-5" />
+              <Link href="/cart" aria-label="장바구니">
+                <ShoppingBag className="h-5 w-5" aria-hidden="true" />
                 <CartBadge />
               </Link>
             </Button>
@@ -142,10 +143,10 @@ export function Header({ auth }: HeaderProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="내 계정"
+                    aria-label={`내 계정 메뉴 (${auth.email})`}
                     className="hidden md:inline-flex text-foreground hover:text-accent-gold hover:bg-transparent transition-gold"
                   >
-                    <User className="h-5 w-5" />
+                    <User className="h-5 w-5" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
