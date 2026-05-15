@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import { createServiceRoleClient } from "@/lib/supabase/service";
 import { getCurrentUser } from "@/lib/auth";
 import type { CartItem } from "@/lib/cart";
+import { notifyOrderCreated } from "@/lib/notifications/telegram";
+import { getPaymentMethodLabel } from "@/lib/order-status";
 
 import { checkoutSchema, type CheckoutValues } from "./schema";
 
@@ -143,6 +145,25 @@ export async function createOrder(
     revalidatePath("/account/orders");
     revalidatePath("/admin/orders");
     revalidatePath("/admin");
+
+    // ─── 운영자 텔레그램 알림 ─────────────────────────────
+    // 토큰/chat_id 미설정 시 noop, 실패 시 console.error 만 — 주문 흐름엔 영향 X.
+    // 결제 가맹 후엔 markOrderPaid() 시점에 별도 알림(결제 완료) 추가 가능.
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalst.kr";
+    await notifyOrderCreated({
+      orderNumber,
+      total,
+      recipientName: parsed.data.recipient_name,
+      recipientPhone: parsed.data.recipient_phone,
+      paymentMethodLabel: getPaymentMethodLabel(parsed.data.payment_method),
+      items: itemRows.map((r) => ({
+        product_name: r.product_name,
+        qty: r.qty,
+      })),
+      memo: parsed.data.memo,
+      adminUrl: `${siteUrl}/admin/orders/${order.id}`,
+    });
 
     // ─── 결제 모듈 끼워넣을 자리 ───────────────────────────
     // 가맹 승인 후 PG SDK 결제창 호출은 클라이언트 측에서.
