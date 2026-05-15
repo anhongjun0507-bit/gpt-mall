@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { randomBytes } from "node:crypto";
 
+import { STATE_COOKIE, NEXT_COOKIE } from "@/lib/naver-oauth";
+
 // 네이버 OAuth 시작 라우트.
 // state(CSRF 방어) + next(로그인 후 복귀 경로) 를 HttpOnly cookie 에 심고
 // nid.naver.com/oauth2.0/authorize 로 302 redirect.
@@ -11,8 +13,6 @@ import { randomBytes } from "node:crypto";
 
 export const dynamic = "force-dynamic";
 
-export const STATE_COOKIE = "naver_oauth_state";
-export const NEXT_COOKIE = "naver_oauth_next";
 const COOKIE_TTL = 60 * 5; // 5분
 
 // open redirect 방어 — / 로 시작하는 단일 슬래시 경로만 허용.

@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { createServiceRoleClient } from "@/lib/supabase/service";
-import { STATE_COOKIE, NEXT_COOKIE } from "@/app/auth/naver/start/route";
+import { STATE_COOKIE, NEXT_COOKIE } from "@/lib/naver-oauth";
 
 // 네이버 OAuth 콜백.
 //   1. cookie state ↔ query state 검증 (CSRF)
