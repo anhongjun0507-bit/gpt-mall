@@ -24,7 +24,6 @@ import {
 import { cn } from "@/lib/utils";
 import { formatKRW } from "@/lib/format";
 import { useCart } from "@/hooks/useCart";
-import { clearCart } from "@/lib/cart";
 
 import { checkoutSchema, type CheckoutValues } from "@/app/(shop)/checkout/schema";
 import { createOrder } from "@/app/(shop)/checkout/actions";
@@ -58,11 +57,14 @@ export function CheckoutForm({ defaultEmail }: Props) {
   // hydrate 완료를 기다리기 위해 짧은 지연을 두지 않고, items 변화에 반응.
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
+  // 카트가 빈 채로 /checkout 에 들어온 경우만 /cart 로 돌려보낸다.
+  // submitting 중에는 절대 redirect 하지 않는다 — 결제 직후 카트가 비워지면서
+  // 이 effect 가 깨어나 /order/complete 로 가는 navigation 을 가로채는 race 방지.
   React.useEffect(() => {
-    if (mounted && items.length === 0) {
+    if (mounted && !submitting && items.length === 0) {
       router.replace("/cart");
     }
-  }, [mounted, items.length, router]);
+  }, [mounted, submitting, items.length, router]);
 
   const form = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
@@ -106,7 +108,9 @@ export function CheckoutForm({ defaultEmail }: Props) {
       // 가맹 후: 여기서 PG SDK 결제창 띄우고 결과 콜백에서 markOrderPaid 호출.
       // 현재는 곧장 완료 페이지로.
       // ─────────────────────────────────────────────────────
-      clearCart();
+      // clearCart() 는 /order/complete 의 CartClearer 가 담당.
+      // 여기서 호출하면 cart 변경 이벤트가 위 useEffect 를 깨워서 /cart 로
+      // 가는 navigation 이 /order/complete 로 가는 navigation 을 가로챈다.
       router.push(result.redirect);
       router.refresh();
       return;
