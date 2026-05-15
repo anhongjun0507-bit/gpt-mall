@@ -179,6 +179,32 @@ export interface Database {
         ];
       };
 
+      password_attempts: {
+        Row: {
+          id: string;
+          user_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "password_attempts_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users"; // auth.users
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+
       order_items: {
         Row: {
           id: string;

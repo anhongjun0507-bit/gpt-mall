@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/types/database";
@@ -54,6 +55,20 @@ export async function requireAdmin(): Promise<Profile> {
     redirect("/");
   }
   return profile;
+}
+
+// 로그인 필수 페이지에서 사용. 미로그인이면 /login?next=... 로 redirect.
+// next 는 호출자가 명시 (기본 /account). 미들웨어가 path 헤더 주입을 안 해
+// layout/page 가 각자 자기 경로를 알려주는 구조.
+export async function requireUser(
+  opts: { next?: string } = {}
+): Promise<User> {
+  const user = await getCurrentUser();
+  if (!user) {
+    const next = opts.next ?? "/account";
+    redirect(`/login?next=${encodeURIComponent(next)}`);
+  }
+  return user;
 }
 
 // Header 등에서 한 번에 user+profile 조회용. 미로그인 시 null.
