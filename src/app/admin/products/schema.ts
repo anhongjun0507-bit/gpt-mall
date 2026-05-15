@@ -8,11 +8,20 @@ const categoryKeys = PRODUCT_CATEGORIES.map((c) => c.key) as [
   ...string[]
 ];
 
-// 옵션 한 개의 구조 — { name: "기간", values: ["1개월", "3개월"] }
+// 옵션 한 개의 구조 (0006 마이그레이션 이후).
+// { name: "기간", values: [{ label: "1개월", price_modifier: 0 }, ...] }
+// price_modifier 는 products.price 에 더하는 금액 (음수 허용).
+export const productOptionValueSchema = z.object({
+  label: z.string().trim().min(1, "옵션 값을 입력하세요"),
+  // UI(OptionBuilder)가 모든 row 를 0으로 초기화하므로 default 불필요.
+  // default() 사용 시 react-hook-form Resolver 의 input/output 타입이 분기되어 충돌.
+  price_modifier: z.number().int("정수만 가능합니다"),
+});
+
 export const productOptionSchema = z.object({
   name: z.string().trim().min(1, "옵션명을 입력하세요"),
   values: z
-    .array(z.string().trim().min(1))
+    .array(productOptionValueSchema)
     .min(1, "최소 1개의 값이 필요합니다"),
 });
 

@@ -13,19 +13,35 @@ import type { Product, ProductOption } from "@/types/database";
 interface Props {
   product: Pick<
     Product,
-    "id" | "slug" | "name" | "price" | "image_url" | "options" | "stock"
+    | "id"
+    | "slug"
+    | "name"
+    | "price"
+    | "original_price"
+    | "image_url"
+    | "options"
+    | "stock"
   >;
 }
 
-// 옵션 선택 + 수량 조절 + 장바구니/바로구매 — 상품 상세 우측 인터랙션 영역.
+const formatKRW = (v: number) => `₩${v.toLocaleString("ko-KR")}`;
+const formatSignedKRW = (v: number) =>
+  v >= 0
+    ? `+${v.toLocaleString("ko-KR")}원`
+    : `${v.toLocaleString("ko-KR")}원`;
+
+// 옵션 선택 + 수량 조절 + 가격 표시 + 장바구니/바로구매 — 상품 상세 우측 인터랙션.
+// 가격(정가·할인율·옵션·수량 반영 최종 결제가)도 이 컴포넌트가 단일 책임으로 표시.
 export function ProductOptions({ product }: Props) {
   const router = useRouter();
   const options = (product.options ?? []) as ProductOption[];
 
-  // 옵션마다 첫 값을 기본 선택. 옵션 없으면 빈 객체.
+  // 각 옵션의 첫 값(label) 을 기본 선택.
   const [selected, setSelected] = React.useState<Record<string, string>>(() =>
     Object.fromEntries(
-      options.map((o) => [o.name, o.values[0] ?? ""]).filter(([, v]) => v !== "")
+      options
+        .map((o) => [o.name, o.values[0]?.label ?? ""])
+        .filter(([, v]) => v !== "")
     )
   );
   const [qty, setQty] = React.useState(1);
@@ -33,6 +49,29 @@ export function ProductOptions({ product }: Props) {
 
   const outOfStock = product.stock <= 0;
   const allOptionsChosen = options.every((o) => selected[o.name]);
+
+  // 선택된 옵션의 price_modifier 합산
+  const optionMod = options.reduce((sum, opt) => {
+    const chosen = selected[opt.name];
+    const v = opt.values.find((x) => x.label === chosen);
+    return sum + (v?.price_modifier ?? 0);
+  }, 0);
+
+  const unitPrice = product.price + optionMod;
+  const totalPrice = unitPrice * qty;
+
+  const hasDiscount =
+    product.original_price !== null &&
+    product.original_price !== undefined &&
+    product.original_price > product.price;
+  const discountPct =
+    hasDiscount && product.original_price
+      ? Math.round(
+          ((product.original_price - product.price) /
+            product.original_price) *
+            100
+        )
+      : 0;
 
   function doAdd(): boolean {
     if (!allOptionsChosen) {
@@ -48,7 +87,7 @@ export function ProductOptions({ product }: Props) {
       slug: product.slug,
       name: product.name,
       image: product.image_url,
-      price: product.price,
+      price: unitPrice, // 옵션 modifier 반영된 단가 (서버에서 재검증)
       qty,
       selectedOptions: selected,
     });
@@ -75,6 +114,37 @@ export function ProductOptions({ product }: Props) {
 
   return (
     <div>
+      {/* ─── 가격 영역 ─── */}
+      <div className="py-6 border-y border-border">
+        {hasDiscount && (
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-sm text-muted-foreground line-through tabular-nums">
+              {formatKRW(product.original_price!)}
+            </span>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-accent-gold text-foreground text-xs font-bold">
+              {discountPct}% OFF
+            </span>
+          </div>
+        )}
+        <p
+          className={cn(
+            "text-3xl font-bold tabular-nums",
+            hasDiscount ? "text-accent-gold" : "text-foreground"
+          )}
+        >
+          {formatKRW(totalPrice)}
+        </p>
+        {(optionMod !== 0 || qty > 1) && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            기본 {formatKRW(product.price)}
+            {optionMod !== 0 && (
+              <> + 옵션 {formatSignedKRW(optionMod)}</>
+            )}
+            {qty > 1 && <> × {qty}</>}
+          </p>
+        )}
+      </div>
+
       {/* ─── 옵션 선택 ─── */}
       {options.length > 0 && (
         <div className="mt-6 space-y-5">
@@ -83,13 +153,13 @@ export function ProductOptions({ product }: Props) {
               <p className="text-sm font-semibold mb-2">{opt.name}</p>
               <div className="flex flex-wrap gap-2">
                 {opt.values.map((v) => {
-                  const isActive = selected[opt.name] === v;
+                  const isActive = selected[opt.name] === v.label;
                   return (
                     <button
-                      key={v}
+                      key={v.label}
                       type="button"
                       onClick={() =>
-                        setSelected((s) => ({ ...s, [opt.name]: v }))
+                        setSelected((s) => ({ ...s, [opt.name]: v.label }))
                       }
                       className={cn(
                         "inline-flex h-10 items-center gap-1.5 px-4 rounded-md border text-sm font-medium transition-all duration-200",
@@ -99,7 +169,12 @@ export function ProductOptions({ product }: Props) {
                       )}
                     >
                       {isActive && <Check className="h-3.5 w-3.5" />}
-                      {v}
+                      {v.label}
+                      {v.price_modifier !== 0 && (
+                        <span className="text-xs opacity-70 tabular-nums">
+                          {formatSignedKRW(v.price_modifier)}
+                        </span>
+                      )}
                     </button>
                   );
                 })}

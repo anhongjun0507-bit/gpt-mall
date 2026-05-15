@@ -8,8 +8,26 @@ import { getCurrentUser } from "@/lib/auth";
 import type { CartItem } from "@/lib/cart";
 import { notifyOrderCreated } from "@/lib/notifications/telegram";
 import { getPaymentMethodLabel } from "@/lib/order-status";
+import type { ProductOption } from "@/types/database";
 
 import { checkoutSchema, type CheckoutValues } from "./schema";
+
+// 선택된 옵션의 price_modifier 합산 — DB 의 product.options 와
+// 카트의 selectedOptions 를 비교해 server-side 에서 modifier 합산.
+function computeOptionModifier(
+  options: ProductOption[] | null | undefined,
+  selected: Record<string, string>
+): number {
+  if (!Array.isArray(options)) return 0;
+  let mod = 0;
+  for (const opt of options) {
+    const chosen = selected?.[opt.name];
+    if (!chosen) continue;
+    const v = opt.values.find((x) => x.label === chosen);
+    if (v) mod += v.price_modifier;
+  }
+  return mod;
+}
 
 export interface ActionResult {
   ok: boolean;
@@ -49,10 +67,11 @@ export async function createOrder(
 
     // 3) 상품 검증 — DB 에서 직접 fetch (클라이언트 데이터 위조 방지)
     //    스냅샷용 name/image 도 DB 값 사용 (신뢰 가능 출처).
+    //    options 컬럼까지 가져와 옵션 price_modifier 합산해서 단가 재검증.
     const productIds = Array.from(new Set(cartItems.map((i) => i.productId)));
     const { data: products, error: prodErr } = await supabase
       .from("products")
-      .select("id, name, price, image_url, stock, is_active")
+      .select("id, name, price, image_url, stock, is_active, options")
       .in("id", productIds);
     if (prodErr) throw prodErr;
 
@@ -69,7 +88,13 @@ export async function createOrder(
           message: `판매 중지된 상품입니다 (${p.name}). 장바구니에서 제거해주세요.`,
         };
       }
-      if (p.price !== item.price) {
+      const expectedUnit =
+        p.price +
+        computeOptionModifier(
+          p.options as ProductOption[] | null,
+          item.selectedOptions
+        );
+      if (expectedUnit !== item.price) {
         return {
           ok: false,
           message: `가격이 변경되었습니다 (${p.name}). 장바구니를 새로고침해주세요.`,
@@ -83,10 +108,16 @@ export async function createOrder(
       }
     }
 
-    // 4) 결제 금액 — 신뢰 가능한 DB 가격으로 재계산
+    // 4) 결제 금액 — 신뢰 가능한 DB 가격(+옵션 modifier)으로 재계산
     const total = cartItems.reduce((sum, item) => {
       const p = productMap.get(item.productId)!;
-      return sum + p.price * item.qty;
+      const unit =
+        p.price +
+        computeOptionModifier(
+          p.options as ProductOption[] | null,
+          item.selectedOptions
+        );
+      return sum + unit * item.qty;
     }, 0);
 
     // 5) 주문자 / 주문번호

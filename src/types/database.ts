@@ -30,10 +30,15 @@ export type OrderStatus =
   | "refunded";
 export type PaymentMethod = "kakaopay" | "naverpay" | "card";
 
-// 상품 옵션 — products.options jsonb 구조
+// 상품 옵션 — products.options jsonb 구조 (0006 마이그레이션 이후).
+// price_modifier 는 products.price 에 더하는 금액 (음수 허용).
+export type ProductOptionValue = {
+  label: string;
+  price_modifier: number;
+};
 export type ProductOption = {
   name: string; // 예: "기간"
-  values: string[]; // 예: ["1개월", "3개월", "6개월"]
+  values: ProductOptionValue[];
 };
 
 // 주문 아이템에 담기는 선택 옵션 — order_items.selected_options jsonb

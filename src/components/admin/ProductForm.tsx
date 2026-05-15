@@ -365,6 +365,7 @@ export function ProductForm({ mode, productId, initialValues }: Props) {
                   <OptionBuilder
                     value={field.value}
                     onChange={field.onChange}
+                    basePrice={form.watch("price") ?? 0}
                   />
                 </FormControl>
                 <FormMessage />

@@ -21,8 +21,6 @@ interface PageProps {
   params: { slug: string };
 }
 
-const formatKRW = (v: number) => `₩${v.toLocaleString("ko-KR")}`;
-
 // 동일 카테고리 다른 상품 4개 — 페이지 하단 추천.
 async function fetchRelated(category: Product["category"], excludeId: string) {
   try {
@@ -78,12 +76,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
   if (!product) notFound();
 
   const related = await fetchRelated(product.category, product.id);
-  const hasDiscount =
-    product.original_price !== null && product.original_price > product.price;
-  const discountPct =
-    hasDiscount && product.original_price
-      ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
-      : 0;
 
   const fallbackImage = `https://picsum.photos/800/800?random=${product.slug}`;
 
@@ -110,41 +102,19 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {product.name}
           </Heading>
           {product.short_description && (
-            <p className="mt-4 text-muted-foreground leading-relaxed">
+            <p className="mt-4 mb-8 text-muted-foreground leading-relaxed">
               {product.short_description}
             </p>
           )}
 
-          {/* 가격 영역 */}
-          <div className="mt-8 py-6 border-y border-border">
-            {hasDiscount && (
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-sm text-muted-foreground line-through">
-                  {formatKRW(product.original_price!)}
-                </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-accent-gold text-foreground text-xs font-bold">
-                  {discountPct}% OFF
-                </span>
-              </div>
-            )}
-            <div className="flex items-baseline gap-2">
-              <span
-                className={`text-3xl font-bold ${
-                  hasDiscount ? "text-accent-gold" : "text-foreground"
-                }`}
-              >
-                {formatKRW(product.price)}
-              </span>
-            </div>
-          </div>
-
-          {/* 옵션 + 수량 + 액션 (Client) */}
+          {/* 가격 + 옵션 + 수량 + 액션 — 가격은 옵션/수량 반영되어 실시간 표시 */}
           <ProductOptions
             product={{
               id: product.id,
               slug: product.slug,
               name: product.name,
               price: product.price,
+              original_price: product.original_price,
               image_url: product.image_url,
               options: product.options,
               stock: product.stock,
