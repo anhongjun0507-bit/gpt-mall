@@ -11,6 +11,7 @@ import {
   Video,
   Mic,
   Rocket,
+  MessageCircle,
 } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
@@ -294,20 +295,26 @@ export default async function HomePage() {
 
         <Container className="relative">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="text-xs tracking-[0.3em] uppercase text-accent-gold font-semibold">
-              READY?
-            </p>
+            <div className="inline-flex items-center gap-2">
+              <p className="text-xs tracking-[0.3em] uppercase text-accent-gold font-semibold">
+                READY?
+              </p>
+              <span
+                aria-hidden
+                className="w-1.5 h-1.5 rounded-full bg-accent-gold"
+              />
+            </div>
             <Heading
               variant="h2"
-              className="mt-4 !text-footer-foreground"
+              className="mt-5 !text-4xl md:!text-5xl lg:!text-6xl !text-footer-foreground tracking-tight"
             >
-              지금 시작할 준비 되셨나요?
+              지금 바로 시작하세요
             </Heading>
-            <p className="mt-6 text-lg text-footer-foreground/70 leading-relaxed">
-              수천 명의 사용자가 이미 디지털스토어에서 AI 도구를 만나고 있습니다.
+            <p className="mt-6 text-lg text-footer-foreground/70 leading-relaxed max-w-2xl mx-auto">
+              공식 라이센스, 즉시 발급. 안전하고 빠른 디지털 상품 구매.
             </p>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
               <Button
                 asChild
                 size="lg"
@@ -324,7 +331,14 @@ export default async function HomePage() {
                 size="lg"
                 className="h-14 px-8 border-footer-foreground/30 bg-transparent text-footer-foreground hover:bg-footer-foreground/10 hover:text-footer-foreground"
               >
-                <Link href="/contact">문의하기</Link>
+                <a
+                  href="https://pf.kakao.com/_xhHWgn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  카카오톡 문의
+                </a>
               </Button>
             </div>
           </div>
