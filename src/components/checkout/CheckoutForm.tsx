@@ -360,7 +360,9 @@ export function CheckoutForm({ defaultEmail }: Props) {
                       <span className="text-accent-gold font-semibold">[필수]</span>
                       <span>구매조건 확인 및 결제 진행 동의</span>
                       <a
-                        href="#"
+                        href="/terms"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-accent-gold underline text-xs transition-gold"
                       >
                         보기
@@ -391,7 +393,9 @@ export function CheckoutForm({ defaultEmail }: Props) {
                       <span className="text-accent-gold font-semibold">[필수]</span>
                       <span>개인정보 제3자 제공 동의 (PG사 — 가맹 후 활성화)</span>
                       <a
-                        href="#"
+                        href="/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-accent-gold underline text-xs transition-gold"
                       >
                         보기

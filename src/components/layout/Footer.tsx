@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
+import { BUSINESS_INFO } from "@/lib/business-info";
 
 // Lucide v1.x 부터 브랜드 아이콘이 제거돼 인라인 SVG 사용.
 function InstagramIcon({ className }: { className?: string }) {
@@ -26,7 +27,6 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
-// 풋터 네비게이션 그룹 — 컬럼별 메뉴
 const SHOP_LINKS = [
   { label: "전체 상품", href: "/products" },
   { label: "신상품", href: "/products?sort=new" },
@@ -39,16 +39,22 @@ const HELP_LINKS = [
   { label: "환불 정책", href: "/help/refund" },
 ] as const;
 
-// 회사 정보 — 추후 실제 데이터로 교체 (사업자 정보)
-const COMPANY_INFO = [
-  { label: "상호", value: "디지털스토어" },
-  { label: "대표자", value: "이현석" },
-  { label: "사업자등록번호", value: "000-00-00000" },
-  { label: "통신판매업신고번호", value: "제0000-서울-0000호" },
-  { label: "주소", value: "서울특별시 강남구" },
-  { label: "고객센터", value: "02-0000-0000" },
-  { label: "이메일", value: "support@digitalst.kr" },
+const LEGAL_LINKS = [
+  { label: "이용약관", href: "/terms" },
+  { label: "개인정보처리방침", href: "/privacy" },
+  { label: "사업자정보", href: "/business-info" },
 ] as const;
+
+// 전자상거래법상 필수 표시 항목. business-info.ts 단일 소스에서 가져온다.
+// 전화번호는 운영하지 않아 표기 X — 문의는 이메일로만.
+const COMPANY_INFO: { label: string; value: string }[] = [
+  { label: "상호", value: BUSINESS_INFO.name },
+  { label: "대표자", value: BUSINESS_INFO.ceo },
+  { label: "사업자등록번호", value: BUSINESS_INFO.brn },
+  { label: "통신판매업신고번호", value: BUSINESS_INFO.mailOrderLicense },
+  { label: "주소", value: BUSINESS_INFO.address },
+  { label: "이메일 문의", value: BUSINESS_INFO.email },
+];
 
 const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://instagram.com", Icon: InstagramIcon },
@@ -65,7 +71,7 @@ export function Footer() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
               <span className="text-h4 font-extrabold tracking-tight">
-                디지털스토어
+                {BUSINESS_INFO.name}
               </span>
               <span
                 aria-hidden
@@ -73,7 +79,7 @@ export function Footer() {
               />
             </div>
             <p className="text-body text-footer-foreground/70 leading-relaxed">
-              프리미엄 AI 소프트웨어 라이센스
+              프리미엄 AI 소프트웨어 라이센스 정식 판매
             </p>
             <div className="flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -145,24 +151,21 @@ export function Footer() {
           </div>
         </div>
 
-        {/* ─── 하단 카피라이트 ─── */}
+        {/* ─── 하단 카피라이트 + 법적 고지 ─── */}
         <div className="mt-12 pt-8 border-t border-footer-foreground/10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <p className="text-sm leading-[1.4] text-footer-foreground/50">
-            © 2026 디지털스토어. All rights reserved.
+            © 2026 {BUSINESS_INFO.name}. All rights reserved.
           </p>
-          <nav className="flex items-center gap-6" aria-label="법적 고지">
-            <Link
-              href="/legal/terms"
-              className="text-sm leading-[1.4] text-footer-foreground/60 hover:text-accent-gold transition-gold"
-            >
-              이용약관
-            </Link>
-            <Link
-              href="/legal/privacy"
-              className="text-sm leading-[1.4] text-footer-foreground/60 hover:text-accent-gold transition-gold"
-            >
-              개인정보처리방침
-            </Link>
+          <nav className="flex items-center gap-6 flex-wrap" aria-label="법적 고지">
+            {LEGAL_LINKS.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-sm leading-[1.4] text-footer-foreground/60 hover:text-accent-gold transition-gold"
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
         </div>
       </Container>
