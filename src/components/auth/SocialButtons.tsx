@@ -41,8 +41,7 @@ interface Props {
 
 // 소셜 로그인 버튼.
 //   카카오: Supabase 의 'kakao' provider 사용. Supabase 대시보드에서 활성화 + 키 입력 필요.
-//          (docs/AUTH_SETUP.md 참조)
-//   네이버: Supabase 미지원이라 커스텀 OAuth 구현 필요 — 향후 작업, 일단 "준비 중".
+//   네이버: 자체 OAuth 흐름 (/auth/naver/start). 키 채워지면 자동 활성.
 export function SocialButtons({ next }: Props = {}) {
   const [kakaoPending, setKakaoPending] = React.useState(false);
   const redirectNext = safeRedirect(next, "/");
@@ -78,10 +77,15 @@ export function SocialButtons({ next }: Props = {}) {
   }
 
   function handleNaver() {
+    // 키가 채워졌으면 자체 OAuth start 라우트로 이동, 아니면 안내 토스트.
+    if (process.env.NEXT_PUBLIC_NAVER_CLIENT_ID) {
+      window.location.href = `/auth/naver/start?next=${encodeURIComponent(redirectNext)}`;
+      return;
+    }
     toast({
       title: "네이버 로그인 준비 중",
       description:
-        "Supabase 기본 미지원이라 별도 커스텀 OAuth 구현 예정입니다. 우선 카카오 또는 이메일을 사용해주세요.",
+        "네이버 로그인은 곧 지원 예정입니다. 우선 카카오 또는 이메일로 가입해 주세요.",
     });
   }
 

@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import {
   Menu,
-  Search,
   ShoppingBag,
   User,
   LogOut,
@@ -122,16 +121,6 @@ export function Header({ auth }: HeaderProps) {
 
           {/* ─── 우측 ─── */}
           <div className="flex items-center gap-1 md:gap-2">
-            {/* 검색 (desktop only) */}
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="검색"
-              className="hidden md:inline-flex text-foreground hover:text-accent-gold hover:bg-transparent transition-gold"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-
             {/* 장바구니 */}
             <Button
               variant="ghost"
