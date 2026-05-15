@@ -40,7 +40,8 @@ export function ProductFilters({
           className={cn(
             "inline-flex h-9 items-center px-4 rounded-md border text-sm font-medium transition-all duration-200",
             it.isActive
-              ? "bg-accent-gold/10 border-accent-gold text-accent-gold"
+              // active = 인버전 (foreground 채움) — 시각 위계 강함, 대비비 충분
+              ? "bg-foreground border-foreground text-background"
               : "bg-background border-border text-foreground hover:border-foreground/40"
           )}
         >

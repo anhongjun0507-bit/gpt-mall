@@ -19,6 +19,21 @@ export const metadata: Metadata = {
     description:
       "AI 소프트웨어 라이센스 정식 판매. 공식 라이센스, 즉시 발급.",
     url: "https://digitalst.kr",
+    images: [
+      {
+        url: "/og.svg",
+        width: 1200,
+        height: 630,
+        alt: "디지털스토어 — 프리미엄 AI 소프트웨어 라이센스",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "디지털스토어 — 프리미엄 AI 소프트웨어 라이센스",
+    description:
+      "AI 소프트웨어 라이센스 정식 판매. 공식 라이센스, 즉시 발급.",
+    images: ["/og.svg"],
   },
   // 배포 전이라 검색엔진 인덱싱 차단. 정식 오픈 시 제거.
   robots: { index: false, follow: false },

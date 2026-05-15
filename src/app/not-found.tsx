@@ -23,10 +23,12 @@ export default function NotFound() {
               404
             </p>
             <Heading variant="h2" className="mt-8 !text-2xl md:!text-3xl">
-              페이지를 찾을 수 없습니다
+              이 페이지는 아직 준비 중이에요
             </Heading>
             <p className="mt-3 text-muted-foreground leading-relaxed">
               요청하신 페이지가 존재하지 않거나 이동되었습니다.
+              <br />
+              인기 상품으로 안내해드릴까요?
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-3 sm:justify-center">

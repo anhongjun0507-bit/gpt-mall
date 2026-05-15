@@ -1,3 +1,4 @@
+import * as React from "react";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
@@ -134,12 +135,13 @@ export function Footer() {
             <h3 className="text-sm font-semibold tracking-wider uppercase text-footer-foreground/90">
               Company
             </h3>
-            <dl className="flex flex-col gap-1.5 text-xs text-footer-foreground/60 leading-relaxed">
+            {/* 2컬럼 그리드 — 라벨 폭 고정으로 값의 시작 x 좌표 정렬. */}
+            <dl className="grid grid-cols-[6rem_1fr] gap-x-3 gap-y-1.5 text-xs text-footer-foreground/60 leading-relaxed">
               {COMPANY_INFO.map(({ label, value }) => (
-                <div key={label} className="flex gap-2">
-                  <dt className="shrink-0 text-footer-foreground/40">{label}</dt>
-                  <dd>{value}</dd>
-                </div>
+                <React.Fragment key={label}>
+                  <dt className="text-footer-foreground/40">{label}</dt>
+                  <dd className="min-w-0 break-words">{value}</dd>
+                </React.Fragment>
               ))}
             </dl>
           </div>
