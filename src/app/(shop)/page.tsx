@@ -78,13 +78,15 @@ const WHY_REASONS = [
   },
 ] as const;
 
+// 홈 카테고리 — label 은 사용자에게 보이는 한글, slug 는 백엔드 enum 과 일치.
+// 일치 대상: ProductCategory in src/types/database.ts + ProductFilters.tsx.
 const CATEGORIES = [
-  { Icon: Sparkles, label: "AI 어시스턴트" },
-  { Icon: Palette, label: "디자인" },
-  { Icon: Code2, label: "코딩" },
-  { Icon: Video, label: "영상" },
-  { Icon: Mic, label: "음성" },
-  { Icon: Rocket, label: "생산성" },
+  { Icon: Sparkles, label: "AI 어시스턴트", slug: "ai_assistant" },
+  { Icon: Palette, label: "디자인", slug: "ai_image" },
+  { Icon: Code2, label: "코딩", slug: "ai_coding" },
+  { Icon: Video, label: "영상", slug: "ai_video" },
+  { Icon: Mic, label: "음성", slug: "ai_voice" },
+  { Icon: Rocket, label: "생산성", slug: "productivity" },
 ] as const;
 
 // 작은 inline component — 라벨 좌측 골드 가로 라인.
@@ -257,10 +259,10 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {CATEGORIES.map(({ Icon, label }) => (
+            {CATEGORIES.map(({ Icon, label, slug }) => (
               <Link
-                key={label}
-                href={`/products?category=${encodeURIComponent(label)}`}
+                key={slug}
+                href={`/products?category=${slug}`}
                 className="group relative aspect-square rounded-2xl bg-card border border-border hover:border-accent-gold hover:bg-accent-gold/5 transition-all duration-300 flex flex-col items-center justify-center gap-3 p-6"
               >
                 <Icon className="w-8 h-8 text-muted-foreground group-hover:text-accent-gold transition-gold" />
