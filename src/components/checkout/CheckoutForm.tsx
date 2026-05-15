@@ -28,10 +28,6 @@ import { useCart } from "@/hooks/useCart";
 import { checkoutSchema, type CheckoutValues } from "@/app/(shop)/checkout/schema";
 import { createOrder } from "@/app/(shop)/checkout/actions";
 
-interface Props {
-  defaultEmail?: string;
-}
-
 // 010-XXXX-XXXX 자동 포맷
 function formatPhone(raw: string): string {
   const d = raw.replace(/\D/g, "").slice(0, 11);
@@ -46,7 +42,7 @@ const PAYMENT_METHODS = [
   { value: "card", label: "신용카드", emoji: "💳" },
 ] as const;
 
-export function CheckoutForm({ defaultEmail }: Props) {
+export function CheckoutForm() {
   const router = useRouter();
   const { items, count, total } = useCart();
   const [submitting, setSubmitting] = React.useState(false);
@@ -71,7 +67,6 @@ export function CheckoutForm({ defaultEmail }: Props) {
     defaultValues: {
       recipient_name: "",
       recipient_phone: "",
-      recipient_email: defaultEmail ?? "",
       kakao_id: "",
       memo: "",
       payment_method: "kakaopay",
@@ -213,26 +208,8 @@ export function CheckoutForm({ defaultEmail }: Props) {
                         onChange={(e) => field.onChange(formatPhone(e.target.value))}
                       />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="recipient_email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>이메일 *</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="you@example.com"
-                        disabled={submitting}
-                        {...field}
-                      />
-                    </FormControl>
                     <FormDescription>
-                      라이센스가 이 이메일로 발송됩니다.
+                      📱 라이센스는 입력하신 번호로 SMS 발송됩니다.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

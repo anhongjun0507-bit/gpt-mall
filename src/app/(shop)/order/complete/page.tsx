@@ -161,30 +161,25 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
         {/* 주문자 정보 */}
         <section className="mt-6 rounded-2xl bg-card border border-border/50 p-6">
           <h3 className="text-h4 font-semibold">주문자 정보</h3>
-          <dl className="mt-4 grid sm:grid-cols-3 gap-4 text-sm">
+          <dl className="mt-4 grid sm:grid-cols-2 gap-4 text-sm">
             <div>
               <dt className="text-xs text-muted-foreground">이름</dt>
               <dd className="mt-1 font-medium">{order.recipient_name}</dd>
             </div>
-            <div className="min-w-0">
-              <dt className="text-xs text-muted-foreground">이메일</dt>
-              <dd className="mt-1 font-medium truncate">
-                {order.recipient_email}
-              </dd>
-            </div>
             <div>
-              <dt className="text-xs text-muted-foreground">연락처</dt>
+              <dt className="text-xs text-muted-foreground">휴대전화</dt>
               <dd className="mt-1 font-medium">{order.recipient_phone}</dd>
             </div>
           </dl>
         </section>
 
-        {/* 라이센스 발급 안내 */}
+        {/* 라이센스 발급 안내 — SMS 톤 */}
         <section className="mt-6 rounded-2xl bg-card border border-border/50 p-6 text-sm leading-relaxed">
           <h3 className="text-h4 font-semibold">라이센스 발급 안내</h3>
           <p className="mt-3 text-muted-foreground">
             결제가 확정되면 라이센스 키가 자동 발급되어 마이페이지에서 확인하실
-            수 있습니다. 발급 후 안내 이메일도 함께 보내드려요.
+            수 있습니다. 발급 시 입력하신 휴대전화 번호로 SMS 안내도 함께
+            보내드려요.
           </p>
         </section>
 

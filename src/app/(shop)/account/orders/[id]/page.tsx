@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import {
   ChevronLeft,
   User,
-  Mail,
   Phone,
   FileText,
   Wallet,
@@ -149,7 +148,7 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
           {/* 주문자 정보 */}
           <section className="rounded-2xl bg-card border border-border/50 p-6">
             <h3 className="text-h4 font-semibold mb-4">주문자 정보</h3>
-            <dl className="grid sm:grid-cols-3 gap-4 text-sm">
+            <dl className="grid sm:grid-cols-2 gap-4 text-sm">
               <div className="flex items-start gap-2">
                 <User className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />
                 <div>
@@ -157,19 +156,10 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
                   <dd className="mt-0.5 font-medium">{order.recipient_name}</dd>
                 </div>
               </div>
-              <div className="flex items-start gap-2 min-w-0">
-                <Mail className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />
-                <div className="min-w-0">
-                  <dt className="text-xs text-muted-foreground">이메일</dt>
-                  <dd className="mt-0.5 font-medium truncate">
-                    {order.recipient_email}
-                  </dd>
-                </div>
-              </div>
               <div className="flex items-start gap-2">
                 <Phone className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />
                 <div>
-                  <dt className="text-xs text-muted-foreground">연락처</dt>
+                  <dt className="text-xs text-muted-foreground">휴대전화</dt>
                   <dd className="mt-0.5 font-medium">{order.recipient_phone}</dd>
                 </div>
               </div>

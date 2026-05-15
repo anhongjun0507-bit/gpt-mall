@@ -135,7 +135,7 @@ export interface Database {
           status: OrderStatus;
           payment_method: PaymentMethod | null;
           recipient_name: string;
-          recipient_email: string;
+          recipient_email: string | null;
           recipient_phone: string;
           memo: string | null;
           paid_at: string | null;
@@ -149,7 +149,7 @@ export interface Database {
           status?: OrderStatus;
           payment_method?: PaymentMethod | null;
           recipient_name: string;
-          recipient_email: string;
+          recipient_email?: string | null;
           recipient_phone: string;
           memo?: string | null;
           paid_at?: string | null;
@@ -163,7 +163,7 @@ export interface Database {
           status?: OrderStatus;
           payment_method?: PaymentMethod | null;
           recipient_name?: string;
-          recipient_email?: string;
+          recipient_email?: string | null;
           recipient_phone?: string;
           memo?: string | null;
           paid_at?: string | null;

@@ -13,11 +13,6 @@ export const checkoutSchema = z.object({
     .string()
     .trim()
     .regex(phoneRegex, "010-XXXX-XXXX 형식으로 입력하세요"),
-  recipient_email: z
-    .string()
-    .trim()
-    .min(1, "이메일을 입력하세요")
-    .email("올바른 이메일을 입력하세요"),
   // 카카오톡 ID — 선택 항목. 빈 문자열은 허용.
   kakao_id: z
     .string()

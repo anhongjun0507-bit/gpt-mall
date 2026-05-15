@@ -101,7 +101,9 @@ export async function createOrder(
         status: "pending",
         payment_method: parsed.data.payment_method,
         recipient_name: parsed.data.recipient_name,
-        recipient_email: parsed.data.recipient_email,
+        // 클라이언트 정책 — 주문서에서 이메일 받지 않음 (SMS 발송 중심).
+        // 회원 주문은 추후 auth.users.email 로 사후 매핑 가능, 컬럼 자체는 유지.
+        recipient_email: null,
         recipient_phone: parsed.data.recipient_phone,
         // 카톡 ID 가 있으면 memo 에 함께 기록 (별도 컬럼 신설 안 함 — 추후 확장 가능)
         memo: [

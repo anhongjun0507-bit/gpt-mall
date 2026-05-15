@@ -1,15 +1,12 @@
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
-import { getCurrentUser } from "@/lib/auth";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 
 export const metadata = { title: "주문서 작성" };
 
-// /checkout — 비회원도 진입 가능. 로그인 시 이메일 기본값 prefill.
+// /checkout — 비회원도 진입 가능.
 // 카트가 비어있으면 CheckoutForm 측 useEffect 에서 /cart 로 redirect.
-export default async function CheckoutPage() {
-  const user = await getCurrentUser();
-
+export default function CheckoutPage() {
   return (
     <Container className="py-12 md:py-16">
       <Heading variant="h2" className="!text-2xl">
@@ -20,7 +17,7 @@ export default async function CheckoutPage() {
       </p>
 
       <div className="mt-10">
-        <CheckoutForm defaultEmail={user?.email ?? undefined} />
+        <CheckoutForm />
       </div>
     </Container>
   );

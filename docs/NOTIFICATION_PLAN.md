@@ -70,7 +70,7 @@ support@digitalst.kr
 | `#{주문일시}` | `orders.created_at` 을 `YYYY-MM-DD HH:mm` 으로 KST 포맷 |
 | `#{고객명}` | `orders.recipient_name` |
 | `#{고객연락처}` | `orders.recipient_phone` |
-| `#{고객이메일}` | `orders.recipient_email` |
+| `#{고객이메일}` | `orders.recipient_email` (선택, null 가능 — 주문서에서 이메일을 받지 않음. 회원 주문은 `auth.users.email` 로 사후 매핑 가능) |
 | `#{주문상품}` | `order_items` 를 줄바꿈으로 join. 예: `Claude Pro 1개월 (기간: 3개월) × 1` |
 | `#{결제금액}` | `orders.total.toLocaleString('ko-KR')` |
 | `#{결제수단}` | `orders.payment_method` 한글 매핑 (kakaopay → 카카오페이) |
