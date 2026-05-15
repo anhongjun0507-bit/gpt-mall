@@ -4,28 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { BUSINESS_INFO } from "@/lib/business-info";
 
-// Lucide v1.x 부터 브랜드 아이콘이 제거돼 인라인 SVG 사용.
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
-    </svg>
-  );
-}
+const KAKAO_CHANNEL_URL = "https://pf.kakao.com/_xhHWgn";
 
 const SHOP_LINKS = [
   { label: "전체 상품", href: "/products" },
@@ -33,11 +12,16 @@ const SHOP_LINKS = [
   { label: "인기 상품", href: "/products?sort=popular" },
 ] as const;
 
-const HELP_LINKS = [
-  { label: "자주 묻는 질문", href: "/help/faq" },
-  { label: "1:1 문의", href: "/help/contact" },
-  { label: "환불 정책", href: "/help/refund" },
-] as const;
+interface HelpLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+const HELP_LINKS: HelpLink[] = [
+  { label: "카카오톡 문의", href: KAKAO_CHANNEL_URL, external: true },
+  { label: "환불 정책", href: "/terms" },
+];
 
 const LEGAL_LINKS = [
   { label: "이용약관", href: "/terms" },
@@ -57,8 +41,7 @@ const COMPANY_INFO: { label: string; value: string }[] = [
 ];
 
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com", Icon: InstagramIcon },
-  { label: "카카오톡 채널", href: "#", Icon: MessageCircle },
+  { label: "카카오톡 채널", href: KAKAO_CHANNEL_URL, Icon: MessageCircle },
 ] as const;
 
 export function Footer() {
@@ -122,14 +105,25 @@ export function Footer() {
               Help
             </h3>
             <ul className="flex flex-col gap-3">
-              {HELP_LINKS.map(({ label, href }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-body text-footer-foreground/70 hover:text-accent-gold transition-gold"
-                  >
-                    {label}
-                  </Link>
+              {HELP_LINKS.map((item) => (
+                <li key={item.label}>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-body text-footer-foreground/70 hover:text-accent-gold transition-gold"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="text-body text-footer-foreground/70 hover:text-accent-gold transition-gold"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
