@@ -222,7 +222,7 @@ export function CheckoutForm() {
           <Card title="디지털 상품 수령 정보">
             <div className="rounded-md bg-secondary/50 border border-border/40 px-4 py-3 mb-5 text-sm text-muted-foreground flex items-start gap-2">
               <Info className="h-4 w-4 mt-0.5 shrink-0 text-accent-gold" />
-              <p>결제 완료 후 입력하신 이메일로 라이센스가 발송됩니다.</p>
+              <p>📱 결제 완료 후 입력하신 휴대전화 번호로 라이센스가 SMS 발송됩니다.</p>
             </div>
             <FormField
               control={form.control}
