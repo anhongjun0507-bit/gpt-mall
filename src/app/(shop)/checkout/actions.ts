@@ -3,7 +3,7 @@
 import { randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
-import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/service";
 import { getCurrentUser } from "@/lib/auth";
 import type { CartItem } from "@/lib/cart";
 
@@ -41,7 +41,9 @@ export async function createOrder(
   }
 
   try {
-    const supabase = createClient();
+    // service_role 사용 이유: 비회원(user_id=null) 흐름에서 RETURNING 의 SELECT RLS
+    // 통과가 불가능. 가격·재고·user_id 위조 방지는 아래 server-side 코드가 책임진다.
+    const supabase = createServiceRoleClient();
 
     // 3) 상품 검증 — DB 에서 직접 fetch (클라이언트 데이터 위조 방지)
     //    스냅샷용 name/image 도 DB 값 사용 (신뢰 가능 출처).

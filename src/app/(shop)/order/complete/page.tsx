@@ -5,7 +5,7 @@ import { CircleCheck } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/service";
 import { getCurrentUser } from "@/lib/auth";
 import { formatKRW } from "@/lib/format";
 import { getPaymentMethodLabel } from "@/lib/order-status";
@@ -30,7 +30,9 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
     redirect("/");
   }
 
-  const supabase = createClient();
+  // service_role 사용 이유: 비회원(user_id=null) 주문은 SELECT RLS 를 통과 못 함.
+  // 본인 주문 외 노출 방지는 아래 권한 검사 블록에서 직접 수행.
+  const supabase = createServiceRoleClient();
   const user = await getCurrentUser();
 
   let order: Order | null = null;
