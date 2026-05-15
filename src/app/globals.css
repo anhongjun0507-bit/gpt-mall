@@ -1,0 +1,182 @@
+/* Pretendard Variable 폰트는 app/layout.tsx 에서 <link> 로 로드 */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────
+   디자인 토큰 (라이트 / 다크)
+   - 모든 색은 OKLCH로 통일. 원본 HEX는 주석 참조.
+   - tailwind.config.ts 는 var(--*) 로 그대로 참조.
+   ───────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Surface */
+    --background: oklch(0.985 0 0);           /* #FAFAFA — 따뜻한 오프화이트 */
+    --foreground: oklch(0.145 0 0);           /* #0A0A0A — 딥 블랙 */
+    --card: oklch(1 0 0);                     /* #FFFFFF — 카드는 순백으로 살짝 띄움 */
+    --card-foreground: oklch(0.145 0 0);      /* #0A0A0A */
+    --popover: oklch(1 0 0);                  /* #FFFFFF */
+    --popover-foreground: oklch(0.145 0 0);   /* #0A0A0A */
+
+    /* Action — Primary는 라이트에서 딥 블랙 */
+    --primary: oklch(0.145 0 0);              /* #0A0A0A */
+    --primary-foreground: oklch(0.985 0 0);   /* #FAFAFA */
+
+    /* Action — Secondary / Muted / Accent (중성 그레이) */
+    --secondary: oklch(0.97 0 0);             /* #F5F5F5 */
+    --secondary-foreground: oklch(0.205 0 0); /* #1A1A1A */
+    --muted: oklch(0.97 0 0);                 /* #F5F5F5 */
+    --muted-foreground: oklch(0.556 0 0);     /* #737373 */
+    --accent: oklch(0.97 0 0);                /* #F5F5F5 */
+    --accent-foreground: oklch(0.205 0 0);    /* #1A1A1A */
+
+    /* 골드 액센트 — 가격/배지/링크 강조용. 남발 금지 */
+    --accent-gold: oklch(0.74 0.09 80);       /* #C9A961 */
+    --accent-gold-hover: oklch(0.79 0.08 85); /* #D4B872 — 살짝 밝아진 hover 톤 */
+
+    /* Feedback */
+    --destructive: oklch(0.577 0.245 27.325); /* #DC2626 톤 */
+    --destructive-foreground: oklch(0.985 0 0);
+
+    /* Form / Outline */
+    --border: oklch(0.922 0 0);               /* #E5E5E5 */
+    --input: oklch(0.922 0 0);                /* #E5E5E5 */
+    --ring: oklch(0.74 0.09 80);              /* 골드 포커스 링 — 일관성 위해 두 모드 동일 */
+
+    /* Header — 스크롤 시 backdrop-blur 위에 얹는 반투명 배경 */
+    --header-bg: oklch(1 0 0 / 0.7);          /* #FFFFFF @ 70% */
+
+    /* Footer / 다크 강제 섹션 — 라이트/다크 모드 무관하게 항상 딥 블랙 톤 */
+    --footer-bg: oklch(0.145 0 0);            /* #0A0A0A */
+    --footer-foreground: oklch(0.985 0 0);    /* #FAFAFA */
+
+    /* 골드 액센트의 옅은 변형 — 라디얼 그라데이션, 옅은 표면 강조 등에 사용 */
+    --accent-gold-faint: color-mix(in oklch, var(--accent-gold) 15%, transparent);
+
+    /* Geometry */
+    --radius: 1rem;                            /* 카드 rounded-2xl 기본 */
+
+    /* Chart (기본값, 무채 톤으로 정리) */
+    --chart-1: oklch(0.74 0.09 80);           /* gold */
+    --chart-2: oklch(0.556 0 0);              /* #737373 */
+    --chart-3: oklch(0.439 0 0);              /* #5C5C5C */
+    --chart-4: oklch(0.371 0 0);              /* #4A4A4A */
+    --chart-5: oklch(0.269 0 0);              /* #333333 */
+  }
+
+  .dark {
+    /* Surface — 깊이감 위해 background보다 card를 한 단계 raise */
+    --background: oklch(0.145 0 0);           /* #0A0A0A — 딥 블랙 */
+    --foreground: oklch(0.985 0 0);           /* #FAFAFA */
+    --card: oklch(0.18 0 0);                  /* #141414 — 한 단계 raised */
+    --card-foreground: oklch(0.985 0 0);      /* #FAFAFA */
+    --popover: oklch(0.18 0 0);               /* #141414 */
+    --popover-foreground: oklch(0.985 0 0);   /* #FAFAFA */
+
+    /* Action — Primary는 다크에서 골드로 전환 (premium pop) */
+    --primary: oklch(0.74 0.09 80);           /* #C9A961 */
+    --primary-foreground: oklch(0.145 0 0);   /* #0A0A0A */
+
+    --secondary: oklch(0.22 0 0);             /* #1F1F1F */
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.22 0 0);
+    --muted-foreground: oklch(0.708 0 0);     /* #B5B5B5 */
+    --accent: oklch(0.22 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+
+    --accent-gold: oklch(0.74 0.09 80);       /* #C9A961 */
+    --accent-gold-hover: oklch(0.79 0.08 85); /* #D4B872 */
+
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+
+    --border: oklch(1 0 0 / 0.08);            /* 화이트 @ 8% — 다크 위 가장 미묘한 라인 */
+    --input: oklch(1 0 0 / 0.12);             /* 화이트 @ 12% */
+    --ring: oklch(0.74 0.09 80);              /* 골드 포커스 링 */
+
+    /* Header — 다크에서는 거의 검정 + 블러 */
+    --header-bg: oklch(0.04 0 0 / 0.7);       /* #050505 @ 70% */
+
+    /* Footer / 다크 강제 섹션 — 라이트와 동일 (모드 독립) */
+    --footer-bg: oklch(0.145 0 0);            /* #0A0A0A */
+    --footer-foreground: oklch(0.985 0 0);    /* #FAFAFA */
+
+    /* 골드 액센트 옅은 변형 (라이트와 동일) */
+    --accent-gold-faint: color-mix(in oklch, var(--accent-gold) 15%, transparent);
+
+    --chart-1: oklch(0.74 0.09 80);
+    --chart-2: oklch(0.708 0 0);
+    --chart-3: oklch(0.556 0 0);
+    --chart-4: oklch(0.439 0 0);
+    --chart-5: oklch(0.371 0 0);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  /* 스무스 스크롤 — 앵커 이동/스크롤 인디케이터 클릭 등에서 자연스럽게 */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss03", "ss04", "cv11";  /* Pretendard tabular numbers + 미세 자간 */
+  }
+
+  /* 텍스트 드래그 선택 색상 — 골드로 브랜드 톤 일관성 */
+  ::selection {
+    @apply bg-accent-gold text-foreground;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   시맨틱 타이포그래피 유틸리티
+   - 사용처에서는 `.text-display`, `.text-h2` 등 한 클래스로 끝.
+   - 반응형 브레이크포인트 변경은 여기 한 곳에서만.
+   ───────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Display — 히어로용. 모바일 40px → md 56px → lg 72px */
+  .text-display {
+    @apply text-display-sm md:text-display-md lg:text-display-lg font-extrabold;
+  }
+
+  /* H1 — 페이지 제목. 단일 사이즈 */
+  .text-h1 {
+    @apply text-[3rem] leading-[1.15] tracking-[-0.03em] font-bold;
+  }
+
+  /* H2 — 섹션 제목. 모바일 28px → md 36px */
+  .text-h2 {
+    @apply text-h2-sm md:text-h2-md font-bold;
+  }
+
+  /* H3 — 서브섹션 */
+  .text-h3 {
+    @apply text-2xl leading-[1.35] tracking-[-0.01em] font-semibold;
+  }
+
+  /* H4 — 카드 제목 등 */
+  .text-h4 {
+    @apply text-xl leading-[1.4] font-semibold;
+  }
+
+  /* Body — 본문. 가독성 우선 line-height 1.6 */
+  .text-body {
+    @apply text-base leading-[1.6];
+  }
+
+  /* Caption — 보조 텍스트. muted color 적용 */
+  .text-caption {
+    @apply text-sm leading-[1.4] text-muted-foreground;
+  }
+
+  /* 골드 액센트 트랜지션 — 모든 골드 호버 요소에 적용 */
+  .transition-gold {
+    @apply transition-colors duration-150 ease-out;
+  }
+}
