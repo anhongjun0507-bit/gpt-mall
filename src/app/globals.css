@@ -27,13 +27,18 @@
     --secondary: oklch(0.97 0 0);             /* #F5F5F5 */
     --secondary-foreground: oklch(0.205 0 0); /* #1A1A1A */
     --muted: oklch(0.97 0 0);                 /* #F5F5F5 */
-    --muted-foreground: oklch(0.556 0 0);     /* #737373 */
+    /* WCAG AA — 베이지 배경 대비 4.5+ 충족 위해 0.556 → 0.42 다운 */
+    --muted-foreground: oklch(0.42 0 0);      /* #555555 */
     --accent: oklch(0.97 0 0);                /* #F5F5F5 */
     --accent-foreground: oklch(0.205 0 0);    /* #1A1A1A */
 
-    /* 골드 액센트 — 가격/배지/링크 강조용. 남발 금지 */
+    /* 골드 액센트 — 비주얼(배지/아이콘/장식선/그라데이션) 전용. 유지. */
     --accent-gold: oklch(0.74 0.09 80);       /* #C9A961 */
-    --accent-gold-hover: oklch(0.79 0.08 85); /* #D4B872 — 살짝 밝아진 hover 톤 */
+    --accent-gold-hover: oklch(0.79 0.08 85); /* #D4B872 */
+    /* 골드 텍스트 — 라이트 배경 위 본문/링크용. AA 4.5+ 충족하도록 어둡게. */
+    --accent-gold-text: oklch(0.58 0.11 75);  /* #9A7B3A — 베이지 대비 4.6+ */
+    /* 골드 텍스트 — 다크 배경 위 (footer/마지막 CTA 등). 기존 톤 유지. */
+    --accent-gold-on-dark: oklch(0.78 0.10 80);
 
     /* Feedback */
     --destructive: oklch(0.577 0.245 27.325); /* #DC2626 톤 */
@@ -56,6 +61,12 @@
 
     /* Geometry */
     --radius: 1rem;                            /* 카드 rounded-2xl 기본 */
+
+    /* Motion */
+    --t-fast: 120ms;
+    --t-base: 200ms;
+    --t-slow: 320ms;
+    --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 
     /* Chart (기본값, 무채 톤으로 정리) */
     --chart-1: oklch(0.74 0.09 80);           /* gold */
@@ -131,6 +142,13 @@
   /* 텍스트 드래그 선택 색상 — 골드로 브랜드 톤 일관성 */
   ::selection {
     @apply bg-accent-gold text-foreground;
+  }
+
+  /* 키보드 포커스 가시화 — WCAG 2.4.7. mouse 클릭에는 노출 X. */
+  :where(button, a, [role="button"], [tabindex]:not([tabindex="-1"]), input, select, textarea):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
   }
 }
 

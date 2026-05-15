@@ -67,6 +67,10 @@ const config: Config = {
           gold: "var(--accent-gold)",
           "gold-hover": "var(--accent-gold-hover)",
           "gold-faint": "var(--accent-gold-faint)",  // 옅은 그라데이션/표면용
+          // 텍스트 전용 골드 — 라이트 배경 위 가독성(AA 4.5+) 충족하는 어두운 골드.
+          "gold-text": "var(--accent-gold-text)",
+          // 다크 배경 위 골드 텍스트(footer / 최종 CTA 섹션 내부 등).
+          "gold-on-dark": "var(--accent-gold-on-dark)",
         },
         destructive: {
           DEFAULT: "var(--destructive)",
