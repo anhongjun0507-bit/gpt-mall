@@ -14,6 +14,15 @@ const nextConfig = {
       },
     ],
   },
+  // 옛 슬러그(-1month 접미사) → 새 슬러그 영구 리다이렉트.
+  // 0009 마이그레이션으로 products.slug 가 정규화되어 옛 URL 이 404 되는 것 방지.
+  async redirects() {
+    return [
+      { source: "/products/chatgpt-plus-1month", destination: "/products/chatgpt-plus", permanent: true },
+      { source: "/products/claude-pro-1month",   destination: "/products/claude-pro",   permanent: true },
+      { source: "/products/cursor-pro-1month",   destination: "/products/cursor-pro",   permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -36,9 +36,11 @@ function formatPhone(raw: string): string {
   return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;
 }
 
+// PG 가맹 승인 전 — 무통장입금만 실제 안내 가능, 카카오페이/카드는 가맹 후 활성화.
+// 사양: 무통장입금 / 카카오페이 / 카드. 네이버페이는 신규 결제에서 제외.
 const PAYMENT_METHODS = [
+  { value: "bank_transfer", label: "무통장입금", emoji: "🏦" },
   { value: "kakaopay", label: "카카오페이", emoji: "💛" },
-  { value: "naverpay", label: "네이버페이", emoji: "💚" },
   { value: "card", label: "신용카드", emoji: "💳" },
 ] as const;
 
@@ -69,7 +71,7 @@ export function CheckoutForm() {
       recipient_phone: "",
       kakao_id: "",
       memo: "",
-      payment_method: "kakaopay",
+      payment_method: "bank_transfer",
       agree_terms: false as true,
       agree_privacy: false as true,
     },
@@ -424,6 +426,7 @@ export function CheckoutForm() {
                 </p>
               )}
 
+              {/* PG 가맹 승인 전 — 결제하기 비활성, 무통장입금 안내로 주문 접수만 가능 */}
               <Button
                 type="submit"
                 size="lg"
@@ -431,7 +434,7 @@ export function CheckoutForm() {
                 className="w-full h-12 mt-5 bg-accent-gold hover:bg-accent-gold-hover text-footer-bg"
               >
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {submitting ? "주문 생성 중..." : "결제하기"}
+                {submitting ? "주문 생성 중..." : "주문 접수하기"}
               </Button>
 
               <p className="mt-3 text-xs text-muted-foreground text-center leading-relaxed">

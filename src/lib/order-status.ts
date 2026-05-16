@@ -56,6 +56,7 @@ export function isValidOrderStatus(s: string): s is OrderStatus {
 
 // 결제 수단 한글 라벨 — 알림톡 등에서도 재사용.
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
+  bank_transfer: "무통장입금",
   kakaopay: "카카오페이",
   naverpay: "네이버페이",
   card: "신용카드",

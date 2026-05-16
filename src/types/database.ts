@@ -28,7 +28,8 @@ export type OrderStatus =
   | "delivered"
   | "cancelled"
   | "refunded";
-export type PaymentMethod = "kakaopay" | "naverpay" | "card";
+// 결제 수단 — UI 노출은 무통장입금/카카오페이/카드. naverpay 는 기존 주문 호환용으로만 보존.
+export type PaymentMethod = "bank_transfer" | "kakaopay" | "naverpay" | "card";
 
 // 상품 옵션 — products.options jsonb 구조 (0006 마이그레이션 이후).
 // price_modifier 는 products.price 에 더하는 금액 (음수 허용).

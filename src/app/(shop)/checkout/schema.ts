@@ -27,7 +27,8 @@ export const checkoutSchema = z.object({
     .max(500, "요청사항이 너무 깁니다")
     .optional()
     .or(z.literal("")),
-  payment_method: z.enum(["kakaopay", "naverpay", "card"], {
+  // UI 노출 수단만 검증 (naverpay 는 기존 주문 호환용 — 신규 결제에는 사용 X)
+  payment_method: z.enum(["bank_transfer", "kakaopay", "card"], {
     message: "결제 수단을 선택하세요",
   }),
   agree_terms: z.literal(true, {

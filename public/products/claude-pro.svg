@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Claude Pro 1개월">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Claude Pro">
   <rect width="600" height="600" fill="#0A0A0A"/>
   <text x="40" y="58" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" letter-spacing="3" fill="#C9A961">AI ASSISTANT</text>
   <line x1="40" y1="74" x2="120" y2="74" stroke="#C9A961" stroke-width="1.5"/>
   <text x="300" y="306" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#FAFAFA" text-anchor="middle" letter-spacing="-1">Claude Pro</text>
   <circle cx="300" cy="336" r="5" fill="#C9A961"/>
-  <text x="300" y="382" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#A1A1AA" text-anchor="middle" letter-spacing="0.5">1개월</text>
   <text x="40" y="568" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="11" font-weight="500" letter-spacing="2.5" fill="#525252">DIGITALSTORE</text>
 </svg>
