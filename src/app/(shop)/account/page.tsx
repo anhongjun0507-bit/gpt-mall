@@ -13,13 +13,17 @@ import { requireUser, getCurrentProfile } from "@/lib/auth";
 import { formatKRW } from "@/lib/format";
 import { ORDER_STATUS_META } from "@/lib/order-status";
 import { cn } from "@/lib/utils";
+import { formatOrderItemTitle } from "@/lib/order-display";
 import type { Order } from "@/types/database";
 
 export const metadata = { title: "마이페이지" };
 
 // PostgREST embedded select 결과 — order_items 는 1:N 이라 배열.
 type OrderWithItems = Order & {
-  order_items: { product_name: string }[];
+  order_items: {
+    product_name: string;
+    selected_options: Record<string, string> | null;
+  }[];
 };
 
 async function fetchUserOrders(userId: string): Promise<OrderWithItems[]> {
@@ -28,7 +32,7 @@ async function fetchUserOrders(userId: string): Promise<OrderWithItems[]> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("orders")
-    .select("*, order_items(product_name)")
+    .select("*, order_items(product_name, selected_options)")
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
   if (error) throw error;
@@ -147,8 +151,13 @@ export default async function AccountHomePage() {
         <ul className="space-y-3">
           {recent3.map((order) => {
             const meta = ORDER_STATUS_META[order.status];
-            const firstItem =
-              order.order_items?.[0]?.product_name ?? "(상품 정보 없음)";
+            const firstRow = order.order_items?.[0];
+            const firstItem = firstRow
+              ? formatOrderItemTitle(
+                  firstRow.product_name,
+                  firstRow.selected_options
+                )
+              : "(상품 정보 없음)";
             const extraCount = Math.max(
               0,
               (order.order_items?.length ?? 0) - 1

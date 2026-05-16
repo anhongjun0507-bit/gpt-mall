@@ -191,6 +191,7 @@ export async function createOrder(
       items: itemRows.map((r) => ({
         product_name: r.product_name,
         qty: r.qty,
+        selected_options: r.selected_options as Record<string, string> | null,
       })),
       memo: parsed.data.memo,
       adminUrl: `${siteUrl}/admin/orders/${order.id}`,

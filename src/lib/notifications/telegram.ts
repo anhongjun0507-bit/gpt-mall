@@ -13,6 +13,7 @@
 interface OrderItemForNotify {
   product_name: string;
   qty: number;
+  selected_options?: Record<string, string> | null;
 }
 
 export interface NotifyOrderCreatedInput {
@@ -50,6 +51,16 @@ function formatOrderMessage(opts: NotifyOrderCreatedInput): string {
   lines.push("<b>주문 상품</b>");
   for (const it of opts.items) {
     lines.push(`• ${escapeHtml(it.product_name)} × ${it.qty}`);
+    // 옵션 (기간 등) 이 있으면 들여쓰기해서 부제로 추가
+    const optEntries = Object.entries(it.selected_options ?? {}).filter(
+      ([, v]) => typeof v === "string" && v.length > 0
+    );
+    if (optEntries.length > 0) {
+      const optLine = optEntries
+        .map(([k, v]) => `${escapeHtml(k)} ${escapeHtml(v)}`)
+        .join(" · ");
+      lines.push(`   <i>↳ ${optLine}</i>`);
+    }
   }
   if (opts.memo && opts.memo.trim()) {
     lines.push("");

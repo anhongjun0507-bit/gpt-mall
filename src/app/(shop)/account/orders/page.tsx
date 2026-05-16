@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { formatKRW } from "@/lib/format";
+import { formatOrderItemTitle } from "@/lib/order-display";
 import { ORDER_STATUS_META, isValidOrderStatus } from "@/lib/order-status";
 import type { Order, OrderStatus } from "@/types/database";
 
@@ -25,7 +26,11 @@ const FILTERS: { key: OrderStatus | null; label: string }[] = [
 ];
 
 type OrderWithItems = Order & {
-  order_items: { product_name: string; product_image: string | null }[];
+  order_items: {
+    product_name: string;
+    product_image: string | null;
+    selected_options: Record<string, string> | null;
+  }[];
 };
 
 interface PageProps {
@@ -53,7 +58,7 @@ export default async function AccountOrdersPage({ searchParams }: PageProps) {
     const supabase = createClient();
     let q = supabase
       .from("orders")
-      .select("*, order_items(product_name, product_image)", {
+      .select("*, order_items(product_name, product_image, selected_options)", {
         count: "exact",
       })
       .eq("user_id", user.id);
@@ -147,7 +152,12 @@ export default async function AccountOrdersPage({ searchParams }: PageProps) {
             {orders.map((order) => {
               const meta = ORDER_STATUS_META[order.status];
               const items = order.order_items ?? [];
-              const firstName = items[0]?.product_name ?? "(상품 정보 없음)";
+              const firstName = items[0]
+                ? formatOrderItemTitle(
+                    items[0].product_name,
+                    items[0].selected_options
+                  )
+                : "(상품 정보 없음)";
               const extra = Math.max(0, items.length - 1);
 
               return (
