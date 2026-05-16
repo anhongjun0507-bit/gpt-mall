@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { createServiceRoleClient } from "@/lib/supabase/service";
+import { createClient as createSsrClient } from "@/lib/supabase/server";
 import { STATE_COOKIE, NEXT_COOKIE } from "@/lib/naver-oauth";
 
 // 네이버 OAuth 콜백.
@@ -9,8 +10,13 @@ import { STATE_COOKIE, NEXT_COOKIE } from "@/lib/naver-oauth";
 //   2. code → access_token (nid.naver.com/oauth2.0/token)
 //   3. access_token → user 정보 (openapi.naver.com/v1/nid/me)
 //   4. admin.createUser 시도 → 신규 또는 기존(email_exists) 분기
-//   5. admin.generateLink(magiclink, redirectTo: /auth/callback?next=...)
-//   6. action_link 로 302 → Supabase 가 우리 사이트에 세션 cookie 발급
+//   5. admin.generateLink(magiclink) → hashed_token 추출
+//   6. SSR client.verifyOtp({ token_hash, type: 'magiclink' }) — 우리 도메인 cookie 에 세션 직접 발급
+//
+// 왜 action_link 로 redirect 안 하나:
+//   Supabase verify endpoint 는 implicit flow 로 토큰을 URL fragment(#) 에 박아 보낸다.
+//   fragment 는 서버로 전송 안 되므로 우리 SSR/PKCE 흐름과 호환 X
+//   → server-side 에서 verifyOtp 호출해 직접 cookie 세션 발급하는 게 정공법.
 //
 // 중복 가입 정책:
 // - 신규: user_metadata.provider = 'naver', providers = ['naver']
@@ -203,27 +209,35 @@ export async function GET(request: NextRequest) {
       throw new Error("createUser returned no user");
     }
 
-    // 4) Magic Link 생성 → action_link 로 redirect
-    const siteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-    const redirectTo = `${siteUrl}/auth/callback?next=${encodeURIComponent(
-      storedNext
-    )}`;
-
+    // 4) Magic Link 생성 — action_link 는 사용 안 함, hashed_token 만 추출
     const { data: linkData, error: linkErr } =
       await admin.auth.admin.generateLink({
         type: "magiclink",
         email,
-        options: { redirectTo },
       });
     if (linkErr) throw linkErr;
-    const actionLink = linkData?.properties?.action_link;
-    if (!actionLink) {
-      throw new Error("generateLink returned no action_link");
+    const hashedToken = linkData?.properties?.hashed_token;
+    if (!hashedToken) {
+      throw new Error("generateLink returned no hashed_token");
     }
 
+    // 5) SSR client 로 verifyOtp — cookies.setAll 통해 우리 도메인에 세션 cookie 발급
+    const ssr = createSsrClient();
+    const { error: verifyErr } = await ssr.auth.verifyOtp({
+      type: "magiclink",
+      token_hash: hashedToken,
+    });
+    if (verifyErr) {
+      console.error("[naver/callback] verifyOtp 실패", verifyErr.message);
+      throw verifyErr;
+    }
+
+    // 6) next 경로로 redirect (storedNext 는 이미 safeNextPath 통과)
     clearOauthCookies();
-    return NextResponse.redirect(actionLink);
+    const dest = request.nextUrl.clone();
+    dest.pathname = storedNext;
+    dest.search = "";
+    return NextResponse.redirect(dest);
   } catch (e) {
     console.error("[naver/callback] 실패", e);
     clearOauthCookies();
