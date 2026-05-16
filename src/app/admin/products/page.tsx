@@ -33,14 +33,14 @@ export default async function AdminProductsPage() {
 
   return (
     <>
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
           <Heading variant="h2" className="!text-2xl">
             상품 관리
           </Heading>
           <p className="mt-2 text-muted-foreground">총 {products.length}개</p>
         </div>
-        <Button asChild>
+        <Button asChild className="self-start sm:self-auto">
           <Link href="/admin/products/new">
             <Plus className="h-4 w-4 mr-1" />
             신규 등록
@@ -49,7 +49,7 @@ export default async function AdminProductsPage() {
       </div>
 
       {products.length === 0 ? (
-        <div className="mt-8 rounded-2xl bg-card border border-border/50 p-12 text-center">
+        <div className="mt-8 rounded-2xl bg-card border border-border/50 p-6 sm:p-12 text-center">
           <p className="text-muted-foreground">아직 등록된 상품이 없습니다.</p>
           <Button asChild className="mt-4">
             <Link href="/admin/products/new">
@@ -59,91 +59,93 @@ export default async function AdminProductsPage() {
         </div>
       ) : (
         <div className="mt-8 rounded-2xl bg-card border border-border/50 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary/40 text-muted-foreground text-xs uppercase tracking-wider">
-              <tr>
-                <th className="text-left px-5 py-3 font-medium w-16">이미지</th>
-                <th className="text-left px-5 py-3 font-medium">상품명</th>
-                <th className="text-left px-5 py-3 font-medium">카테고리</th>
-                <th className="text-right px-5 py-3 font-medium">가격</th>
-                <th className="text-right px-5 py-3 font-medium">재고</th>
-                <th className="text-center px-5 py-3 font-medium">활성</th>
-                <th className="text-right px-5 py-3 font-medium w-24">액션</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {products.map((p) => (
-                <tr
-                  key={p.id}
-                  className="hover:bg-accent-gold/5 transition-colors duration-200"
-                >
-                  <td className="px-5 py-3">
-                    <div className="w-10 h-10 rounded-md bg-secondary overflow-hidden">
-                      {p.image_url && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={p.image_url}
-                          alt=""
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-5 py-3">
-                    <div className="font-medium">{p.name}</div>
-                    <div className="text-xs text-muted-foreground font-mono">
-                      {p.slug}
-                    </div>
-                  </td>
-                  <td className="px-5 py-3 text-muted-foreground">
-                    {getCategoryLabel(p.category)}
-                  </td>
-                  <td className="px-5 py-3 text-right font-semibold tabular-nums">
-                    {formatKRW(p.price)}
-                  </td>
-                  <td
-                    className={cn(
-                      "px-5 py-3 text-right tabular-nums",
-                      p.stock <= 0 && "text-destructive"
-                    )}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[760px]">
+              <thead className="bg-secondary/40 text-muted-foreground text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium w-16 whitespace-nowrap">이미지</th>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium whitespace-nowrap">상품명</th>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium whitespace-nowrap">카테고리</th>
+                  <th className="text-right px-4 sm:px-5 py-3 font-medium whitespace-nowrap">가격</th>
+                  <th className="text-right px-4 sm:px-5 py-3 font-medium whitespace-nowrap">재고</th>
+                  <th className="text-center px-4 sm:px-5 py-3 font-medium whitespace-nowrap">활성</th>
+                  <th className="text-right px-4 sm:px-5 py-3 font-medium w-24 whitespace-nowrap">액션</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {products.map((p) => (
+                  <tr
+                    key={p.id}
+                    className="hover:bg-accent-gold/5 transition-colors duration-200"
                   >
-                    {p.stock}
-                  </td>
-                  <td className="px-5 py-3 text-center">
-                    <span
+                    <td className="px-4 sm:px-5 py-3">
+                      <div className="w-10 h-10 rounded-md bg-secondary overflow-hidden">
+                        {p.image_url && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={p.image_url}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-5 py-3">
+                      <div className="font-medium">{p.name}</div>
+                      <div className="text-xs text-muted-foreground font-mono">
+                        {p.slug}
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-5 py-3 text-muted-foreground whitespace-nowrap">
+                      {getCategoryLabel(p.category)}
+                    </td>
+                    <td className="px-4 sm:px-5 py-3 text-right font-semibold tabular-nums whitespace-nowrap">
+                      {formatKRW(p.price)}
+                    </td>
+                    <td
                       className={cn(
-                        "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold",
-                        p.is_active
-                          ? "bg-accent-gold/10 text-accent-gold"
-                          : "bg-secondary text-muted-foreground"
+                        "px-4 sm:px-5 py-3 text-right tabular-nums whitespace-nowrap",
+                        p.stock <= 0 && "text-destructive"
                       )}
                     >
-                      {p.is_active ? "활성" : "비활성"}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-right">
-                    <div className="inline-flex items-center gap-1">
-                      <Button
-                        asChild
-                        variant="ghost"
-                        size="icon"
-                        aria-label={`${p.name} 수정`}
-                        className="text-muted-foreground hover:text-accent-gold"
+                      {p.stock}
+                    </td>
+                    <td className="px-4 sm:px-5 py-3 text-center whitespace-nowrap">
+                      <span
+                        className={cn(
+                          "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold",
+                          p.is_active
+                            ? "bg-accent-gold/10 text-accent-gold"
+                            : "bg-secondary text-muted-foreground"
+                        )}
                       >
-                        <Link href={`/admin/products/${p.id}/edit`}>
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <DeleteProductButton
-                        productId={p.id}
-                        productName={p.name}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        {p.is_active ? "활성" : "비활성"}
+                      </span>
+                    </td>
+                    <td className="px-4 sm:px-5 py-3 text-right whitespace-nowrap">
+                      <div className="inline-flex items-center gap-1">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`${p.name} 수정`}
+                          className="text-muted-foreground hover:text-accent-gold"
+                        >
+                          <Link href={`/admin/products/${p.id}/edit`}>
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                        <DeleteProductButton
+                          productId={p.id}
+                          productName={p.name}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </>

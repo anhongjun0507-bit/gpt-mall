@@ -81,7 +81,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
 
       {/* 테이블 또는 빈 상태 */}
       {orders.length === 0 ? (
-        <div className="mt-8 rounded-2xl bg-card border border-border/50 p-12 text-center">
+        <div className="mt-8 rounded-2xl bg-card border border-border/50 p-6 sm:p-12 text-center">
           <p className="text-muted-foreground">
             {activeStatus
               ? `'${ORDER_STATUS_META[activeStatus].label}' 상태의 주문이 없습니다.`
@@ -90,78 +90,80 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
         </div>
       ) : (
         <div className="mt-8 rounded-2xl bg-card border border-border/50 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary/40 text-muted-foreground text-xs uppercase tracking-wider">
-              <tr>
-                <th className="text-left px-5 py-3 font-medium">주문번호</th>
-                <th className="text-left px-5 py-3 font-medium">일시</th>
-                <th className="text-left px-5 py-3 font-medium">구매자</th>
-                <th className="text-left px-5 py-3 font-medium">결제수단</th>
-                <th className="text-right px-5 py-3 font-medium">금액</th>
-                <th className="text-center px-5 py-3 font-medium">상태</th>
-                <th className="text-right px-5 py-3 font-medium w-16">상세</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {orders.map((o) => {
-                const meta = ORDER_STATUS_META[o.status];
-                return (
-                  <tr
-                    key={o.id}
-                    className="hover:bg-accent-gold/5 transition-colors duration-200"
-                  >
-                    <td className="px-5 py-3 font-mono text-xs">
-                      {o.order_number}
-                    </td>
-                    <td className="px-5 py-3 text-muted-foreground">
-                      {new Date(o.created_at).toLocaleString("ko-KR", {
-                        year: "2-digit",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </td>
-                    <td className="px-5 py-3">
-                      <div className="font-medium">{o.recipient_name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {o.recipient_phone}
-                      </div>
-                    </td>
-                    <td className="px-5 py-3 text-muted-foreground">
-                      {getPaymentMethodLabel(o.payment_method)}
-                    </td>
-                    <td className="px-5 py-3 text-right font-semibold tabular-nums">
-                      {formatKRW(o.total)}
-                    </td>
-                    <td className="px-5 py-3 text-center">
-                      <span
-                        className={cn(
-                          "inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold",
-                          meta.className
-                        )}
-                      >
-                        {meta.label}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-right">
-                      <Button
-                        asChild
-                        variant="ghost"
-                        size="icon"
-                        aria-label={`${o.order_number} 상세`}
-                        className="text-muted-foreground hover:text-accent-gold"
-                      >
-                        <Link href={`/admin/orders/${o.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[860px]">
+              <thead className="bg-secondary/40 text-muted-foreground text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium whitespace-nowrap">주문번호</th>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium whitespace-nowrap">일시</th>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium whitespace-nowrap">구매자</th>
+                  <th className="text-left px-4 sm:px-5 py-3 font-medium whitespace-nowrap">결제수단</th>
+                  <th className="text-right px-4 sm:px-5 py-3 font-medium whitespace-nowrap">금액</th>
+                  <th className="text-center px-4 sm:px-5 py-3 font-medium whitespace-nowrap">상태</th>
+                  <th className="text-right px-4 sm:px-5 py-3 font-medium w-16 whitespace-nowrap">상세</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {orders.map((o) => {
+                  const meta = ORDER_STATUS_META[o.status];
+                  return (
+                    <tr
+                      key={o.id}
+                      className="hover:bg-accent-gold/5 transition-colors duration-200"
+                    >
+                      <td className="px-4 sm:px-5 py-3 font-mono text-xs whitespace-nowrap">
+                        {o.order_number}
+                      </td>
+                      <td className="px-4 sm:px-5 py-3 text-muted-foreground whitespace-nowrap">
+                        {new Date(o.created_at).toLocaleString("ko-KR", {
+                          year: "2-digit",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                      <td className="px-4 sm:px-5 py-3 whitespace-nowrap">
+                        <div className="font-medium">{o.recipient_name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {o.recipient_phone}
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-5 py-3 text-muted-foreground whitespace-nowrap">
+                        {getPaymentMethodLabel(o.payment_method)}
+                      </td>
+                      <td className="px-4 sm:px-5 py-3 text-right font-semibold tabular-nums whitespace-nowrap">
+                        {formatKRW(o.total)}
+                      </td>
+                      <td className="px-4 sm:px-5 py-3 text-center whitespace-nowrap">
+                        <span
+                          className={cn(
+                            "inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold",
+                            meta.className
+                          )}
+                        >
+                          {meta.label}
+                        </span>
+                      </td>
+                      <td className="px-4 sm:px-5 py-3 text-right whitespace-nowrap">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`${o.order_number} 상세`}
+                          className="text-muted-foreground hover:text-accent-gold"
+                        >
+                          <Link href={`/admin/orders/${o.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </>

@@ -13,7 +13,7 @@ export default function AdminUsersPage() {
         회원 관리
       </Heading>
 
-      <div className="mt-8 rounded-2xl bg-card border border-border/50 p-12 text-center">
+      <div className="mt-8 rounded-2xl bg-card border border-border/50 p-6 sm:p-12 text-center">
         <div className="mx-auto w-14 h-14 rounded-2xl bg-accent-gold/10 flex items-center justify-center">
           <UsersIcon className="h-6 w-6 text-accent-gold" />
         </div>

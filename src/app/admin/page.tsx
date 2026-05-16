@@ -135,19 +135,21 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* ─── 통계 카드 4개 ─── */}
-      <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         {cards.map(({ label, value, Icon }) => (
           <div
             key={label}
-            className="rounded-2xl bg-card border border-border/50 p-6 transition-all duration-300 hover:border-accent-gold/40 hover:shadow-sm"
+            className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6 transition-all duration-300 hover:border-accent-gold/40 hover:shadow-sm"
           >
-            <div className="flex items-start justify-between">
-              <p className="text-sm text-muted-foreground">{label}</p>
-              <div className="w-10 h-10 rounded-xl bg-accent-gold/10 flex items-center justify-center">
-                <Icon className="w-4.5 h-4.5 text-accent-gold" />
+            <div className="flex items-start justify-between gap-2">
+              <p className="text-xs sm:text-sm text-muted-foreground">{label}</p>
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-accent-gold/10 flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-accent-gold" />
               </div>
             </div>
-            <p className="mt-4 text-3xl font-bold tabular-nums">{value}</p>
+            <p className="mt-3 sm:mt-4 text-xl sm:text-3xl font-bold tabular-nums break-all">
+              {value}
+            </p>
           </div>
         ))}
       </div>
@@ -167,59 +169,61 @@ export default async function AdminDashboardPage() {
         </div>
 
         {recentOrders.length === 0 ? (
-          <div className="rounded-2xl bg-card border border-border/50 p-12 text-center">
+          <div className="rounded-2xl bg-card border border-border/50 p-6 sm:p-12 text-center">
             <p className="text-muted-foreground">아직 주문이 없습니다.</p>
           </div>
         ) : (
           <div className="rounded-2xl bg-card border border-border/50 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-secondary/40 text-muted-foreground text-xs uppercase tracking-wider">
-                <tr>
-                  <th className="text-left px-6 py-3 font-medium">주문번호</th>
-                  <th className="text-left px-6 py-3 font-medium">일시</th>
-                  <th className="text-left px-6 py-3 font-medium">구매자</th>
-                  <th className="text-right px-6 py-3 font-medium">금액</th>
-                  <th className="text-right px-6 py-3 font-medium">상태</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {recentOrders.map((o) => {
-                  const meta = STATUS_META[o.status];
-                  return (
-                    <tr
-                      key={o.id}
-                      className="hover:bg-accent-gold/5 transition-colors duration-200"
-                    >
-                      <td className="px-6 py-4 font-mono text-xs">
-                        {o.order_number}
-                      </td>
-                      <td className="px-6 py-4 text-muted-foreground">
-                        {new Date(o.created_at).toLocaleString("ko-KR", {
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td className="px-6 py-4">{o.recipient_name}</td>
-                      <td className="px-6 py-4 text-right font-semibold tabular-nums">
-                        {formatKRW(o.total)}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span
-                          className={cn(
-                            "inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold",
-                            meta.className
-                          )}
-                        >
-                          {meta.label}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-[640px]">
+                <thead className="bg-secondary/40 text-muted-foreground text-xs uppercase tracking-wider">
+                  <tr>
+                    <th className="text-left px-4 sm:px-6 py-3 font-medium whitespace-nowrap">주문번호</th>
+                    <th className="text-left px-4 sm:px-6 py-3 font-medium whitespace-nowrap">일시</th>
+                    <th className="text-left px-4 sm:px-6 py-3 font-medium whitespace-nowrap">구매자</th>
+                    <th className="text-right px-4 sm:px-6 py-3 font-medium whitespace-nowrap">금액</th>
+                    <th className="text-right px-4 sm:px-6 py-3 font-medium whitespace-nowrap">상태</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {recentOrders.map((o) => {
+                    const meta = STATUS_META[o.status];
+                    return (
+                      <tr
+                        key={o.id}
+                        className="hover:bg-accent-gold/5 transition-colors duration-200"
+                      >
+                        <td className="px-4 sm:px-6 py-4 font-mono text-xs whitespace-nowrap">
+                          {o.order_number}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 text-muted-foreground whitespace-nowrap">
+                          {new Date(o.created_at).toLocaleString("ko-KR", {
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">{o.recipient_name}</td>
+                        <td className="px-4 sm:px-6 py-4 text-right font-semibold tabular-nums whitespace-nowrap">
+                          {formatKRW(o.total)}
+                        </td>
+                        <td className="px-4 sm:px-6 py-4 text-right whitespace-nowrap">
+                          <span
+                            className={cn(
+                              "inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold",
+                              meta.className
+                            )}
+                          >
+                            {meta.label}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </section>

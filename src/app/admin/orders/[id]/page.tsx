@@ -51,13 +51,13 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
           주문 목록으로
         </Link>
 
-        <div className="mt-3 flex items-start justify-between gap-4">
-          <div>
+        <div className="mt-3 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+          <div className="min-w-0">
             <Heading variant="h2" className="!text-2xl">
               주문 상세
             </Heading>
-            <div className="mt-2 flex items-center gap-3 flex-wrap">
-              <span className="font-mono text-sm text-muted-foreground">
+            <div className="mt-2 flex items-center gap-2 sm:gap-3 flex-wrap">
+              <span className="font-mono text-sm text-muted-foreground break-all">
                 {order.order_number}
               </span>
               <span className="text-xs text-muted-foreground">·</span>
@@ -66,7 +66,9 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
               </span>
             </div>
           </div>
-          <OrderStatusChanger orderId={order.id} currentStatus={order.status} />
+          <div className="self-start sm:self-auto">
+            <OrderStatusChanger orderId={order.id} currentStatus={order.status} />
+          </div>
         </div>
       </div>
 
@@ -75,7 +77,7 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
         <div className="lg:col-span-2 space-y-6">
           {/* 주문 상품 */}
           <section className="rounded-2xl bg-card border border-border/50 overflow-hidden">
-            <header className="px-6 py-4 border-b border-border">
+            <header className="px-4 sm:px-6 py-4 border-b border-border">
               <h3 className="text-h4 font-semibold">주문 상품</h3>
             </header>
             {items.length === 0 ? (
@@ -83,8 +85,8 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
             ) : (
               <ul className="divide-y divide-border">
                 {items.map((it) => (
-                  <li key={it.id} className="p-6 flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-lg bg-secondary overflow-hidden shrink-0">
+                  <li key={it.id} className="p-4 sm:p-6 flex items-start gap-3 sm:gap-4">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-secondary overflow-hidden shrink-0">
                       {it.product_image && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -95,9 +97,9 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium">{it.product_name}</p>
+                      <p className="font-medium break-words">{it.product_name}</p>
                       {Object.keys(it.selected_options ?? {}).length > 0 && (
-                        <p className="mt-1 text-xs text-muted-foreground">
+                        <p className="mt-1 text-xs text-muted-foreground break-words">
                           {Object.entries(it.selected_options)
                             .map(([k, v]) => `${k}: ${v}`)
                             .join(" · ")}
@@ -107,7 +109,7 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
                         {formatKRW(it.price)} × {it.qty}
                       </p>
                     </div>
-                    <p className="font-semibold tabular-nums shrink-0">
+                    <p className="font-semibold tabular-nums shrink-0 text-right">
                       {formatKRW(it.price * it.qty)}
                     </p>
                   </li>
@@ -118,7 +120,7 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
 
           {/* 배송 메모 */}
           {order.memo && (
-            <section className="rounded-2xl bg-card border border-border/50 p-6">
+            <section className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6">
               <header className="flex items-center gap-2 mb-3">
                 <FileText className="h-4 w-4 text-muted-foreground" />
                 <h3 className="text-h4 font-semibold">배송 메모</h3>
@@ -133,7 +135,7 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
         {/* 우측 1/3 — 구매자 + 결제 */}
         <aside className="space-y-6">
           {/* 구매자 */}
-          <section className="rounded-2xl bg-card border border-border/50 p-6">
+          <section className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6">
             <h3 className="text-h4 font-semibold mb-4">구매자</h3>
             <dl className="space-y-3 text-sm">
               <div className="flex items-start gap-3">
@@ -161,7 +163,7 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
           </section>
 
           {/* 결제 */}
-          <section className="rounded-2xl bg-card border border-border/50 p-6">
+          <section className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6">
             <header className="flex items-center gap-2 mb-4">
               <Wallet className="h-4 w-4 text-muted-foreground" />
               <h3 className="text-h4 font-semibold">결제</h3>
@@ -192,7 +194,7 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
           {/* 현재 상태 카드 */}
           <section
             className={cn(
-              "rounded-2xl border p-5",
+              "rounded-2xl border p-4 sm:p-5",
               meta.className.includes("bg-accent-gold")
                 ? "bg-accent-gold/5 border-accent-gold/30"
                 : "bg-card border-border/50"
