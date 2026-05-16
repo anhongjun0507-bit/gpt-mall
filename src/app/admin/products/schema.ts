@@ -51,7 +51,18 @@ export const productFormSchema = z.object({
     .min(0, "0개 이상이어야 합니다"),
   short_description: z.string().trim().max(160).nullable().optional(),
   description: z.string().trim().nullable().optional(),
-  image_url: z.string().trim().url().nullable().optional().or(z.literal("").transform(() => null)),
+  // 절대 URL(https://...) 또는 / 로 시작하는 정적 자산 경로(/products/...) 모두 허용.
+  // 빈 문자열은 null 로 정규화. 강제 .url() 은 정적 자산을 거부하므로 사용 X.
+  image_url: z
+    .string()
+    .trim()
+    .refine(
+      (v) => v === "" || v.startsWith("/") || /^https?:\/\//i.test(v),
+      "URL 또는 / 로 시작하는 절대 경로여야 합니다"
+    )
+    .nullable()
+    .optional()
+    .or(z.literal("").transform(() => null)),
   options: z.array(productOptionSchema),
   badge: z.enum(["BEST", "NEW", "HOT"]).nullable().optional(),
   is_active: z.boolean(),
