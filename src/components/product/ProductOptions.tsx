@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart";
+import { formatOrderItemTitle } from "@/lib/order-display";
 import type { Product, ProductOption } from "@/types/database";
 
 interface Props {
@@ -101,7 +102,8 @@ export function ProductOptions({ product }: Props) {
     if (ok) {
       toast({
         title: "장바구니에 담았어요",
-        description: `${product.name} ${qty}개`,
+        // 상품명 + 선택 옵션 + 수량 → "Claude Pro · 기간 3개월 / 2개"
+        description: `${formatOrderItemTitle(product.name, selected)} / ${qty}개`,
       });
     }
   }
@@ -184,7 +186,7 @@ export function ProductOptions({ product }: Props) {
         </div>
       )}
 
-      {/* ─── 수량 조절 ─── */}
+      {/* ─── 수량 조절 — +/- 버튼 + 직접 입력 ─── */}
       <div className="mt-6">
         <p className="text-sm font-semibold mb-2">수량</p>
         <div className="inline-flex h-11 items-center rounded-md border border-border overflow-hidden">
@@ -197,12 +199,28 @@ export function ProductOptions({ product }: Props) {
           >
             <Minus className="h-4 w-4" />
           </button>
-          <span className="w-12 text-center font-semibold tabular-nums">
-            {qty}
-          </span>
+          <input
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={9999}
+            value={qty}
+            onChange={(e) => {
+              // 입력 중에는 빈 문자열 허용 → 0/NaN 은 1 로 정규화 (blur 처리)
+              const raw = e.target.value;
+              if (raw === "") {
+                setQty(1);
+                return;
+              }
+              const n = parseInt(raw, 10);
+              if (Number.isFinite(n) && n >= 1) setQty(Math.min(n, 9999));
+            }}
+            aria-label="수량"
+            className="w-14 h-full text-center font-semibold tabular-nums bg-transparent outline-none focus:bg-secondary/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
           <button
             type="button"
-            onClick={() => setQty((q) => q + 1)}
+            onClick={() => setQty((q) => Math.min(9999, q + 1))}
             aria-label="수량 증가"
             className="w-11 h-full flex items-center justify-center hover:bg-secondary transition-colors duration-200"
           >

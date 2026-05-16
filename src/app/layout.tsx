@@ -50,7 +50,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* Pretendard Variable — CDN 직접 로드 */}
+        {/* Pretendard Variable — CDN 직접 로드.
+            preconnect 로 DNS/TLS 핸드셰이크 선행 → 폰트 첫 페인트 단축. */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"

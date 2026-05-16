@@ -37,17 +37,37 @@ export function ProductSort({ value }: { value: SortKey }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="h-9 gap-2">
-          {SORT_OPTIONS[value]}
-          <ChevronDown className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="sm"
+          // 펼침 셀렉트라는 신호 강화 — 좌측 "정렬" 라벨 + 강조된 chevron.
+          className="h-9 gap-1.5 pl-3 pr-2 font-medium border-border/80 hover:border-foreground/50 data-[state=open]:border-foreground/60 data-[state=open]:bg-secondary/60"
+          aria-label={`정렬: ${SORT_OPTIONS[value]}`}
+        >
+          <span className="text-muted-foreground">정렬</span>
+          <span aria-hidden className="text-muted-foreground/40">·</span>
+          <span>{SORT_OPTIONS[value]}</span>
+          <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 data-[state=open]:rotate-180" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {(Object.keys(SORT_OPTIONS) as SortKey[]).map((k) => (
-          <DropdownMenuItem key={k} onSelect={() => setSort(k)}>
-            {SORT_OPTIONS[k]}
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent align="end" className="min-w-[140px]">
+        {(Object.keys(SORT_OPTIONS) as SortKey[]).map((k) => {
+          const isActive = k === value;
+          return (
+            <DropdownMenuItem
+              key={k}
+              onSelect={() => setSort(k)}
+              className={isActive ? "bg-secondary font-semibold" : ""}
+            >
+              {SORT_OPTIONS[k]}
+              {isActive && (
+                <span className="ml-auto text-accent-gold" aria-hidden>
+                  ✓
+                </span>
+              )}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

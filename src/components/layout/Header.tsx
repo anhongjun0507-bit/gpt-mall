@@ -71,8 +71,8 @@ export function Header({ auth }: HeaderProps) {
         // 스크롤 0 에서도 카드/푸터 위로 헤더가 묻히지 않도록 항상 backdrop-blur
         // + 옅은 보더 — 폴드 영역은 거의 보이지 않지만 인터랙티브 영역의 기준선 유지.
         isScrolled
-          ? "bg-header-bg backdrop-blur-md border-b border-border/40"
-          : "bg-background/40 backdrop-blur-sm border-b border-transparent"
+          ? "bg-background/80 backdrop-blur-md border-b border-border/60 shadow-sm"
+          : "bg-background/70 backdrop-blur-md border-b border-border/30"
       )}
     >
       <Container>

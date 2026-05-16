@@ -157,7 +157,7 @@ export function Footer() {
               <Link
                 key={href}
                 href={href}
-                className="text-sm leading-[1.4] text-footer-foreground/60 hover:text-accent-gold transition-gold"
+                className="text-sm leading-[1.4] text-footer-foreground/85 hover:text-accent-gold hover:underline underline-offset-4 transition-gold"
               >
                 {label}
               </Link>

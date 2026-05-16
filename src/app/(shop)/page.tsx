@@ -145,8 +145,9 @@ export default async function HomePage() {
             <GoldLineLabel>PREMIUM AI LICENSES</GoldLineLabel>
 
             <Heading variant="display" as="h1" className="mt-6 text-foreground">
-              당신의 작업을
-              <br />
+              당신의 작업을{" "}
+              {/* 모바일에서는 줄바꿈 — 데스크탑에서는 한 줄로 자연스럽게 흐름 */}
+              <br className="md:hidden" />
               <span className="bg-gradient-to-r from-accent-gold via-accent-gold-hover to-accent-gold bg-clip-text text-transparent">
                 10배 빠르게
               </span>
