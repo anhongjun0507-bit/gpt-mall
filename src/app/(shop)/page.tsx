@@ -1,7 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
-  ChevronDown,
   Zap,
   ShieldCheck,
   Headphones,
@@ -128,7 +128,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ═══ Section 1: Hero ════════════════════════════════ */}
-      <section className="relative overflow-hidden h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] min-h-[640px] bg-gradient-to-b from-background via-background to-secondary/30">
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-background to-secondary/30">
         {/* 우상단 골드 글로우 — blur로 부드럽게 */}
         <div
           aria-hidden
@@ -140,7 +140,7 @@ export default async function HomePage() {
           className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-3xl"
         />
 
-        <Container className="relative h-full flex items-center">
+        <Container className="relative py-20 md:py-28">
           <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-1000">
             <GoldLineLabel>PREMIUM AI LICENSES</GoldLineLabel>
 
@@ -184,15 +184,19 @@ export default async function HomePage() {
               </li>
             </ul>
           </div>
-        </Container>
 
-        {/* 스크롤 인디케이터 */}
-        <div
-          aria-hidden
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-60 animate-bounce"
-        >
-          <ChevronDown className="h-6 w-6 text-foreground" />
-        </div>
+          {/* 히어로 배너 — 3:2 비율 박스 고정으로 크롭/레터박스 방지. LCP 요소라 priority. */}
+          <div className="mt-16 md:mt-20 relative max-w-4xl aspect-[3/2] rounded-2xl overflow-hidden border border-border/50 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+            <Image
+              src="/hero-banner.webp"
+              alt="디지털스토어 — AI 구독 공유 플랫폼"
+              fill
+              priority
+              sizes="(min-width: 1024px) 896px, 100vw"
+              className="object-cover"
+            />
+          </div>
+        </Container>
       </section>
 
       {/* ═══ Section 2: Featured Products ════════════════════ */}
