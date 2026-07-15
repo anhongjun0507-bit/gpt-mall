@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
+  ChevronDown,
   Zap,
   ShieldCheck,
   Headphones,
@@ -127,52 +128,76 @@ export default async function HomePage() {
   const featured = await fetchFeaturedProducts();
   return (
     <>
-      {/* ═══ Section 1: Hero ════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-background to-secondary/30">
-        {/* 우상단 골드 글로우 — blur로 부드럽게 */}
+      {/* ═══ Section 1: Hero ════════════════════════════════
+         배너 아트워크가 다크 배경 전제로 제작돼 라이트 배경에선 경계가 드러난다.
+         Final CTA·Footer 와 동일한 모드 독립 다크 토큰을 써서 이미지를 녹인다. */}
+      <section className="relative overflow-hidden h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] min-h-[640px] bg-footer-bg text-footer-foreground">
+        {/* 배너 아트워크 — 헤드라인 뒤 배경. 우측에 앉혀 좌측 텍스트와 겹치지 않게. */}
+        <div aria-hidden className="absolute inset-y-0 right-0 w-full md:w-[62%]">
+          <Image
+            src="/hero-banner.webp"
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 768px) 62vw, 100vw"
+            className="object-cover object-center"
+          />
+          {/* 좌→우 스크림: 텍스트가 얹히는 좌측을 다크 배경색으로 덮어 가독성 확보 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-footer-bg via-footer-bg/60 to-transparent" />
+          {/* 상하 페더링 — 이미지 경계선이 드러나지 않게 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-footer-bg/50 via-transparent to-footer-bg/60" />
+          {/* 모바일은 이미지가 화면을 꽉 채워 텍스트와 겹치므로 한 겹 더 눌러준다 */}
+          <div className="absolute inset-0 bg-footer-bg/55 md:hidden" />
+        </div>
+
+        {/* 좌하단 골드 글로우 — 텍스트 쪽에 브랜드 톤 유지 */}
         <div
           aria-hidden
-          className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-accent-gold/30 rounded-full blur-3xl"
-        />
-        {/* 좌하단 골드 글로우 (더 옅게) */}
-        <div
-          aria-hidden
-          className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-3xl"
+          className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-accent-gold/15 rounded-full blur-3xl"
         />
 
-        <Container className="relative py-20 md:py-28">
+        <Container className="relative h-full flex items-center">
           <div className="max-w-4xl animate-in fade-in slide-in-from-bottom-6 duration-1000">
             <GoldLineLabel>PREMIUM AI LICENSES</GoldLineLabel>
 
-            <Heading variant="display" as="h1" className="mt-6 text-foreground">
+            <Heading variant="display" as="h1" className="mt-6 !text-footer-foreground">
               당신의 작업을{" "}
               {/* 모바일에서는 줄바꿈 — 데스크탑에서는 한 줄로 자연스럽게 흐름 */}
               <br className="md:hidden" />
               <span className="bg-gradient-to-r from-accent-gold via-accent-gold-hover to-accent-gold bg-clip-text text-transparent">
                 10배 빠르게
               </span>
-              <span className="text-foreground">.</span>
+              <span className="!text-footer-foreground">.</span>
             </Heading>
 
-            <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            <p className="mt-6 text-lg md:text-xl text-footer-foreground/70 max-w-2xl leading-relaxed">
               공식 라이센스, 즉시 발급, 합리적인 가격. AI 시대의 모든 도구를 한
               곳에서.
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="h-14 px-8 text-base group">
+              <Button
+                asChild
+                size="lg"
+                className="h-14 px-8 text-base bg-accent-gold hover:bg-accent-gold-hover text-footer-bg group"
+              >
                 <Link href="/products">
                   지금 시작하기
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="h-14 px-8 text-base">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="h-14 px-8 text-base border-footer-foreground/30 bg-transparent text-footer-foreground hover:bg-footer-foreground/10 hover:text-footer-foreground"
+              >
                 <Link href="/products">상품 둘러보기</Link>
               </Button>
             </div>
 
             {/* 신뢰 지표 */}
-            <ul className="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
+            <ul className="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm text-footer-foreground/70">
               <li className="flex items-center gap-1.5">
                 <span className="text-accent-gold">✓</span> 즉시 발급
               </li>
@@ -184,19 +209,15 @@ export default async function HomePage() {
               </li>
             </ul>
           </div>
-
-          {/* 히어로 배너 — 3:2 비율 박스 고정으로 크롭/레터박스 방지. LCP 요소라 priority. */}
-          <div className="mt-16 md:mt-20 relative max-w-4xl aspect-[3/2] rounded-2xl overflow-hidden border border-border/50 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-            <Image
-              src="/hero-banner.webp"
-              alt="디지털스토어 — AI 구독 공유 플랫폼"
-              fill
-              priority
-              sizes="(min-width: 1024px) 896px, 100vw"
-              className="object-cover"
-            />
-          </div>
         </Container>
+
+        {/* 스크롤 인디케이터 */}
+        <div
+          aria-hidden
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-60 animate-bounce"
+        >
+          <ChevronDown className="h-6 w-6 text-footer-foreground" />
+        </div>
       </section>
 
       {/* ═══ Section 2: Featured Products ════════════════════ */}
