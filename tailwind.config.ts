@@ -90,8 +90,9 @@ const config: Config = {
         "header-bg": "var(--header-bg)",
 
         // Footer — 모드 독립 (라이트/다크 모두 동일). bg-footer-bg / text-footer-foreground
-        "footer-bg": "var(--footer-bg)",
-        "footer-foreground": "var(--footer-foreground)",
+        // oklch(... / <alpha-value>) 형태여야 /70 같은 불투명도 수식어가 동작한다.
+        "footer-bg": "oklch(var(--footer-bg) / <alpha-value>)",
+        "footer-foreground": "oklch(var(--footer-foreground) / <alpha-value>)",
       },
 
       // ─── Geometry ─────────────────────────────────────────────
