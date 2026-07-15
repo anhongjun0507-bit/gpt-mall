@@ -7,19 +7,13 @@ import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductFilters } from "@/components/product/ProductFilters";
-import { ProductSort, SORT_OPTIONS, type SortKey } from "@/components/product/ProductSort";
+import { ProductSort } from "@/components/product/ProductSort";
+import { SORT_OPTIONS, SORT_QUERY, DEFAULT_SORT, type SortKey } from "@/lib/product-sort";
 import { getCategoryShortLabel, isValidCategory } from "@/lib/product-categories";
 import type { Product, ProductCategory } from "@/types/database";
 
 export const metadata: Metadata = {
   title: "전체 상품",
-};
-
-// 정렬 키 → Postgres 컬럼 매핑
-const SORT_QUERY: Record<SortKey, { column: string; ascending: boolean }> = {
-  latest: { column: "created_at", ascending: false },
-  price_asc: { column: "price", ascending: true },
-  price_desc: { column: "price", ascending: false },
 };
 
 // Server Component — RLS가 is_active=true 만 노출하므로 추가 필터 불필요.
@@ -36,7 +30,7 @@ export default async function ProductsPage({
   const sortKey: SortKey =
     searchParams.sort && searchParams.sort in SORT_OPTIONS
       ? (searchParams.sort as SortKey)
-      : "latest";
+      : DEFAULT_SORT;
 
   let products: Product[] = [];
   let count = 0;
@@ -49,7 +43,7 @@ export default async function ProductsPage({
     const { column, ascending } = SORT_QUERY[sortKey];
     query = query
       .order(column, { ascending })
-      .order("sort_order", { ascending: false });
+      .order("created_at", { ascending: false }); // 동점 시 tie-breaker
 
     const { data, count: c, error } = await query;
     if (error) throw error;
@@ -76,7 +70,7 @@ export default async function ProductsPage({
       <div className="mt-8 flex flex-wrap gap-3 items-center justify-between">
         <ProductFilters
           active={category}
-          sort={sortKey === "latest" ? "" : sortKey}
+          sort={sortKey === DEFAULT_SORT ? "" : sortKey}
         />
         <ProductSort value={sortKey} />
       </div>

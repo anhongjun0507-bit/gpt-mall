@@ -10,14 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-export const SORT_OPTIONS = {
-  latest: "최신순",
-  price_asc: "가격 낮은순",
-  price_desc: "가격 높은순",
-} as const;
-
-export type SortKey = keyof typeof SORT_OPTIONS;
+import { SORT_OPTIONS, DEFAULT_SORT, type SortKey } from "@/lib/product-sort";
 
 export function ProductSort({ value }: { value: SortKey }) {
   const router = useRouter();
@@ -25,7 +18,7 @@ export function ProductSort({ value }: { value: SortKey }) {
 
   function setSort(s: SortKey) {
     const params = new URLSearchParams(searchParams.toString());
-    if (s === "latest") {
+    if (s === DEFAULT_SORT) {
       params.delete("sort"); // 기본값은 URL 정리
     } else {
       params.set("sort", s);
