@@ -26,14 +26,14 @@ export default function PrivacyPage() {
             <li>이름</li>
             <li>휴대전화 번호</li>
             <li>결제 정보(PG사를 통해 처리, 회사는 카드 정보 자체를 저장하지 않음)</li>
-            <li>주문 내역 및 라이센스 발급 정보</li>
+            <li>주문 내역 및 이용권 발급 정보</li>
           </ul>
         </LegalSection>
 
         <LegalSection title="2. 개인정보의 수집 및 이용 목적">
           <ul className="list-disc pl-5 space-y-1">
             <li>회원 가입 및 본인 확인</li>
-            <li>주문 처리 및 라이센스 발급·전달</li>
+            <li>주문 처리 및 공유계정 발급·전달</li>
             <li>고객 문의 응대 및 환불 처리</li>
             <li>서비스 안내 및 공지 전달(필수 정보에 한함)</li>
             <li>법령상 의무 이행(거래 기록 보관 등)</li>
