@@ -132,7 +132,7 @@ export default async function AccountOrdersPage({ searchParams }: PageProps) {
             />
             <p className="mt-4 font-medium">아직 주문 내역이 없습니다</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              마음에 드는 AI 도구를 찾아보세요.
+              마음에 드는 상품을 찾아보세요.
             </p>
             <Button asChild className="mt-6">
               <Link href="/products">상품 둘러보기</Link>

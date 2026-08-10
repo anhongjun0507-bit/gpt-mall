@@ -85,7 +85,7 @@ export default async function HomePage() {
               <div className="hidden md:inline-flex items-center gap-2">
                 <span aria-hidden className="w-6 h-px bg-accent-gold" />
                 <span className="text-xs tracking-[0.25em] uppercase text-accent-gold font-semibold">
-                  AI SUBSCRIPTION SHARING
+                  SUBSCRIPTION SHARING
                 </span>
               </div>
               <p className="md:mt-1 text-base md:text-2xl font-extrabold tracking-tight">

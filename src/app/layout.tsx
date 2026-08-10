@@ -6,33 +6,33 @@ import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   metadataBase: new URL("https://digitalst.kr"),
   title: {
-    default: "디지털스토어 — 프리미엄 AI 구독 공유",
+    default: "디지털스토어 — 프리미엄 구독 공유",
     template: "%s | 디지털스토어",
   },
   description:
-    "AI 서비스 구독 공유 상품 판매. 결제 후 빠른 계정 발급. 안전한 결제로 AI 도구를 합리적으로 시작하세요.",
+    "구독 공유 상품 판매. 결제 후 빠른 계정 발급. 안전한 결제로 필요한 도구를 합리적으로 시작하세요.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
     siteName: "디지털스토어",
-    title: "디지털스토어 — 프리미엄 AI 구독 공유",
+    title: "디지털스토어 — 프리미엄 구독 공유",
     description:
-      "AI 서비스 구독 공유 상품 판매. 결제 후 빠른 계정 발급.",
+      "구독 공유 상품 판매. 결제 후 빠른 계정 발급.",
     url: "https://digitalst.kr",
     images: [
       {
         url: "/og.svg",
         width: 1200,
         height: 630,
-        alt: "디지털스토어 — 프리미엄 AI 구독 공유",
+        alt: "디지털스토어 — 프리미엄 구독 공유",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "디지털스토어 — 프리미엄 AI 구독 공유",
+    title: "디지털스토어 — 프리미엄 구독 공유",
     description:
-      "AI 서비스 구독 공유 상품 판매. 결제 후 빠른 계정 발급.",
+      "구독 공유 상품 판매. 결제 후 빠른 계정 발급.",
     images: ["/og.svg"],
   },
   // 배포 전이라 검색엔진 인덱싱 차단. 정식 오픈 시 제거.
