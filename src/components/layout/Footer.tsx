@@ -63,7 +63,7 @@ export function Footer() {
               />
             </div>
             <p className="text-body text-footer-foreground/70 leading-relaxed">
-              프리미엄 AI 서비스 구독 공유 스토어
+              프리미엄 구독 공유 스토어
             </p>
             <div className="flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
