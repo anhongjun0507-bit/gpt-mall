@@ -211,7 +211,7 @@ export function CheckoutForm() {
                       />
                     </FormControl>
                     <FormDescription>
-                      📱 라이센스는 입력하신 번호로 SMS 발송됩니다.
+                      📱 구독 공유 계정 정보는 입력하신 번호로 SMS 발송됩니다.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -224,7 +224,7 @@ export function CheckoutForm() {
           <Card title="디지털 상품 수령 정보">
             <div className="rounded-md bg-secondary/50 border border-border/40 px-4 py-3 mb-5 text-sm text-muted-foreground flex items-start gap-2">
               <Info className="h-4 w-4 mt-0.5 shrink-0 text-accent-gold" />
-              <p>📱 결제 완료 후 입력하신 휴대전화 번호로 라이센스가 SMS 발송됩니다.</p>
+              <p>📱 결제 완료 후 입력하신 휴대전화 번호로 구독 공유 계정 정보가 SMS 발송됩니다.</p>
             </div>
             <FormField
               control={form.control}
@@ -452,7 +452,7 @@ export function CheckoutForm() {
               </p>
               <p className="flex items-start gap-2">
                 <Info className="h-3.5 w-3.5 mt-0.5 shrink-0 text-accent-gold" />
-                디지털 상품은 라이센스 발급 전까지만 환불 가능합니다.{" "}
+                디지털 상품은 계정 정보 발급 전까지만 환불 가능합니다.{" "}
                 <Link href="/help/refund" className="underline hover:text-foreground">
                   자세히
                 </Link>

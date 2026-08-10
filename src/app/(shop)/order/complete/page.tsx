@@ -173,11 +173,11 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
           </dl>
         </section>
 
-        {/* 라이센스 발급 안내 — SMS 톤 */}
+        {/* 구독 공유 계정 발급 안내 — SMS 톤 */}
         <section className="mt-6 rounded-2xl bg-card border border-border/50 p-6 text-sm leading-relaxed">
-          <h3 className="text-h4 font-semibold">라이센스 발급 안내</h3>
+          <h3 className="text-h4 font-semibold">구독 공유 계정 발급 안내</h3>
           <p className="mt-3 text-muted-foreground">
-            결제가 확정되면 라이센스 키가 자동 발급되어 마이페이지에서 확인하실
+            결제가 확정되면 구독 공유 계정 정보가 자동 발급되어 마이페이지에서 확인하실
             수 있습니다. 발급 시 입력하신 휴대전화 번호로 SMS 안내도 함께
             보내드려요.
           </p>

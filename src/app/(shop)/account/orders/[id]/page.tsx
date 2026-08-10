@@ -248,10 +248,10 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
                 <>
                   <Button variant="outline" className="w-full" disabled>
                     <KeyRound className="h-4 w-4 mr-2" />
-                    라이센스 다시 보기
+                    계정 정보 다시 보기
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    라이센스 발급 모듈 준비 후 활성화됩니다.
+                    계정 정보 발급 모듈 준비 후 활성화됩니다.
                   </p>
                 </>
               )}

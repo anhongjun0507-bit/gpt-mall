@@ -67,14 +67,14 @@ export function ProductCard({
       </div>
 
       {/* 본문 영역 */}
-      <div className="p-5">
+      <div className="p-4">
         <p className="text-xs uppercase tracking-wider text-muted-foreground">
           {category}
         </p>
-        <h3 className="mt-2 font-semibold text-base line-clamp-2 leading-snug group-hover:text-accent-gold transition-gold">
+        <h3 className="mt-1.5 font-semibold text-base line-clamp-2 leading-snug group-hover:text-accent-gold transition-gold">
           {name}
         </h3>
-        <div className="mt-3 flex items-baseline gap-2">
+        <div className="mt-2 flex items-baseline gap-2">
           <span
             className={cn(
               "text-lg font-bold",

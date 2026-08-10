@@ -125,7 +125,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <div className="mt-8 pt-6 border-t border-border grid grid-cols-3 gap-4">
             {[
               { Icon: Zap, label: "즉시 발급" },
-              { Icon: ShieldCheck, label: "정품 보장" },
+              { Icon: ShieldCheck, label: "안전 거래" },
               { Icon: Headphones, label: "24/7 지원" },
             ].map(({ Icon, label }) => (
               <div key={label} className="flex flex-col items-center gap-2 text-center">
@@ -155,10 +155,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
           </TabsContent>
           <TabsContent value="notice" className="mt-6 text-body text-muted-foreground leading-relaxed whitespace-pre-line">
-            {`• 본 상품은 공식 라이센스 코드로 발급됩니다.\n• 발급된 코드는 환불 불가합니다 (정책 참조).\n• 라이센스 사용 중 발생한 문제는 카카오톡 상담을 통해 해결해 드립니다.`}
+            {`• 본 상품은 구독 공유 상품으로, 결제 후 이용 계정 정보가 발급됩니다.\n• 발급된 계정 정보는 환불 불가합니다 (정책 참조).\n• 이용 중 발생한 문제는 카카오톡 상담을 통해 해결해 드립니다.`}
           </TabsContent>
           <TabsContent value="refund" className="mt-6 text-body text-muted-foreground leading-relaxed whitespace-pre-line">
-            {`• 라이센스 코드 발급 전 결제 취소 시 100% 환불.\n• 발급 후에는 단순 변심에 의한 환불 불가 (디지털 콘텐츠 특성상).\n• 라이센스 자체에 결함이 있는 경우 무상 교환 또는 환불.\n• 환불 요청은 카카오톡 채널을 통해 7일 이내에 접수.`}
+            {`• 계정 정보 발급 전 결제 취소 시 100% 환불.\n• 발급 후에는 단순 변심에 의한 환불 불가 (디지털 콘텐츠 특성상).\n• 발급된 계정을 정상 이용할 수 없는 경우 무상 교체 또는 환불.\n• 환불 요청은 카카오톡 채널을 통해 7일 이내에 접수.`}
           </TabsContent>
         </Tabs>
       </div>

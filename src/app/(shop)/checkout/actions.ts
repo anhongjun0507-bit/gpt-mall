@@ -235,7 +235,7 @@ export async function createOrder(
 //      — 클라이언트 콜백만 믿지 말고 PG REST 로 한 번 더 조회/대조 (금액·주문번호)
 //   2) orders 업데이트: status='paid', paid_at=now()
 //   3) 재고 차감 (createOrder 시점에 차감하지 않았다면 여기서 확정)
-//   4) 라이센스 키 발급 (licenses 테이블 insert)
+//   4) 구독 공유 계정 정보 발급 (licenses 테이블 insert)
 //   5) 알림톡 트리거
 //      — Supabase Database Webhook 으로 잡거나 (docs/NOTIFICATION_PLAN.md 참고)
 //        또는 여기서 /api/notifications/order-paid 를 직접 호출

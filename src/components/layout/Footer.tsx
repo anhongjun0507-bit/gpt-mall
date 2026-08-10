@@ -47,12 +47,12 @@ const SOCIAL_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="bg-footer-bg text-footer-foreground py-16 md:py-24">
+    <footer className="bg-footer-bg text-footer-foreground py-8 md:py-10">
       <Container>
         {/* ─── 4열 그리드 (모바일 1열, md 이상 4열) ─── */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* 1열: 브랜드 */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <span className="text-h4 font-extrabold tracking-tight">
                 {BUSINESS_INFO.name}
@@ -63,7 +63,7 @@ export function Footer() {
               />
             </div>
             <p className="text-body text-footer-foreground/70 leading-relaxed">
-              프리미엄 AI 소프트웨어 라이센스 정식 판매
+              프리미엄 AI 서비스 구독 공유 스토어
             </p>
             <div className="flex items-center gap-3">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -82,11 +82,11 @@ export function Footer() {
           </div>
 
           {/* 2열: Shop */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold tracking-wider uppercase text-footer-foreground/90">
               Shop
             </h3>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-2">
               {SHOP_LINKS.map(({ label, href }) => (
                 <li key={href}>
                   <Link
@@ -101,11 +101,11 @@ export function Footer() {
           </div>
 
           {/* 3열: Help */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold tracking-wider uppercase text-footer-foreground/90">
               Help
             </h3>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-2">
               {HELP_LINKS.map((item) => (
                 <li key={item.label}>
                   {item.external ? (
@@ -131,12 +131,12 @@ export function Footer() {
           </div>
 
           {/* 4열: 회사 정보 */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold tracking-wider uppercase text-footer-foreground/90">
               Company
             </h3>
             {/* 2컬럼 그리드 — 라벨 폭 고정으로 값의 시작 x 좌표 정렬. */}
-            <dl className="grid grid-cols-[6rem_1fr] gap-x-3 gap-y-1.5 text-xs text-footer-foreground/60 leading-relaxed">
+            <dl className="grid grid-cols-[6rem_1fr] gap-x-3 gap-y-1 text-xs text-footer-foreground/60 leading-relaxed">
               {COMPANY_INFO.map(({ label, value }) => (
                 <React.Fragment key={label}>
                   <dt className="text-footer-foreground/40">{label}</dt>
@@ -148,7 +148,7 @@ export function Footer() {
         </div>
 
         {/* ─── 하단 카피라이트 + 법적 고지 ─── */}
-        <div className="mt-12 pt-8 border-t border-footer-foreground/10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="mt-6 pt-5 border-t border-footer-foreground/10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <p className="text-sm leading-[1.4] text-footer-foreground/50">
             © 2026 {BUSINESS_INFO.name}. All rights reserved.
           </p>

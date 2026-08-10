@@ -76,7 +76,7 @@ export function Header({ auth }: HeaderProps) {
       )}
     >
       <Container>
-        <div className="flex h-16 md:h-20 items-center justify-between">
+        <div className="flex h-14 md:h-16 items-center justify-between">
           {/* ─── 좌측: 로고 ─── */}
           <Link
             href="/"
