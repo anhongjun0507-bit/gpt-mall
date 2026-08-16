@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CartBadge } from "@/components/product/CartBadge";
+import { SignOutForm } from "@/components/layout/SignOutForm";
 import type { CurrentAuth } from "@/lib/auth";
 
 interface NavItem {
@@ -185,7 +186,7 @@ export function Header({ auth }: HeaderProps) {
                   )}
                   <DropdownMenuSeparator />
                   {/* 로그아웃 — form POST. button asChild 로 DropdownMenuItem 스타일 유지. */}
-                  <form action="/auth/signout" method="POST">
+                  <SignOutForm>
                     <DropdownMenuItem asChild>
                       <button
                         type="submit"
@@ -195,7 +196,7 @@ export function Header({ auth }: HeaderProps) {
                         로그아웃
                       </button>
                     </DropdownMenuItem>
-                  </form>
+                  </SignOutForm>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -320,7 +321,7 @@ export function Header({ auth }: HeaderProps) {
                 {/* 하단 CTA */}
                 <div className="px-6 py-6 border-t border-border flex flex-col gap-3">
                   {auth ? (
-                    <form action="/auth/signout" method="POST">
+                    <SignOutForm>
                       <Button
                         type="submit"
                         variant="outline"
@@ -330,7 +331,7 @@ export function Header({ auth }: HeaderProps) {
                         <LogOut className="h-4 w-4 mr-2" />
                         로그아웃
                       </Button>
-                    </form>
+                    </SignOutForm>
                   ) : (
                     <>
                       <SheetClose asChild>

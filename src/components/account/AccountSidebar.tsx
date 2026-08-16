@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { SignOutForm } from "@/components/layout/SignOutForm";
 
 interface NavItem {
   href: string;
@@ -61,7 +62,7 @@ export function AccountSidebar() {
             );
           })}
           <li className="ml-auto pl-2">
-            <form action="/auth/signout" method="post" className="inline">
+            <SignOutForm className="inline">
               <button
                 type="submit"
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-destructive transition-colors"
@@ -69,7 +70,7 @@ export function AccountSidebar() {
                 <LogOut className="h-3.5 w-3.5" />
                 로그아웃
               </button>
-            </form>
+            </SignOutForm>
           </li>
         </ul>
       </nav>
@@ -100,7 +101,7 @@ export function AccountSidebar() {
 
         {/* 구분선 + 로그아웃 (form POST — signout route) */}
         <div className="mt-2 pt-2 border-t border-border">
-          <form action="/auth/signout" method="post">
+          <SignOutForm>
             <button
               type="submit"
               className="w-full flex items-center gap-3 px-4 py-3 border-l-2 border-transparent text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-200"
@@ -108,7 +109,7 @@ export function AccountSidebar() {
               <LogOut className="h-4 w-4" />
               <span className="text-sm font-medium">로그아웃</span>
             </button>
-          </form>
+          </SignOutForm>
         </div>
       </nav>
     </aside>
