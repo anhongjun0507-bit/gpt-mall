@@ -22,8 +22,10 @@ export type ProductCategory =
   | "ai_voice"
   | "productivity";
 export type ProductBadge = "BEST" | "NEW" | "HOT";
+// awaiting_deposit — 무통장 입금 대기. pending(PG 결제 대기) 과 구분한다.
 export type OrderStatus =
   | "pending"
+  | "awaiting_deposit"
   | "paid"
   | "delivered"
   | "cancelled"
@@ -144,6 +146,9 @@ export interface Database {
           recipient_email: string | null;
           recipient_phone: string;
           memo: string | null;
+          // 무통장 입금 전용 — 그 외 결제수단에서는 null
+          depositor_name: string | null;
+          deposit_due_at: string | null;
           paid_at: string | null;
           created_at: string;
         };
@@ -158,6 +163,8 @@ export interface Database {
           recipient_email?: string | null;
           recipient_phone: string;
           memo?: string | null;
+          depositor_name?: string | null;
+          deposit_due_at?: string | null;
           paid_at?: string | null;
           created_at?: string;
         };
@@ -172,6 +179,8 @@ export interface Database {
           recipient_email?: string | null;
           recipient_phone?: string;
           memo?: string | null;
+          depositor_name?: string | null;
+          deposit_due_at?: string | null;
           paid_at?: string | null;
           created_at?: string;
         };

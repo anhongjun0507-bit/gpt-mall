@@ -23,6 +23,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { formatKRW } from "@/lib/format";
+import { BANK_ACCOUNT } from "@/lib/bank-account";
 import { useCart } from "@/hooks/useCart";
 
 import { checkoutSchema, type CheckoutValues } from "@/app/(shop)/checkout/schema";
@@ -36,12 +37,12 @@ function formatPhone(raw: string): string {
   return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;
 }
 
-// PG 가맹 승인 전 — 무통장입금만 실제 안내 가능, 카카오페이/카드는 가맹 후 활성화.
-// 사양: 무통장입금 / 카카오페이 / 카드. 네이버페이는 신규 결제에서 제외.
+// PG 가맹 승인 전 — 무통장입금만 선택 가능. 카카오페이/카드는 승인 후 활성화.
+// 목록에 남겨두는 이유: 결제 수단이 준비 중이라는 사실을 고객에게 보여주기 위함.
 const PAYMENT_METHODS = [
-  { value: "bank_transfer", label: "무통장입금", emoji: "🏦" },
-  { value: "kakaopay", label: "카카오페이", emoji: "💛" },
-  { value: "card", label: "신용카드", emoji: "💳" },
+  { value: "bank_transfer", label: "무통장입금", emoji: "🏦", enabled: true },
+  { value: "kakaopay", label: "카카오페이", emoji: "💛", enabled: false },
+  { value: "card", label: "신용카드", emoji: "💳", enabled: false },
 ] as const;
 
 export function CheckoutForm() {
@@ -72,11 +73,23 @@ export function CheckoutForm() {
       kakao_id: "",
       memo: "",
       payment_method: "bank_transfer",
+      depositor_name: "",
       agree_terms: false as true,
       agree_privacy: false as true,
     },
     mode: "onBlur",
   });
+
+  const paymentMethod = form.watch("payment_method");
+
+  // 입금자명은 주문자명으로 프리필하되, 사용자가 한 번이라도 직접 고치면
+  // 그 뒤로는 주문자명 변경을 따라가지 않는다 (수정값 보존).
+  const recipientName = form.watch("recipient_name");
+  const depositorEdited = React.useRef(false);
+  React.useEffect(() => {
+    if (depositorEdited.current) return;
+    form.setValue("depositor_name", recipientName);
+  }, [recipientName, form]);
 
   const agreeTerms = form.watch("agree_terms");
   const agreePrivacy = form.watch("agree_privacy");
@@ -285,16 +298,26 @@ export function CheckoutForm() {
                             key={m.value}
                             type="button"
                             onClick={() => field.onChange(m.value)}
-                            disabled={submitting}
+                            disabled={submitting || !m.enabled}
+                            aria-pressed={isActive}
                             className={cn(
-                              "h-16 rounded-md border flex items-center justify-center gap-2 transition-all duration-200 text-sm font-medium",
-                              isActive
-                                ? "bg-accent-gold/10 border-accent-gold text-accent-gold"
-                                : "bg-background border-border text-foreground hover:border-foreground/40"
+                              "h-16 rounded-md border flex flex-col items-center justify-center gap-0.5 transition-all duration-200 text-sm font-medium",
+                              !m.enabled
+                                ? "bg-secondary/40 border-border/40 text-muted-foreground cursor-not-allowed"
+                                : isActive
+                                  ? "bg-accent-gold/10 border-accent-gold text-accent-gold"
+                                  : "bg-background border-border text-foreground hover:border-foreground/40"
                             )}
                           >
-                            <span aria-hidden>{m.emoji}</span>
-                            {m.label}
+                            <span className="flex items-center gap-2">
+                              <span aria-hidden>{m.emoji}</span>
+                              {m.label}
+                            </span>
+                            {!m.enabled && (
+                              <span className="text-[11px] font-normal">
+                                가맹 승인 대기
+                              </span>
+                            )}
                           </button>
                         );
                       })}
@@ -304,10 +327,51 @@ export function CheckoutForm() {
                 </FormItem>
               )}
             />
-            <p className="mt-4 text-xs text-muted-foreground bg-secondary/40 border border-border/40 rounded-md px-3 py-2 leading-relaxed">
-              ⚠️ 결제 시스템이 현재 가맹 승인 대기 중입니다. 주문은 정상 접수되며,
-              가맹 승인 완료 후 별도로 결제 안내를 드립니다.
-            </p>
+
+            {/* 무통장 선택 시 — 계좌 안내 + 입금자명 */}
+            {paymentMethod === "bank_transfer" && (
+              <div className="mt-5 space-y-5">
+                <div className="rounded-md border border-accent-gold/30 bg-accent-gold/5 px-4 py-4">
+                  <p className="text-sm font-semibold">입금 계좌</p>
+                  <p className="mt-2 text-base font-bold tabular-nums">
+                    {BANK_ACCOUNT.bank} {BANK_ACCOUNT.number}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    예금주 · {BANK_ACCOUNT.holder}
+                  </p>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="depositor_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>입금자명 *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="홍길동"
+                          disabled={submitting}
+                          {...field}
+                          onChange={(e) => {
+                            depositorEdited.current = true;
+                            field.onChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        주문자명과 다르면 실제 입금하실 이름으로 수정해주세요.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <p className="text-xs text-muted-foreground bg-secondary/40 border border-border/40 rounded-md px-3 py-2 leading-relaxed">
+                  ⏰ 주문 후 24시간 이내 입금해주셔야 주문이 확정됩니다. 미입금 시
+                  자동 취소될 수 있습니다.
+                </p>
+              </div>
+            )}
           </Card>
 
           {/* 6. 약관 동의 */}
@@ -426,7 +490,6 @@ export function CheckoutForm() {
                 </p>
               )}
 
-              {/* PG 가맹 승인 전 — 결제하기 비활성, 무통장입금 안내로 주문 접수만 가능 */}
               <Button
                 type="submit"
                 size="lg"
@@ -434,13 +497,13 @@ export function CheckoutForm() {
                 className="w-full h-12 mt-5 bg-accent-gold hover:bg-accent-gold-hover text-footer-bg"
               >
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {submitting ? "주문 생성 중..." : "주문 접수하기"}
+                {submitting ? "주문 생성 중..." : "주문하기"}
               </Button>
 
               <p className="mt-3 text-xs text-muted-foreground text-center leading-relaxed">
-                현재 결제 모듈 준비 중 — 주문은 &apos;결제 대기&apos; 상태로
-                <br />
-                저장됩니다.
+                {paymentMethod === "bank_transfer"
+                  ? "주문 후 안내되는 계좌로 24시간 이내 입금해주세요."
+                  : "주문은 '결제 대기' 상태로 저장됩니다."}
               </p>
             </div>
 

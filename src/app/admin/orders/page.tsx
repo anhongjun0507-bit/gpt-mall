@@ -12,6 +12,7 @@ import {
   isValidOrderStatus,
   getPaymentMethodLabel,
 } from "@/lib/order-status";
+import { isDepositOverdue } from "@/lib/bank-account";
 import { OrderStatusFilter } from "@/components/admin/OrderStatusFilter";
 import type { Order, OrderStatus } from "@/types/database";
 
@@ -40,6 +41,7 @@ async function fetchData(activeStatus: OrderStatus | "") {
 
   const counts: Record<OrderStatus | "all", number> = {
     all: 0,
+    awaiting_deposit: 0,
     pending: 0,
     paid: 0,
     delivered: 0,
@@ -106,6 +108,10 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
               <tbody className="divide-y divide-border">
                 {orders.map((o) => {
                   const meta = ORDER_STATUS_META[o.status];
+                  // 입금 기한이 지난 입금대기 건은 운영자가 바로 알아보게 별도 표시.
+                  const overdue =
+                    o.status === "awaiting_deposit" &&
+                    isDepositOverdue(o.deposit_due_at);
                   return (
                     <tr
                       key={o.id}
@@ -144,6 +150,11 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                         >
                           {meta.label}
                         </span>
+                        {overdue && (
+                          <span className="ml-1.5 inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-destructive/10 text-destructive">
+                            기한 초과
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 sm:px-5 py-3 text-right whitespace-nowrap">
                         <Button

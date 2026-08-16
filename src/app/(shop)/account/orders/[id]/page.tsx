@@ -21,6 +21,7 @@ import {
   ORDER_STATUS_META,
   getPaymentMethodLabel,
 } from "@/lib/order-status";
+import { DepositGuide } from "@/components/order/DepositGuide";
 import type { Order, OrderItem } from "@/types/database";
 
 // 표준 UUID v4/v8 형식. 형식 안 맞으면 DB 조회 없이 즉시 차단.
@@ -100,6 +101,15 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
       <div className="mt-8 grid lg:grid-cols-3 gap-6">
         {/* 좌측 */}
         <div className="lg:col-span-2 space-y-6">
+          {/* 입금 대기면 계좌 정보를 다시 보여준다 — 고객이 나중에 재확인 가능하도록 */}
+          {order.status === "awaiting_deposit" && (
+            <DepositGuide
+              total={order.total}
+              depositorName={order.depositor_name}
+              depositDueAt={order.deposit_due_at}
+            />
+          )}
+
           {/* 주문 상품 */}
           <section className="rounded-2xl bg-card border border-border/50 overflow-hidden">
             <header className="px-6 py-4 border-b border-border">
@@ -234,6 +244,12 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
             {/* 상태별 액션 */}
             <section className="rounded-2xl bg-card border border-border/50 p-6 space-y-3">
               <h3 className="text-h4 font-semibold">주문 액션</h3>
+              {order.status === "awaiting_deposit" && (
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  위 입금 안내의 계좌로 입금해주세요. 입금이 확인되면 카카오톡으로
+                  계정 정보를 보내드립니다.
+                </p>
+              )}
               {order.status === "pending" && (
                 <>
                   <Button className="w-full" disabled>

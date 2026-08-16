@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth";
 import type { CartItem } from "@/lib/cart";
 import { notifyOrderCreated } from "@/lib/notifications/telegram";
 import { getPaymentMethodLabel } from "@/lib/order-status";
+import { calcDepositDueAt, formatDepositDue } from "@/lib/bank-account";
 import type { ProductOption } from "@/types/database";
 
 import { checkoutSchema, type CheckoutValues } from "./schema";
@@ -124,6 +125,16 @@ export async function createOrder(
     const user = await getCurrentUser();
     const orderNumber = generateOrderNumber();
 
+    // 무통장 입금은 '입금 대기' 로 접수하고 기한(주문 + 24시간)을 박아둔다.
+    // 카드·간편결제(가맹 승인 대기)는 기존대로 pending.
+    const isBankTransfer = parsed.data.payment_method === "bank_transfer";
+    const depositorName = isBankTransfer
+      ? parsed.data.depositor_name?.trim() || parsed.data.recipient_name
+      : null;
+    const depositDueAt = isBankTransfer
+      ? calcDepositDueAt().toISOString()
+      : null;
+
     // 6) orders insert
     const { data: order, error: orderErr } = await supabase
       .from("orders")
@@ -131,8 +142,10 @@ export async function createOrder(
         order_number: orderNumber,
         user_id: user?.id ?? null,
         total,
-        status: "pending",
+        status: isBankTransfer ? "awaiting_deposit" : "pending",
         payment_method: parsed.data.payment_method,
+        depositor_name: depositorName,
+        deposit_due_at: depositDueAt,
         recipient_name: parsed.data.recipient_name,
         // 클라이언트 정책 — 주문서에서 이메일 받지 않음 (SMS 발송 중심).
         // 회원 주문은 추후 auth.users.email 로 사후 매핑 가능, 컬럼 자체는 유지.
@@ -195,6 +208,13 @@ export async function createOrder(
       })),
       memo: parsed.data.memo,
       adminUrl: `${siteUrl}/admin/orders/${order.id}`,
+      deposit:
+        isBankTransfer && depositDueAt
+          ? {
+              depositorName: depositorName ?? parsed.data.recipient_name,
+              dueLabel: formatDepositDue(depositDueAt),
+            }
+          : null,
     });
 
     // ─── 결제 모듈 끼워넣을 자리 ───────────────────────────

@@ -28,6 +28,7 @@ const STATUS_META: Record<
   { label: string; className: string }
 > = {
   pending: { label: "결제 대기", className: "bg-secondary text-muted-foreground" },
+  awaiting_deposit: { label: "입금 대기", className: "bg-accent-gold/15 text-accent-gold" },
   paid: { label: "결제 완료", className: "bg-accent-gold/10 text-accent-gold" },
   delivered: { label: "발급 완료", className: "bg-foreground text-background" },
   cancelled: { label: "취소", className: "bg-secondary text-muted-foreground line-through" },

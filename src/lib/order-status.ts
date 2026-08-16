@@ -16,6 +16,11 @@ export const ORDER_STATUS_META: Record<OrderStatus, OrderStatusMeta> = {
     className: "bg-secondary text-muted-foreground",
     transitions: ["paid", "cancelled"],
   },
+  awaiting_deposit: {
+    label: "입금 대기",
+    className: "bg-accent-gold/15 text-accent-gold",
+    transitions: ["paid", "cancelled"],
+  },
   paid: {
     label: "결제 완료",
     className: "bg-accent-gold/10 text-accent-gold",
@@ -38,7 +43,9 @@ export const ORDER_STATUS_META: Record<OrderStatus, OrderStatusMeta> = {
   },
 };
 
+// 표시 순서 — 운영자가 가장 자주 보는 '입금 대기' 를 앞에 둔다.
 export const ALL_ORDER_STATUSES: OrderStatus[] = [
+  "awaiting_deposit",
   "pending",
   "paid",
   "delivered",

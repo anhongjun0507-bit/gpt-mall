@@ -25,6 +25,11 @@ export interface NotifyOrderCreatedInput {
   items: OrderItemForNotify[];
   memo?: string | null;
   adminUrl?: string;
+  // 무통장 입금 주문일 때만 채워진다 — 운영자가 입금 대조에 쓰는 값.
+  deposit?: {
+    depositorName: string;
+    dueLabel: string; // "8월 17일 15시까지"
+  } | null;
 }
 
 const TELEGRAM_API_BASE = "https://api.telegram.org";
@@ -39,11 +44,15 @@ function escapeHtml(raw: string): string {
 
 function formatOrderMessage(opts: NotifyOrderCreatedInput): string {
   const lines: string[] = [];
-  lines.push("🛒 <b>새 주문 접수</b>");
+  lines.push(opts.deposit ? "🏦 <b>새 주문 접수 (입금 대기)</b>" : "🛒 <b>새 주문 접수</b>");
   lines.push("");
   lines.push(`<b>주문번호</b>: <code>${escapeHtml(opts.orderNumber)}</code>`);
-  lines.push(`<b>결제금액</b>: ₩${opts.total.toLocaleString("ko-KR")}`);
-  lines.push(`<b>결제수단</b>: ${escapeHtml(opts.paymentMethodLabel)}`);
+  lines.push(`💰 <b>${opts.deposit ? "입금금액" : "결제금액"}</b>: ₩${opts.total.toLocaleString("ko-KR")}`);
+  lines.push(`💳 <b>결제수단</b>: ${escapeHtml(opts.paymentMethodLabel)}`);
+  if (opts.deposit) {
+    lines.push(`👤 <b>입금자명</b>: ${escapeHtml(opts.deposit.depositorName)}`);
+    lines.push(`⏰ <b>입금 기한</b>: ${escapeHtml(opts.deposit.dueLabel)}`);
+  }
   lines.push("");
   lines.push(`<b>주문자</b>: ${escapeHtml(opts.recipientName)}`);
   lines.push(`<b>휴대전화</b>: ${escapeHtml(opts.recipientPhone)}`);

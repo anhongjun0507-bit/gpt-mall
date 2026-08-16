@@ -19,6 +19,7 @@ const PAGE_SIZE = 10;
 
 const FILTERS: { key: OrderStatus | null; label: string }[] = [
   { key: null, label: "전체" },
+  { key: "awaiting_deposit", label: "입금 대기" },
   { key: "pending", label: "결제 대기" },
   { key: "paid", label: "결제 완료" },
   { key: "delivered", label: "발급 완료" },

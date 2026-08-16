@@ -11,6 +11,8 @@ import { formatKRW } from "@/lib/format";
 import { getPaymentMethodLabel } from "@/lib/order-status";
 import type { Order, OrderItem } from "@/types/database";
 
+import { DepositGuide } from "@/components/order/DepositGuide";
+
 import { CartClearer } from "./CartClearer";
 
 export const metadata = { title: "주문 완료" };
@@ -72,6 +74,8 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
     if (order.user_id !== null) notFound();
   }
 
+  const isAwaitingDeposit = order.status === "awaiting_deposit";
+
   return (
     <Container className="py-16 md:py-24">
       <CartClearer />
@@ -93,17 +97,27 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
           </p>
         </div>
 
-        {/* 가맹 승인 대기 안내 */}
-        <section
-          role="status"
-          className="mt-10 rounded-2xl border border-accent-gold/30 bg-accent-gold/5 px-5 py-4 text-sm leading-relaxed"
-        >
-          <p className="font-semibold">결제 가맹 승인 대기 중입니다</p>
-          <p className="mt-1 text-muted-foreground">
-            현재 PG 가맹 승인을 진행 중이라 결제는 임시로 보류된 상태예요.
-            승인이 완료되는 즉시 입력하신 이메일로 결제 안내를 보내드립니다.
-          </p>
-        </section>
+        {/* 무통장 입금 주문이면 입금 안내를 최상단에.
+            그 외(카드·간편결제)는 기존 가맹 승인 대기 안내 유지. */}
+        {isAwaitingDeposit ? (
+          <DepositGuide
+            total={order.total}
+            depositorName={order.depositor_name}
+            depositDueAt={order.deposit_due_at}
+            className="mt-10"
+          />
+        ) : (
+          <section
+            role="status"
+            className="mt-10 rounded-2xl border border-accent-gold/30 bg-accent-gold/5 px-5 py-4 text-sm leading-relaxed"
+          >
+            <p className="font-semibold">결제 가맹 승인 대기 중입니다</p>
+            <p className="mt-1 text-muted-foreground">
+              현재 PG 가맹 승인을 진행 중이라 결제는 임시로 보류된 상태예요.
+              승인이 완료되는 즉시 입력하신 연락처로 결제 안내를 보내드립니다.
+            </p>
+          </section>
+        )}
 
         {/* 주문 상품 */}
         <section className="mt-8 rounded-2xl bg-card border border-border/50 overflow-hidden">
@@ -177,9 +191,9 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
         <section className="mt-6 rounded-2xl bg-card border border-border/50 p-6 text-sm leading-relaxed">
           <h3 className="text-h4 font-semibold">구독 공유 계정 발급 안내</h3>
           <p className="mt-3 text-muted-foreground">
-            결제가 확정되면 구독 공유 계정 정보가 자동 발급되어 마이페이지에서 확인하실
-            수 있습니다. 발급 시 입력하신 휴대전화 번호로 SMS 안내도 함께
-            보내드려요.
+            {isAwaitingDeposit
+              ? "입금이 확인되면 구독 공유 계정 정보를 카카오톡으로 보내드립니다. 마이페이지 주문 내역에서도 진행 상황을 확인하실 수 있어요."
+              : "결제가 확정되면 구독 공유 계정 정보가 자동 발급되어 마이페이지에서 확인하실 수 있습니다. 발급 시 입력하신 휴대전화 번호로 SMS 안내도 함께 보내드려요."}
           </p>
         </section>
 

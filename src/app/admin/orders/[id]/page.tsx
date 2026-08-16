@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, User, Mail, Phone, FileText, Wallet } from "lucide-react";
+import {
+  ChevronLeft,
+  User,
+  Mail,
+  Phone,
+  FileText,
+  Wallet,
+  Landmark,
+} from "lucide-react";
 
 import { createClient } from "@/lib/supabase/server";
 import { Heading } from "@/components/ui/heading";
@@ -10,7 +18,9 @@ import {
   ORDER_STATUS_META,
   getPaymentMethodLabel,
 } from "@/lib/order-status";
+import { BANK_ACCOUNT_LINE, formatDepositDue, isDepositOverdue } from "@/lib/bank-account";
 import { OrderStatusChanger } from "@/components/admin/OrderStatusChanger";
+import { ConfirmDepositButton } from "@/components/admin/ConfirmDepositButton";
 import type { Order, OrderItem } from "@/types/database";
 
 export const metadata = { title: "주문 상세" };
@@ -39,6 +49,8 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
 
   const meta = ORDER_STATUS_META[order.status];
   const itemsSubtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const isAwaitingDeposit = order.status === "awaiting_deposit";
+  const overdue = isDepositOverdue(order.deposit_due_at);
 
   return (
     <>
@@ -190,6 +202,57 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
               )}
             </dl>
           </section>
+
+          {/* 입금 정보 — 무통장 주문에서만. 입금대기면 확인 버튼까지. */}
+          {order.payment_method === "bank_transfer" && order.deposit_due_at && (
+            <section
+              className={cn(
+                "rounded-2xl border p-4 sm:p-6",
+                isAwaitingDeposit
+                  ? "bg-accent-gold/5 border-accent-gold/30"
+                  : "bg-card border-border/50"
+              )}
+            >
+              <header className="flex items-center gap-2 mb-4">
+                <Landmark className="h-4 w-4 text-muted-foreground" />
+                <h3 className="text-h4 font-semibold">입금 정보</h3>
+              </header>
+              <dl className="space-y-2.5 text-sm">
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted-foreground">입금 계좌</dt>
+                  <dd className="text-right tabular-nums">{BANK_ACCOUNT_LINE}</dd>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted-foreground">입금자명</dt>
+                  <dd className="font-semibold">{order.depositor_name ?? "-"}</dd>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted-foreground">입금 기한</dt>
+                  <dd
+                    className={cn(
+                      "text-right",
+                      isAwaitingDeposit && overdue && "text-destructive font-semibold"
+                    )}
+                  >
+                    {formatDepositDue(order.deposit_due_at)}
+                    {isAwaitingDeposit && overdue && " (초과)"}
+                  </dd>
+                </div>
+              </dl>
+              {isAwaitingDeposit && (
+                <div className="mt-5">
+                  <ConfirmDepositButton
+                    orderId={order.id}
+                    total={order.total}
+                    depositorName={order.depositor_name}
+                  />
+                  <p className="mt-2 text-xs text-muted-foreground text-center">
+                    통장 입금 확인 후 눌러주세요 — 결제 완료로 바뀝니다.
+                  </p>
+                </div>
+              )}
+            </section>
+          )}
 
           {/* 현재 상태 카드 */}
           <section
