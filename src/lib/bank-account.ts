@@ -1,3 +1,5 @@
+import { KST_TIME_ZONE } from "@/lib/format";
+
 // 무통장 입금 계좌 정보 — 주문서·주문완료·마이페이지·텔레그램 알림이 공유한다.
 // 계좌가 바뀌면 이 파일만 고치면 된다.
 
@@ -18,12 +20,12 @@ export function calcDepositDueAt(from: Date = new Date()): Date {
 }
 
 // 입금 기한 표기 — "8월 17일 15시까지".
-// Vercel 서버는 UTC 로 동작하므로 timeZone 을 반드시 명시한다 (미지정 시 9시간 어긋남).
+// 다른 날짜 표시와 마찬가지로 KST 고정 (@/lib/format 의 KST_TIME_ZONE 공유).
 export function formatDepositDue(iso: string | Date): string {
   const d = typeof iso === "string" ? new Date(iso) : iso;
   if (Number.isNaN(d.getTime())) return "";
   const parts = new Intl.DateTimeFormat("ko-KR", {
-    timeZone: "Asia/Seoul",
+    timeZone: KST_TIME_ZONE,
     month: "long",
     day: "numeric",
     hour: "numeric",

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { formatKRW } from "@/lib/format";
+import { formatKRW, formatDateTimeKST } from "@/lib/format";
 import { formatOrderItemTitle } from "@/lib/order-display";
 import { ORDER_STATUS_META, isValidOrderStatus } from "@/lib/order-status";
 import type { Order, OrderStatus } from "@/types/database";
@@ -175,13 +175,7 @@ export default async function AccountOrdersPage({ searchParams }: PageProps) {
                         </span>
                         <span className="text-xs text-muted-foreground">·</span>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(order.created_at).toLocaleString("ko-KR", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {formatDateTimeKST(order.created_at)}
                         </span>
                       </div>
                       <span

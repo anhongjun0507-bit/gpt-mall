@@ -4,16 +4,20 @@ import { Package, PackageCheck, ShoppingCart, Wallet, type LucideIcon } from "lu
 import { createClient } from "@/lib/supabase/server";
 import { Heading } from "@/components/ui/heading";
 import { cn } from "@/lib/utils";
+import {
+  formatKRW,
+  formatDateTimeKST,
+  formatDateWithWeekdayKST,
+  KST_TIME_ZONE,
+} from "@/lib/format";
 import type { Order } from "@/types/database";
 
 export const metadata = { title: "대시보드" };
 
-const formatKRW = (v: number) => `₩${v.toLocaleString("ko-KR")}`;
-
 // KST(UTC+9) 기준 오늘 00:00:00 의 ISO 문자열 — orders.created_at 비교용.
 function getKstTodayStartIso(): string {
   const fmt = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Seoul",
+    timeZone: KST_TIME_ZONE,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -131,7 +135,7 @@ export default async function AdminDashboardPage() {
           대시보드
         </Heading>
         <p className="mt-2 text-muted-foreground">
-          오늘은 {new Date().toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric", weekday: "long" })}
+          오늘은 {formatDateWithWeekdayKST(new Date())}
         </p>
       </div>
 
@@ -198,12 +202,7 @@ export default async function AdminDashboardPage() {
                           {o.order_number}
                         </td>
                         <td className="px-4 sm:px-6 py-4 text-muted-foreground whitespace-nowrap">
-                          {new Date(o.created_at).toLocaleString("ko-KR", {
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {formatDateTimeKST(o.created_at)}
                         </td>
                         <td className="px-4 sm:px-6 py-4 whitespace-nowrap">{o.recipient_name}</td>
                         <td className="px-4 sm:px-6 py-4 text-right font-semibold tabular-nums whitespace-nowrap">

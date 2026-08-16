@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { formatKRW } from "@/lib/format";
+import { formatKRW, formatDateTimeKST } from "@/lib/format";
 import {
   ORDER_STATUS_META,
   getPaymentMethodLabel,
@@ -84,7 +84,7 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
             </span>
             <span className="text-xs text-muted-foreground">·</span>
             <span className="text-sm text-muted-foreground">
-              {new Date(order.created_at).toLocaleString("ko-KR")}
+              {formatDateTimeKST(order.created_at)}
             </span>
           </div>
         </div>
@@ -235,7 +235,7 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
                 </div>
                 {order.paid_at && (
                   <p className="text-xs text-muted-foreground pt-2">
-                    결제 완료: {new Date(order.paid_at).toLocaleString("ko-KR")}
+                    결제 완료: {formatDateTimeKST(order.paid_at)}
                   </p>
                 )}
               </dl>

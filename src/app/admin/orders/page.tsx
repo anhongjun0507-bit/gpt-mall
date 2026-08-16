@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { formatKRW } from "@/lib/format";
+import { formatKRW, formatDateTimeKST } from "@/lib/format";
 import {
   ORDER_STATUS_META,
   ALL_ORDER_STATUSES,
@@ -121,13 +121,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                         {o.order_number}
                       </td>
                       <td className="px-4 sm:px-5 py-3 text-muted-foreground whitespace-nowrap">
-                        {new Date(o.created_at).toLocaleString("ko-KR", {
-                          year: "2-digit",
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {formatDateTimeKST(o.created_at)}
                       </td>
                       <td className="px-4 sm:px-5 py-3 whitespace-nowrap">
                         <div className="font-medium">{o.recipient_name}</div>

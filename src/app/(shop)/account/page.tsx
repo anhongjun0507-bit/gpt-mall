@@ -10,7 +10,7 @@ import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser, getCurrentProfile } from "@/lib/auth";
-import { formatKRW } from "@/lib/format";
+import { formatKRW, formatDateKST, formatDateTimeKST } from "@/lib/format";
 import { ORDER_STATUS_META } from "@/lib/order-status";
 import { cn } from "@/lib/utils";
 import { formatOrderItemTitle } from "@/lib/order-display";
@@ -99,13 +99,7 @@ export default async function AccountHomePage() {
     },
     {
       label: "최근 주문일",
-      value: lastOrderDate
-        ? new Date(lastOrderDate).toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })
-        : "-",
+      value: lastOrderDate ? formatDateKST(lastOrderDate) : "-",
       Icon: CalendarClock,
     },
   ];
@@ -193,13 +187,7 @@ export default async function AccountHomePage() {
                         )}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        {new Date(order.created_at).toLocaleString("ko-KR", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {formatDateTimeKST(order.created_at)}
                       </p>
                     </div>
                     <p className="font-bold tabular-nums shrink-0">
