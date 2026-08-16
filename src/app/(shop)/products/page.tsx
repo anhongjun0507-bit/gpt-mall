@@ -16,7 +16,9 @@ export const metadata: Metadata = {
   title: "전체 상품",
 };
 
-// Server Component — RLS가 is_active=true 만 노출하므로 추가 필터 불필요.
+// Server Component.
+// RLS 의 products_admin_all 정책 때문에 admin 세션은 비활성 상품까지 SELECT 된다.
+// 쇼핑 화면은 세션과 무관하게 활성 상품만 보여야 하므로 쿼리에서 명시적으로 거른다.
 export default async function ProductsPage({
   searchParams,
 }: {
@@ -38,7 +40,8 @@ export default async function ProductsPage({
     const supabase = createClient();
     let query = supabase
       .from("products")
-      .select("*", { count: "exact" });
+      .select("*", { count: "exact" })
+      .eq("is_active", true);
     if (category) query = query.eq("category", category);
     const { column, ascending } = SORT_QUERY[sortKey];
     query = query

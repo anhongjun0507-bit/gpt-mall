@@ -28,6 +28,7 @@ async function fetchRelated(category: Product["category"], excludeId: string) {
     const { data, error } = await supabase
       .from("products")
       .select("*")
+      .eq("is_active", true)
       .eq("category", category)
       .neq("id", excludeId)
       .order("sort_order", { ascending: false })
@@ -41,6 +42,8 @@ async function fetchRelated(category: Product["category"], excludeId: string) {
   }
 }
 
+// 비활성 상품은 admin 세션(RLS products_admin_all)에서도 쇼핑 화면에 노출하지 않는다.
+// → is_active 필터로 걸러 호출부에서 notFound() 처리.
 async function fetchProduct(slug: string): Promise<Product | null> {
   try {
     const supabase = createClient();
@@ -48,6 +51,7 @@ async function fetchProduct(slug: string): Promise<Product | null> {
       .from("products")
       .select("*")
       .eq("slug", slug)
+      .eq("is_active", true)
       .maybeSingle();
     if (error) throw error;
     return (data as Product) ?? null;
