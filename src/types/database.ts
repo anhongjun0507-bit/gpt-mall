@@ -149,6 +149,9 @@ export interface Database {
           // 무통장 입금 전용 — 그 외 결제수단에서는 null
           depositor_name: string | null;
           deposit_due_at: string | null;
+          // 회원 탈퇴 시각 — user_id 는 SET NULL 로 끊기지만 주문 행은 보존된다.
+          // NULL 이면서 user_id 도 NULL 이면 비회원 주문.
+          user_withdrawn_at: string | null;
           paid_at: string | null;
           created_at: string;
         };
@@ -165,6 +168,7 @@ export interface Database {
           memo?: string | null;
           depositor_name?: string | null;
           deposit_due_at?: string | null;
+          user_withdrawn_at?: string | null;
           paid_at?: string | null;
           created_at?: string;
         };
@@ -181,6 +185,7 @@ export interface Database {
           memo?: string | null;
           depositor_name?: string | null;
           deposit_due_at?: string | null;
+          user_withdrawn_at?: string | null;
           paid_at?: string | null;
           created_at?: string;
         };
