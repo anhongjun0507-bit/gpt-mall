@@ -21,27 +21,12 @@ function KakaoIcon({ className }: { className?: string }) {
   );
 }
 
-// 네이버 아이콘.
-function NaverIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M14.07 12.06L9.93 6H6v12h3.93V11.94L14.07 18H18V6h-3.93v6.06z" />
-    </svg>
-  );
-}
-
 interface Props {
   next?: string;
 }
 
 // 소셜 로그인 버튼.
 //   카카오: Supabase 의 'kakao' provider 사용. Supabase 대시보드에서 활성화 + 키 입력 필요.
-//   네이버: 자체 OAuth 흐름 (/auth/naver/start). 키 채워지면 자동 활성.
 export function SocialButtons({ next }: Props = {}) {
   const [kakaoPending, setKakaoPending] = React.useState(false);
   const redirectNext = safeRedirect(next, "/");
@@ -76,43 +61,20 @@ export function SocialButtons({ next }: Props = {}) {
     }
   }
 
-  function handleNaver() {
-    // 키가 채워졌으면 자체 OAuth start 라우트로 이동, 아니면 안내 토스트.
-    if (process.env.NEXT_PUBLIC_NAVER_CLIENT_ID) {
-      window.location.href = `/auth/naver/start?next=${encodeURIComponent(redirectNext)}`;
-      return;
-    }
-    toast({
-      title: "네이버 로그인 준비 중",
-      description:
-        "네이버 로그인은 곧 지원 예정입니다. 우선 카카오 또는 이메일로 가입해 주세요.",
-    });
-  }
-
   return (
-    <div className="space-y-2">
-      <button
-        type="button"
-        onClick={handleKakao}
-        disabled={kakaoPending}
-        className="w-full h-12 rounded-md font-semibold inline-flex items-center justify-center gap-2 bg-[#FEE500] text-black hover:bg-[#FEE500]/90 disabled:opacity-60 transition-colors duration-200"
-      >
-        {kakaoPending ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <KakaoIcon className="w-5 h-5" />
-        )}
-        카카오로 시작하기
-      </button>
-      <button
-        type="button"
-        onClick={handleNaver}
-        className="w-full h-12 rounded-md font-semibold inline-flex items-center justify-center gap-2 bg-[#03C75A] text-white hover:bg-[#03C75A]/90 transition-colors duration-200"
-      >
-        <NaverIcon className="w-5 h-5" />
-        네이버로 시작하기
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={handleKakao}
+      disabled={kakaoPending}
+      className="w-full h-12 rounded-md font-semibold inline-flex items-center justify-center gap-2 bg-[#FEE500] text-black hover:bg-[#FEE500]/90 disabled:opacity-60 transition-colors duration-200"
+    >
+      {kakaoPending ? (
+        <Loader2 className="w-5 h-5 animate-spin" />
+      ) : (
+        <KakaoIcon className="w-5 h-5" />
+      )}
+      카카오로 시작하기
+    </button>
   );
 }
 
