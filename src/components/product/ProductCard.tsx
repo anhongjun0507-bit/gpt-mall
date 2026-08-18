@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import { formatMonthlyPrice } from "@/lib/format";
 
 export interface ProductCardData {
   id: string;
@@ -38,6 +39,8 @@ export function ProductCard({
   badge,
 }: ProductCardData) {
   const hasDiscount = typeof originalPrice === "number" && originalPrice > price;
+  // 기간제 상품만 월 환산가 표시. 아니면 null → 렌더 안 함.
+  const monthlyPrice = formatMonthlyPrice(name, price);
 
   return (
     <Link
@@ -89,6 +92,11 @@ export function ProductCard({
             </span>
           )}
         </div>
+        {monthlyPrice && (
+          <p className="mt-1 text-xs text-muted-foreground tabular-nums">
+            {monthlyPrice}
+          </p>
+        )}
       </div>
     </Link>
   );

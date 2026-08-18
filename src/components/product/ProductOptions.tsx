@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart";
+import { formatMonthlyPrice } from "@/lib/format";
 import { formatOrderItemTitle } from "@/lib/order-display";
 import type { Product, ProductOption } from "@/types/database";
 
@@ -60,6 +61,9 @@ export function ProductOptions({ product }: Props) {
 
   const unitPrice = product.price + optionMod;
   const totalPrice = unitPrice * qty;
+
+  // 월 환산가는 옵션·수량과 무관하게 상품 기본가 기준으로만 표시한다.
+  const monthlyPrice = formatMonthlyPrice(product.name, product.price);
 
   const hasDiscount =
     product.original_price !== null &&
@@ -136,6 +140,11 @@ export function ProductOptions({ product }: Props) {
         >
           {formatKRW(totalPrice)}
         </p>
+        {monthlyPrice && (
+          <p className="mt-1.5 text-xs text-muted-foreground tabular-nums">
+            {monthlyPrice}
+          </p>
+        )}
         {(optionMod !== 0 || qty > 1) && (
           <p className="mt-2 text-xs text-muted-foreground">
             기본 {formatKRW(product.price)}

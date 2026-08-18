@@ -64,3 +64,18 @@ export function formatDateWithWeekdayKST(value: DateInput): string {
     weekday: "long",
   }).format(d);
 }
+
+// ─── 월 환산가 ──────────────────────────────────────────────────────
+// 상품명에 "N개월" 이 들어있는 기간제 상품만 월 단가를 함께 보여준다.
+// N < 2 는 환산 의미가 없고, 매칭 안 되는 상품(패키지 등)은 표시하지 않는다.
+// 값은 항상 가격에서 계산한다 — 하드코딩 금지.
+export function formatMonthlyPrice(
+  name: string,
+  price: number
+): string | null {
+  const matched = /(\d+)개월/.exec(name);
+  if (!matched) return null;
+  const months = Number(matched[1]);
+  if (!Number.isFinite(months) || months < 2) return null;
+  return `월 ${formatNumber(Math.round(price / months))}원 (${months}개월 기준)`;
+}
