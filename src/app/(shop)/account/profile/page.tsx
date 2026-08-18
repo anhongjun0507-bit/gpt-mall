@@ -1,6 +1,7 @@
 import { Heading } from "@/components/ui/heading";
 import { requireUser, getCurrentProfile } from "@/lib/auth";
 import { ProfileForm } from "@/components/account/ProfileForm";
+import { DeleteAccountSection } from "@/components/account/DeleteAccountSection";
 
 export const metadata = { title: "개인정보" };
 
@@ -26,6 +27,8 @@ export default async function AccountProfilePage() {
           phone: profile?.phone ?? "",
         }}
       />
+
+      <DeleteAccountSection />
     </section>
   );
 }

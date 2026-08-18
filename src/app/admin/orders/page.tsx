@@ -13,6 +13,7 @@ import {
   getPaymentMethodLabel,
 } from "@/lib/order-status";
 import { isDepositOverdue } from "@/lib/bank-account";
+import { getOrdererAccountLabel } from "@/lib/order-display";
 import { OrderStatusFilter } from "@/components/admin/OrderStatusFilter";
 import type { Order, OrderStatus } from "@/types/database";
 
@@ -128,6 +129,12 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                         <div className="text-xs text-muted-foreground">
                           {o.recipient_phone}
                         </div>
+                        {/* 계정이 끊긴 주문(탈퇴·비회원)은 회원 여부를 명시 */}
+                        {!o.user_id && (
+                          <div className="text-xs text-muted-foreground/70">
+                            {getOrdererAccountLabel(o)}
+                          </div>
+                        )}
                       </td>
                       <td className="px-4 sm:px-5 py-3 text-muted-foreground whitespace-nowrap">
                         {getPaymentMethodLabel(o.payment_method)}

@@ -19,6 +19,7 @@ import {
   getPaymentMethodLabel,
 } from "@/lib/order-status";
 import { BANK_ACCOUNT_LINE, formatDepositDue, isDepositOverdue } from "@/lib/bank-account";
+import { getOrdererAccountLabel } from "@/lib/order-display";
 import { OrderStatusChanger } from "@/components/admin/OrderStatusChanger";
 import { ConfirmDepositButton } from "@/components/admin/ConfirmDepositButton";
 import type { Order, OrderItem } from "@/types/database";
@@ -148,7 +149,13 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
         <aside className="space-y-6">
           {/* 구매자 */}
           <section className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6">
-            <h3 className="text-h4 font-semibold mb-4">구매자</h3>
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <h3 className="text-h4 font-semibold">구매자</h3>
+              {/* 계정이 끊긴 주문이면 아래 이름·연락처는 주문 시점 스냅샷 */}
+              <span className="text-xs text-muted-foreground shrink-0">
+                {getOrdererAccountLabel(order)}
+              </span>
+            </div>
             <dl className="space-y-3 text-sm">
               <div className="flex items-start gap-3">
                 <User className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />

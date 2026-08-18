@@ -25,3 +25,15 @@ export function formatOrderItemTitle(
   const sub = formatSelectedOptions(opts);
   return sub ? `${productName} · ${sub}` : productName;
 }
+
+// ─── 주문자 계정 상태 ───────────────────────────────────────────────
+// orders.user_id 는 회원 탈퇴 시 ON DELETE SET NULL 로 끊긴다(주문 행은 보존).
+// 그래서 user_id 가 NULL 인 주문은 '비회원 주문' 과 '탈퇴 회원 주문' 두 가지다.
+// user_withdrawn_at 스탬프로 둘을 구분해 관리자 화면에 표시한다.
+export function getOrdererAccountLabel(order: {
+  user_id: string | null;
+  user_withdrawn_at: string | null;
+}): string {
+  if (order.user_id) return "회원";
+  return order.user_withdrawn_at ? "(탈퇴한 회원)" : "비회원";
+}
