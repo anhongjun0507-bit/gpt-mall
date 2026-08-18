@@ -15,7 +15,11 @@ import { DepositGuide } from "@/components/order/DepositGuide";
 
 import { CartClearer } from "./CartClearer";
 
-export const metadata = { title: "주문 완료" };
+export const metadata = {
+  title: "주문 완료",
+  // 장바구니·주문 흐름은 검색 노출 대상 아님 (전역 noindex 해제 대비 이중 안전장치).
+  robots: { index: false, follow: false },
+};
 
 // 주문번호 형식 — createOrder() 의 generateOrderNumber() 와 일치해야 함.
 // ORD-YYYYMMDD-XXXX (대문자 hex 4자리)

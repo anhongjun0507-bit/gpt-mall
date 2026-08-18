@@ -9,6 +9,7 @@ import type { CartItem } from "@/lib/cart";
 import { notifyOrderCreated } from "@/lib/notifications/telegram";
 import { getPaymentMethodLabel } from "@/lib/order-status";
 import { calcDepositDueAt, formatDepositDue } from "@/lib/bank-account";
+import { SITE_URL } from "@/lib/site";
 import type { ProductOption } from "@/types/database";
 
 import { checkoutSchema, type CheckoutValues } from "./schema";
@@ -193,8 +194,6 @@ export async function createOrder(
     // ─── 운영자 텔레그램 알림 ─────────────────────────────
     // 토큰/chat_id 미설정 시 noop, 실패 시 console.error 만 — 주문 흐름엔 영향 X.
     // 결제 가맹 후엔 markOrderPaid() 시점에 별도 알림(결제 완료) 추가 가능.
-    const siteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL ?? "https://digitalst.kr";
     await notifyOrderCreated({
       orderNumber,
       total,
@@ -207,7 +206,7 @@ export async function createOrder(
         selected_options: r.selected_options as Record<string, string> | null,
       })),
       memo: parsed.data.memo,
-      adminUrl: `${siteUrl}/admin/orders/${order.id}`,
+      adminUrl: `${SITE_URL}/admin/orders/${order.id}`,
       deposit:
         isBankTransfer && depositDueAt
           ? {

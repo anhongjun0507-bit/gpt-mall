@@ -7,6 +7,8 @@
 // - 전화번호는 운영하지 않으므로 표기 X. 문의는 이메일 또는 카톡 채널로.
 // - 정산 계좌(PG 정산용)는 사이트 어디에도 노출 X. 운영자가 별도 보관.
 
+import { SITE_URL } from "@/lib/site";
+
 export const BUSINESS_INFO = {
   name: "디지털스토어",
   ceo: "이현석",
@@ -18,7 +20,7 @@ export const BUSINESS_INFO = {
   items: "전자상거래 소매업(소프트웨어), 해외직구대행업", // 종목
   openedAt: "2021-04-16", // 개업일 (YYYY-MM-DD)
   siteName: "디지털스토어",
-  siteUrl: "https://digitalst.kr",
+  siteUrl: SITE_URL,
 } as const;
 
 export type BusinessInfo = typeof BUSINESS_INFO;

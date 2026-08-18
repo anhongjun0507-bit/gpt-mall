@@ -1,10 +1,17 @@
+import type { Metadata } from "next";
+
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { BUSINESS_INFO } from "@/lib/business-info";
 
 // 전자상거래법상 사업자 정보 표시 페이지. business-info.ts 단일 소스에서.
 
-export const metadata = { title: "사업자정보" };
+export const metadata: Metadata = {
+  title: "사업자정보",
+  description:
+    "전자상거래법에 따른 디지털스토어 사업자 정보입니다. 상호와 대표자, 사업자등록번호, 통신판매업신고번호, 사업장 주소와 문의 이메일을 확인하실 수 있습니다.",
+  alternates: { canonical: "/business-info" },
+};
 
 const INFO_ROWS: { label: string; value: string; mono?: boolean }[] = [
   { label: "상호", value: BUSINESS_INFO.name },
@@ -29,7 +36,7 @@ const TAX_LOOKUP_URL =
 export default function BusinessInfoPage() {
   return (
     <Container className="py-12 md:py-16 max-w-3xl">
-      <Heading variant="h2" className="!text-2xl md:!text-3xl">
+      <Heading variant="h2" as="h1" className="!text-2xl md:!text-3xl">
         사업자정보
       </Heading>
       <p className="mt-2 text-sm text-muted-foreground">

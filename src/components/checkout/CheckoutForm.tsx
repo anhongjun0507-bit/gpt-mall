@@ -198,7 +198,7 @@ export function CheckoutForm() {
                     <FormLabel>이름 *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="홍길동"
+                        placeholder="성함을 입력해주세요"
                         disabled={submitting}
                         {...field}
                       />
@@ -349,7 +349,7 @@ export function CheckoutForm() {
                       <FormLabel>입금자명 *</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="홍길동"
+                          placeholder="실제 입금하시는 분 성함"
                           disabled={submitting}
                           {...field}
                           onChange={(e) => {

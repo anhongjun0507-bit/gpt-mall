@@ -2,7 +2,11 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 
-export const metadata = { title: "주문서 작성" };
+export const metadata = {
+  title: "주문서 작성",
+  // 장바구니·주문 흐름은 검색 노출 대상 아님 (전역 noindex 해제 대비 이중 안전장치).
+  robots: { index: false, follow: false },
+};
 
 // /checkout — 비회원도 진입 가능.
 // 카트가 비어있으면 CheckoutForm 측 useEffect 에서 /cart 로 redirect.

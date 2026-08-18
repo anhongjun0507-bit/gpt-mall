@@ -14,6 +14,9 @@ import type { Product, ProductCategory } from "@/types/database";
 
 export const metadata: Metadata = {
   title: "전체 상품",
+  description:
+    "디지털스토어에서 판매 중인 구독 공유 상품을 한눈에 모아 보세요. 카테고리와 정렬로 필요한 상품만 골라 보고, 주문 확인 후 계정 정보를 빠르게 받아보실 수 있습니다.",
+  alternates: { canonical: "/products" },
 };
 
 // Server Component.
@@ -63,7 +66,7 @@ export default async function ProductsPage({
         <p className="text-xs tracking-[0.3em] uppercase text-accent-gold font-semibold">
           ALL PRODUCTS
         </p>
-        <Heading variant="h2" className="mt-3">
+        <Heading variant="h2" as="h1" className="mt-3">
           전체 상품
         </Heading>
         <p className="mt-2 text-muted-foreground">총 {count}개</p>

@@ -104,7 +104,7 @@ export function ProfileForm({ email, defaultValues }: Props) {
             <FormItem>
               <FormLabel>이름 *</FormLabel>
               <FormControl>
-                <Input placeholder="홍길동" disabled={submitting} {...field} />
+                <Input placeholder="성함을 입력해주세요" disabled={submitting} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

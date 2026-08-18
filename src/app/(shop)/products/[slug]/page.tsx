@@ -16,6 +16,8 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { ProductOptions } from "@/components/product/ProductOptions";
 import { getCategoryLabel, getCategoryShortLabel } from "@/lib/product-categories";
 import type { Product } from "@/types/database";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL } from "@/lib/site";
 
 interface PageProps {
   params: { slug: string };
@@ -64,13 +66,32 @@ async function fetchProduct(slug: string): Promise<Product | null> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const product = await fetchProduct(params.slug);
   if (!product) return { title: "상품을 찾을 수 없음" };
+
+  const description =
+    product.short_description ?? product.description ?? undefined;
+  const canonicalPath = `/products/${product.slug}`;
+  // 상품별 openGraph 를 통째로 지정하면 루트 openGraph 의 type·siteName·locale 이
+  // 상속되지 않고 사라진다(병합이 아니라 대체). 명시적으로 복원한다.
+  const ogImages = product.image_url ? [{ url: product.image_url }] : undefined;
+
   return {
     title: product.name,
-    description: product.short_description ?? product.description ?? undefined,
+    description,
+    alternates: { canonical: canonicalPath },
     openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      siteName: "디지털스토어",
+      url: canonicalPath,
       title: product.name,
-      description: product.short_description ?? undefined,
-      images: product.image_url ? [{ url: product.image_url }] : undefined,
+      description,
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description,
+      images: product.image_url ? [product.image_url] : undefined,
     },
   };
 }
@@ -83,8 +104,53 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   const fallbackImage = `https://picsum.photos/800/800?random=${product.slug}`;
 
+  // ─── 구조화 데이터 ───
+  // Product — 평점·리뷰 데이터가 없으므로 aggregateRating/review 필드는 넣지 않는다(가짜 스키마 금지).
+  const productUrl = `${SITE_URL}/products/${product.slug}`;
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: [product.image_url ?? fallbackImage],
+    description:
+      product.short_description ?? product.description ?? product.name,
+    category: getCategoryLabel(product.category),
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "KRW",
+      availability:
+        product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      url: productUrl,
+    },
+  };
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "홈", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "전체 상품",
+        item: `${SITE_URL}/products`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: productUrl,
+      },
+    ],
+  };
+
   return (
     <Container className="py-12 md:py-16">
+      <JsonLd data={productLd} />
+      <JsonLd data={breadcrumbLd} />
+
       {/* ─── 메인 2단 레이아웃 ─── */}
       <div className="grid lg:grid-cols-2 gap-12">
         {/* 좌측: 이미지 */}
@@ -102,7 +168,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <p className="text-xs uppercase tracking-wider text-accent-gold font-semibold">
             {getCategoryShortLabel(product.category)}
           </p>
-          <Heading variant="h2" className="mt-2">
+          <Heading variant="h2" as="h1" className="mt-2">
             {product.name}
           </Heading>
           {product.short_description && (

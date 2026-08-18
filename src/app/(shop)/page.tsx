@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
@@ -9,6 +10,11 @@ import { ProductCard, type ProductCardData } from "@/components/product/ProductC
 import { createClient } from "@/lib/supabase/server";
 import { getCategoryShortLabel } from "@/lib/product-categories";
 import type { Product } from "@/types/database";
+
+// title·description 은 루트 default 를 그대로 쓴다 (홈 = 사이트 대표 메타).
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 // 홈 인기 상품 — DB 실시간 조회 (sort_order 우선, 활성 상품만, 최대 4건).
 // 관리자에서 상품 수정/이미지 교체 시 즉시 반영되도록 dynamic.
@@ -118,7 +124,7 @@ export default async function HomePage() {
                   BEST SELLERS
                 </span>
               </div>
-              <Heading variant="h2" className="mt-2">
+              <Heading variant="h2" as="h1" className="mt-2">
                 지금 가장 인기있는
               </Heading>
             </div>

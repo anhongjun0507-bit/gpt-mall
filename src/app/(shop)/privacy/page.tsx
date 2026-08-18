@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { BUSINESS_INFO } from "@/lib/business-info";
@@ -5,14 +7,19 @@ import { LegalSection } from "@/components/legal/LegalSection";
 
 // 표준 개인정보처리방침 템플릿. 정식 오픈 전 법률 검토 권장 (TODO).
 
-export const metadata = { title: "개인정보처리방침" };
+export const metadata: Metadata = {
+  title: "개인정보처리방침",
+  description:
+    "디지털스토어가 수집하는 개인정보 항목과 이용 목적, 보유 기간, 제3자 제공 범위, 이용자의 열람·정정·삭제 권리와 안전성 확보 조치를 안내드립니다.",
+  alternates: { canonical: "/privacy" },
+};
 
 const EFFECTIVE_DATE = "2026-05-15";
 
 export default function PrivacyPage() {
   return (
     <Container className="py-12 md:py-16 max-w-3xl">
-      <Heading variant="h2" className="!text-2xl md:!text-3xl">
+      <Heading variant="h2" as="h1" className="!text-2xl md:!text-3xl">
         개인정보처리방침
       </Heading>
       <p className="mt-2 text-sm text-muted-foreground">

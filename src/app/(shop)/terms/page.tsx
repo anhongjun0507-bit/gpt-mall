@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { BUSINESS_INFO } from "@/lib/business-info";
@@ -5,14 +7,19 @@ import { LegalSection } from "@/components/legal/LegalSection";
 
 // 이용약관 — 구독 계정 공유 모델. 사업자 정보는 business-info.ts 단일 소스에서.
 
-export const metadata = { title: "이용약관" };
+export const metadata: Metadata = {
+  title: "이용약관",
+  description:
+    "디지털스토어 서비스 이용약관입니다. 회원가입과 이용계약, 구독 공유 계정 제공 방식, 이용 기간 보장과 환불 기준, 회사와 회원의 책임 범위를 안내드립니다.",
+  alternates: { canonical: "/terms" },
+};
 
 const EFFECTIVE_DATE = "2026-07-15";
 
 export default function TermsPage() {
   return (
     <Container className="py-12 md:py-16 max-w-3xl">
-      <Heading variant="h2" className="!text-2xl md:!text-3xl">
+      <Heading variant="h2" as="h1" className="!text-2xl md:!text-3xl">
         이용약관
       </Heading>
       <p className="mt-2 text-sm text-muted-foreground">

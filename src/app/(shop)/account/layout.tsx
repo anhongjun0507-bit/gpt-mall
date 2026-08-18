@@ -2,6 +2,13 @@ import { Container } from "@/components/ui/container";
 import { requireUser } from "@/lib/auth";
 import { AccountSidebar } from "@/components/account/AccountSidebar";
 
+import type { Metadata } from "next";
+
+// 마이페이지 전 구간 검색 노출 금지 — 전역 noindex 해제 후에도 유지되도록 명시.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
+
 // 마이페이지 영역 — 로그인 필수. Header/Footer 는 (shop) 그룹 layout 이 처리.
 // next 는 layout 레벨 default 로 /account. 더 정확한 경로가 필요한 페이지는
 // 자체적으로 requireUser({ next: ... }) 를 한 번 더 호출하면 된다.
