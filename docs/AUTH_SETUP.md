@@ -106,42 +106,9 @@ Dashboard > Authentication > Email Templates 에서 각 템플릿 본문을 한�
 ### 3.3. 키 발급 전 동작
 키 등록 전에 카카오 버튼을 클릭하면 친절한 에러 toast 가 뜸 ("카카오 로그인이 아직 활성화되지 않았어요"). 사용자는 우선 이메일로 가입하면 됨.
 
-## 4. 네이버 OAuth (구현 완료)
+## 4. 네이버 OAuth
 
-Supabase 의 `signInWithOAuth` 는 네이버를 지원하지 않아 커스텀 라우트로 직접 구현했다.
-
-| 단계 | 실제 라우트 파일 | URL 경로 |
-|---|---|---|
-| 인증 시작 | `src/app/auth/naver/start/route.ts` | `/auth/naver/start` |
-| 콜백 | `src/app/auth/callback/naver/route.ts` | `/auth/callback/naver` |
-
-콜백은 `/auth/callback` 아래에 있다. `/auth/naver/callback` 이 **아니다**.
-
-### 4.1. 네이버 개발자센터 등록값
-- https://developers.naver.com → Application 등록
-- 사용 API: **네이버 로그인**
-- 서비스 URL: `https://www.digitalst.kr`
-- **Callback URL 3종을 모두 등록**한다:
-  ```
-  https://www.digitalst.kr/auth/callback/naver
-  https://digitalst.kr/auth/callback/naver
-  http://localhost:3000/auth/callback/naver
-  ```
-  apex 는 www 로 307 redirect 되지만, 등록값이 어긋나면 네이버가 `redirect_uri` 불일치로
-  거부하므로 apex 도 함께 등록해 둔다. localhost 는 로컬 개발용.
-- 검수 필요 (실제 운영 시) — 개발 단계는 검수 없이 테스트 가능
-
-### 4.2. redirect_uri 는 NEXT_PUBLIC_SITE_URL 에서 만들어진다
-`/auth/naver/start` 가 `${NEXT_PUBLIC_SITE_URL}/auth/callback/naver` 로 `redirect_uri` 를
-조립하므로, Vercel production 의 `NEXT_PUBLIC_SITE_URL` 은 `https://www.digitalst.kr`(www)
-여야 한다. apex 로 두면 네이버에 apex 콜백이 등록돼 있지 않을 때 로그인이 실패한다.
-
-### 4.3. 환경 변수
-```bash
-NEXT_PUBLIC_NAVER_CLIENT_ID=...   # start 라우트에서 authorize URL 조립에 사용 (공개값)
-NAVER_CLIENT_ID=...               # callback 라우트의 token 교환용
-NAVER_CLIENT_SECRET=...           # 서버 전용
-```
+2026-08 검수 반려(서비스 적용 불가)로 제거. 복원 필요 시 git 히스토리 `ded1dbf` 참조.
 
 ## 5. 인증 흐름 다이어그램
 
