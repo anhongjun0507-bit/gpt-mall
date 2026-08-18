@@ -4,8 +4,10 @@ import { ChevronDown } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
+import { JsonLd } from "@/components/seo/JsonLd";
 
-// 자주 묻는 질문 — 답변 원문은 아래 FAQ_ITEMS 단일 소스에서만 관리한다.
+// 자주 묻는 질문 — 답변 원문은 아래 FAQ_ITEMS 단일 소스에서 화면과 JSON-LD 가
+// 같은 문자열을 쓴다(구조화 데이터와 화면 텍스트 불일치 방지).
 // 환불 답변은 이용약관 제14조 2항 원문을 그대로 옮긴 것이며 임의 수정 금지.
 
 export const metadata: Metadata = {
@@ -81,9 +83,21 @@ function AnswerText({ text }: { text: string }) {
   );
 }
 
+const FAQ_LD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+
 export default function FaqPage() {
   return (
     <Container className="py-12 md:py-16 max-w-3xl">
+      <JsonLd data={FAQ_LD} />
+
       <Heading variant="h2" as="h1" className="!text-2xl md:!text-3xl">
         자주 묻는 질문
       </Heading>

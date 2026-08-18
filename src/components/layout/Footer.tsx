@@ -20,6 +20,7 @@ interface HelpLink {
 }
 
 const HELP_LINKS: HelpLink[] = [
+  { label: "자주 묻는 질문", href: "/faq" },
   { label: "카카오톡 문의", href: KAKAO_CHANNEL_URL, external: true },
   { label: "환불 정책", href: "/terms" },
 ];
