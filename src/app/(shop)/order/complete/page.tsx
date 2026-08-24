@@ -104,12 +104,18 @@ export default async function OrderCompletePage({ searchParams }: PageProps) {
         {/* 무통장 입금 주문이면 입금 안내를 최상단에.
             그 외(카드·간편결제)는 기존 가맹 승인 대기 안내 유지. */}
         {isAwaitingDeposit ? (
-          <DepositGuide
-            total={order.total}
-            depositorName={order.depositor_name}
-            depositDueAt={order.deposit_due_at}
-            className="mt-10"
-          />
+          <>
+            <DepositGuide
+              total={order.total}
+              depositorName={order.depositor_name}
+              depositDueAt={order.deposit_due_at}
+              className="mt-10"
+            />
+            {/* 발급 소요 안내 — 상품별 분기 없이 단일 문구로 유지(/faq 2번과 동일 기준). */}
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              입금 확인 후 순차적으로 발급되며, 최대 24시간 이내에 안내드립니다.
+            </p>
+          </>
         ) : (
           <section
             role="status"

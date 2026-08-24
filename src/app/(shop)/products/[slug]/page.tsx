@@ -191,6 +191,17 @@ export default async function ProductDetailPage({ params }: PageProps) {
             }}
           />
 
+          {/* 제공 방식 고지 — 상품별로 방식이 달라 상세는 주문 확인 후 안내한다. */}
+          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+            제공 방식은 상품에 따라 다르며, 주문 확인 후 안내드립니다.{" "}
+            <Link
+              href="/faq"
+              className="text-accent-gold-text underline underline-offset-4 hover:text-accent-gold transition-gold"
+            >
+              자주 묻는 질문
+            </Link>
+          </p>
+
           {/* 신뢰 지표 */}
           <div className="mt-8 pt-6 border-t border-border grid grid-cols-3 gap-4">
             {[
