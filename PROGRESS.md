@@ -1,3 +1,9 @@
+## 2026-08-24 — 상품 문구 DB 반영 (코드 변경 없음)
+- Supabase `products` 4개 전부 `short_description` 클라이언트 컨펌 문구로 교체. `youtube-premium.description` 의 "- 빠른 초대장 전송, 사용즉시 적용" → "- 초대장 전송 후 수락하면 적용됩니다" (나머지 3개 description 은 속도 단정 표현 없어 원문 유지).
+- `name`·`is_active` 미변경(false/true/false/false 그대로) — 월 환산가 "N개월" 패턴·판매 여부 유지.
+- 검증: 라이브 `/products/gemini-pro` 본문·meta description·og:description·Product JSON-LD 전부 새 문구 반영, 월 4,833원 유지, 금지어(속도 단정+정품 계열) 0건, 16라우트 정상.
+- 참고: `/products` 목록의 ProductCard 는 short_description 을 렌더하지 않는 구조라 목록 화면에는 문구가 노출되지 않음(설계상 정상).
+
 ## 2026-08-24 — 색인 요청 준비: 시행일 표기·sitemap lastmod·홈 h1
 - `/privacy` 에 `LAST_REVISED = "2026-08-24"` 추가, 시행일/최종 개정일 2줄 구조로 노출(`45a06bf`). `/terms` 는 개정 사실이 없어 미수정(동일 구조라 필요 시 상수만 추가하면 됨).
 - `sitemap.ts` 의 `STATIC_PATHS` 배열을 `STATIC_LAST_MODIFIED` 맵으로 바꿔 정적 6경로에 `lastModified` 부여(`2e5230b`). 값은 각 페이지 파일의 최종 커밋 시각(git log)이며 `new Date()` 미사용 — 배포마다 전 경로가 갱신되는 것을 막기 위함. 콘텐츠 개정 시 이 맵을 손으로 갱신해야 한다.
