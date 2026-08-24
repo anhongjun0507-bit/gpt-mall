@@ -1,3 +1,11 @@
+## 2026-08-24 — SEO 3단계: 색인 개방 (완료)
+- `layout.tsx` 전역 `robots {index:false}` → `{index:true, follow:true}` 명시 전환(`f54df71`). 비공개 구간은 `(auth)`·`(shop)/account`·`admin` layout 과 cart·checkout·order/complete page 의 개별 noindex 가 그대로 방어 — 라이브 7개 페이지 HTML + layout 청크(4821·1349·8439·3684) 로 확인.
+- og.svg 부제 "즉시 발급" → "합리적인 가격", og.png 재생성(`016dbdb`). 재생성 전 `fonts-noto-cjk` 설치 필요(없으면 한글이 비트맵 폰트로 깨짐 — dpkg 중단 상태 복구 후 설치).
+- `/privacy` 하단 "표준 템플릿 초안 · 정식 오픈 전 법률 검토 예정" 고객 노출 문구 + 동일 취지 TODO 주석 제거(`237d89c`).
+- 검색엔진 소유확인: `src/lib/site-verification.ts` + 미들웨어 진입점(`1319e24`). 파일명에 토큰이 박혀 정적 라우트 불가, `app/[segment]` 는 최상위 404 를 삼켜서 미들웨어 방식 채택. `GOOGLE_SITE_VERIFICATION`/`NAVER_SITE_VERIFICATION` 미설정 시 404. metadata.verification 도 동일 env 로 병행. **토큰 주입 후 재배포 필요.**
+- 함정: Edge 런타임은 `process.env[변수]` 동적 접근이 항상 undefined → 리터럴 접근으로 수정(`491cba2`). 로컬 `next start` 로 200 + 올바른 본문·`x-robots-tag: noindex` 확인.
+- 미해결(보고만): `/privacy` 제3자 제공 항목에 "네이버 OAuth" 가 남아 있으나 네이버 로그인은 2026-08-18 제거됨 — 법정 고지라 임의 수정하지 않음. 상품 `short_description` 개선안도 제안만 하고 DB 미수정.
+
 ## 2026-08-24 — FAQ 실제 운영 반영 + 발급 시간 안내 (완료)
 - `/faq` FAQ_ITEMS 1·2·3·5·8번 답변 교체(`e97f0cd`): 제공 방식은 유튜브 프리미엄=가족 그룹 초대 / 그 외=개별 이용 계정·이용권 활성화로 분리, 발급 시간은 상품별 분기 없는 포괄 문구(최대 24시간). 3번은 가족 그룹 초대 상품 한정, 5번은 개별 이용 계정 한정 명시, 8번은 약관 제11조 2항·제14조 2항 범위 내 보강.
 - 상품 상세 구매 버튼 하단 제공 방식 고지 + `/faq` 링크, `/order/complete` 무통장 입금 안내 아래 발급 소요 단일 문구 추가(`d15b3d0`). DB·Supabase 상품 데이터 미수정. main push·프로덕션 배포 완료.
@@ -24,3 +32,11 @@
 - 각각 "빠른 발급" / "입금 확인 후 순차적으로 발급되며 최대 24시간 이내에 안내드립니다" / "순차적으로 발급해 드리며, 최대 24시간 이내에" 로 교체. 커밋 `b83735f`, main push·프로덕션 배포 완료.
 - DB 미수정(보고만): `youtube-premium.description` 에 "빠른 초대장 전송, 사용즉시 적용" 1건 — 해당 상품은 `is_active=false`(2026-08-23 12:24 UTC 비활성) 라 라이브 노출 없음. 활성 상품은 `gemini-pro` 단 1개.
 - 검증: tsc 0·build 0 / 라이브 전 공개 페이지 "즉시 발급·즉시 발송·자동 발급" 0건, 상품 상세 "빠른 발급" 렌더 확인 / `/faq` FAQPage JSON-LD 10문항·본문 완전 일치 / 16라우트 noindex 유지 / sitemap 7 URL(정적 6 + gemini-pro).
+
+## 2026-08-24 — 프로덕션 E2E 자동 검증 (Playwright, 코드 변경 없음)
+- 입금 확인 버튼: `ORD-20260816-37DD` awaiting_deposit → paid 전환 성공(화면 "결제 완료" + DB `paid_at` 기입, 버튼 사라짐).
+- 탈퇴 흐름 전 구간 통과: e2e 계정으로 실제 checkout UI 경유 무통장 주문(`ORD-20260824-36DC`) → 미완료 주문 가드가 "진행 중인 주문이 있어 탈퇴할 수 없습니다…" 로 차단 → 관리자 cancelled 처리 후 탈퇴 성공 → 재로그인 차단 → 주문 행 보존(`user_id=NULL`, `user_withdrawn_at` 기입) + admin 목록·상세 "(탈퇴한 회원)" 라벨 확인.
+- 시각 판정(스크린샷 육안): `/faq` 1280·390 및 details 전개 정상(겹침·잘림 없음, sticky 헤더 정상), 상품 상세 "제공 방식…" 안내·"빠른 발급"·월 4,833원 정상 노출, `og.png` 한글 렌더 정상.
+- 발견(미수정): `public/og.svg`/`og.png` 문구가 아직 "구독 공유, 즉시 발급" — 2026-08-24 발급 속도 문구 정합성 작업에서 누락된 마지막 1곳.
+- 인프라: Vercel↔Git 연결 실패 — Vercel 계정에 연결된 GitHub 는 `sbind0001` 인데 저장소는 `anhongjun0507-bit/gpt-mall` 소유라 `repo_no_access`. 웹 UI 에서 해당 GitHub 계정 연결 필요. main 브랜치 보호는 여전히 PAT 부재.
+- 정리: 두 테스트 주문 행 삭제 → orders 8→7건, auth.users 5명(e2e 계정은 탈퇴로 소멸), profiles 5행. 스크린샷은 `e2e-shots/`, 스크립트는 `e2e/` (커밋 안 함).
