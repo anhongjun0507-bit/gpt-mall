@@ -1,9 +1,14 @@
 import { type NextRequest } from "next/server";
 
 import { updateSession } from "@/lib/supabase/middleware";
+import { siteVerificationResponse } from "@/lib/site-verification";
 
 // Next.js 미들웨어 진입점 — 모든 요청에서 세션 갱신.
 export async function middleware(request: NextRequest) {
+  // 검색엔진 소유확인 파일은 세션과 무관하므로 먼저 처리하고 빠져나간다.
+  const verification = siteVerificationResponse(request);
+  if (verification) return verification;
+
   return await updateSession(request);
 }
 
