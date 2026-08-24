@@ -62,8 +62,8 @@ export default function PrivacyPage() {
               예정)에 결제 진행에 필요한 정보 제공
             </li>
             <li>
-              <strong>소셜 로그인</strong>: 카카오·네이버 OAuth 사용 시 해당
-              플랫폼과 인증에 필요한 정보 교환 (이메일·닉네임 등 사용자가 동의한 범위)
+              <strong>소셜 로그인</strong>: 카카오 OAuth 사용 시 해당 플랫폼과
+              인증에 필요한 정보 교환 (이메일·닉네임 등 사용자가 동의한 범위)
             </li>
             <li>법령에 의거 수사기관의 요청이 있는 경우</li>
           </ul>
