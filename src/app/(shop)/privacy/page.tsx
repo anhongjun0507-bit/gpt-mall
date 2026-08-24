@@ -13,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 const EFFECTIVE_DATE = "2026-05-15";
+// 본문 개정이 있을 때만 갱신 — 시행일은 최초 시행 시점 그대로 유지한다.
+const LAST_REVISED = "2026-08-24";
 
 export default function PrivacyPage() {
   return (
@@ -20,9 +22,10 @@ export default function PrivacyPage() {
       <Heading variant="h2" as="h1" className="!text-2xl md:!text-3xl">
         개인정보처리방침
       </Heading>
-      <p className="mt-2 text-sm text-muted-foreground">
-        시행일 · {EFFECTIVE_DATE}
-      </p>
+      <div className="mt-2 space-y-0.5 text-sm text-muted-foreground">
+        <p>시행일 · {EFFECTIVE_DATE}</p>
+        <p>최종 개정일 · {LAST_REVISED}</p>
+      </div>
 
       <div className="mt-10 space-y-10">
         <LegalSection title="1. 수집하는 개인정보 항목">
