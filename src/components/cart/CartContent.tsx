@@ -103,9 +103,9 @@ export function CartContent() {
           </Button>
 
           <p className="mt-4 text-xs text-muted-foreground text-center leading-relaxed">
-            디지털 상품은 결제 완료 후
+            입금 확인 후 순차적으로 발급되며
             <br />
-            즉시 발송됩니다
+            최대 24시간 이내에 안내드립니다
           </p>
         </div>
       </aside>

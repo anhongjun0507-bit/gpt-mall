@@ -205,7 +205,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           {/* 신뢰 지표 */}
           <div className="mt-8 pt-6 border-t border-border grid grid-cols-3 gap-4">
             {[
-              { Icon: Zap, label: "즉시 발급" },
+              { Icon: Zap, label: "빠른 발급" },
               { Icon: ShieldCheck, label: "안전 거래" },
               { Icon: Headphones, label: "24/7 지원" },
             ].map(({ Icon, label }) => (
