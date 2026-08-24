@@ -5,8 +5,6 @@ import { Heading } from "@/components/ui/heading";
 import { BUSINESS_INFO } from "@/lib/business-info";
 import { LegalSection } from "@/components/legal/LegalSection";
 
-// 표준 개인정보처리방침 템플릿. 정식 오픈 전 법률 검토 권장 (TODO).
-
 export const metadata: Metadata = {
   title: "개인정보처리방침",
   description:
@@ -97,11 +95,6 @@ export default function PrivacyPage() {
           </ul>
         </LegalSection>
       </div>
-
-      <p className="mt-12 text-xs text-muted-foreground">
-        ※ 본 방침은 표준 템플릿 기반의 초안입니다. 정식 오픈 전 법률 검토를
-        받을 예정입니다.
-      </p>
     </Container>
   );
 }
