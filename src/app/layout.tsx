@@ -39,8 +39,18 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: ["/og.png"],
   },
-  // 배포 전이라 검색엔진 인덱싱 차단. 정식 오픈 시 제거.
-  robots: { index: false, follow: false },
+  // 공개 페이지는 색인 허용 — 기본값에 기대지 않고 명시한다.
+  // 비공개 구간(admin·account·cart·checkout·order·auth)은 각 layout/page 의
+  // 개별 robots 메타가 계속 noindex 를 덮어쓴다.
+  robots: { index: true, follow: true },
+  // 서치콘솔·서치어드바이저 소유확인 메타. env 미설정이면 태그 자체가 안 나간다.
+  // HTML 파일 방식은 src/lib/site-verification.ts 참조 — 둘 중 아무거나 쓰면 된다.
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    ...(process.env.NAVER_SITE_VERIFICATION
+      ? { other: { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION } }
+      : {}),
+  },
 };
 
 // 사이트 전역 구조화 데이터.
