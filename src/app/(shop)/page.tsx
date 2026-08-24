@@ -85,6 +85,9 @@ export default async function HomePage() {
         </div>
 
         <Container className="relative">
+          {/* 페이지 대표 제목. 배너는 아트워크 + 태그라인뿐이라 시각적으로는 숨기고
+             문서 구조상 h1 만 남긴다 (페이지 내 h1 은 이것 하나). */}
+          <h1 className="sr-only">유튜브 프리미엄·제미나이 Pro 구독 공유</h1>
           <div className="flex h-16 md:h-20 items-center justify-between gap-4">
             <div className="min-w-0">
               {/* 라벨은 데스크탑에서만 — 모바일에선 줄바꿈되며 배너가 두꺼워진다 */}
@@ -124,7 +127,7 @@ export default async function HomePage() {
                   BEST SELLERS
                 </span>
               </div>
-              <Heading variant="h2" as="h1" className="mt-2">
+              <Heading variant="h2" className="mt-2">
                 지금 가장 인기있는
               </Heading>
             </div>
