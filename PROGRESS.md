@@ -18,3 +18,9 @@
 - 검증 V1~V8 전부 통과: tsc 0 error·build OK / src 내 naver 는 naverpay 3파일만 / 라이브 두 라우트 404 / login·signup HTML 네이버 0건 + 카카오 버튼 정상 / 회귀 10라우트 200·account·admin 307 / vercel env NAVER 0 / 월 환산가(월 4,833원) 유지.
 - 테스트 계정 3개(anhongjun0507·sb80000·aibike @naver.com) 삭제 → auth.users 7→4명, profiles 4행. 주문은 8건 그대로이며 `ORD-20260516-CD21` 은 `user_id=null`·`user_withdrawn_at=null` 로 admin 에서 "비회원" 표시(운영자 정리라 탈퇴 스탬프 미기입).
 - 미완: GitHub main 브랜치 보호 — 이 환경에 PAT 없음(git 은 SSH 키, gh CLI 미설치)으로 API 401. 웹 UI 또는 PAT 필요.
+
+## 2026-08-24 — 발급 속도 문구 정합성 정리
+- 전수 조사 결과 FAQ 기준(최대 24시간)과 상충하는 코드 문구 3곳 발견: 상품 상세 신뢰 지표 "즉시 발급"(`products/[slug]/page.tsx:208`), 장바구니 "결제 완료 후 즉시 발송됩니다"(`CartContent.tsx:106-108`), 주문 완료 카드결제 분기 "자동 발급되어"(`order/complete/page.tsx:206`).
+- 각각 "빠른 발급" / "입금 확인 후 순차적으로 발급되며 최대 24시간 이내에 안내드립니다" / "순차적으로 발급해 드리며, 최대 24시간 이내에" 로 교체. 커밋 `b83735f`, main push·프로덕션 배포 완료.
+- DB 미수정(보고만): `youtube-premium.description` 에 "빠른 초대장 전송, 사용즉시 적용" 1건 — 해당 상품은 `is_active=false`(2026-08-23 12:24 UTC 비활성) 라 라이브 노출 없음. 활성 상품은 `gemini-pro` 단 1개.
+- 검증: tsc 0·build 0 / 라이브 전 공개 페이지 "즉시 발급·즉시 발송·자동 발급" 0건, 상품 상세 "빠른 발급" 렌더 확인 / `/faq` FAQPage JSON-LD 10문항·본문 완전 일치 / 16라우트 noindex 유지 / sitemap 7 URL(정적 6 + gemini-pro).
