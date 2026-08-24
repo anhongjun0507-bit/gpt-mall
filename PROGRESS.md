@@ -1,3 +1,9 @@
+## 2026-08-24 — 개인정보처리방침 제3자 제공 정정 + 색인 요청 사전 점검
+- `/privacy` §4 제3자 제공의 "카카오·네이버 OAuth" → "카카오 OAuth" (`06f36f7`). privacy 전수 검색 결과 네이버 언급은 이 1곳뿐이었고, §1 수집 항목·§2 이용 목적에는 네이버 관련 서술 없음. 그 외 법정 고지(토스페이먼츠 연동 예정 등)는 미수정.
+- 시행일은 `EFFECTIVE_DATE = "2026-05-15"` 단일 필드뿐이고 개정일 표기 방식이 코드에 없음(terms 도 동일 구조) → 임의 추가하지 않고 보고만. 실질 개정이라 시행일 갱신 여부는 클라이언트 판단 필요.
+- 색인 요청 사전 점검(읽기 전용): sitemap `lastmod` 은 활성 상품 1건만 `products.updated_at`(2026-08-11) 을 반영하고 정적 6개는 값이 없음 — 콘텐츠를 여러 번 고친 `/faq`·`/privacy` 는 실제 변경 시각 미반영. 홈 h1 이 "지금 가장 인기있는"(베스트셀러 섹션 제목)이라 페이지 대표 h1 부재. 상품 상세 description 은 `short_description` 원문이라 검색결과 노출 문구가 "gemini pro 12개월 계정 (단독사용, 개인정보, password 변경가능)".
+- 검증 V1~V5 통과: tsc 0·build exit 0 / `/privacy` 200·네이버 0건·카카오 유지 / 공개 7 index,follow·비공개 7 noindex 유지 / sitemap 7 URL / 16라우트 정상.
+
 ## 2026-08-24 — SEO 3단계: 색인 개방 (완료)
 - `layout.tsx` 전역 `robots {index:false}` → `{index:true, follow:true}` 명시 전환(`f54df71`). 비공개 구간은 `(auth)`·`(shop)/account`·`admin` layout 과 cart·checkout·order/complete page 의 개별 noindex 가 그대로 방어 — 라이브 7개 페이지 HTML + layout 청크(4821·1349·8439·3684) 로 확인.
 - og.svg 부제 "즉시 발급" → "합리적인 가격", og.png 재생성(`016dbdb`). 재생성 전 `fonts-noto-cjk` 설치 필요(없으면 한글이 비트맵 폰트로 깨짐 — dpkg 중단 상태 복구 후 설치).
