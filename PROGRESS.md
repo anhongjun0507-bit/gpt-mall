@@ -65,3 +65,4 @@
 - 라이브 검증: 홈 HTML 에 두 meta 모두 값 일치 출력, HTML 파일 방식 `/google_GgEif4ml…mEcyM.html` 200(text/plain)·`/navere72a5a23…16ab0a.html` 200(text/html) 내용 일치, 오타 토큰 `/googlewrongtoken.html` 404 유지.
 - 루트 metadata 라 meta 는 HTML 을 반환하는 전 페이지(공개 7 + cart·checkout·login·signup 등)에 동일 출력. 307 리다이렉트 라우트(account·admin 하위)는 본문이 없어 미출력 — 정상.
 - 회귀 무변화: 공개 7 `index, follow` / 비공개 7 `noindex, nofollow` 또는 307 / `/sitemap.xml` 200·7 URL / `/robots.txt` 200 / 16라우트 상태코드 동일.
+- (같은 날 후속) 구글 토큰 교체: `_GgEif4ml…mEcyM` → `X-pZbLEdQz2lnEgvB25mAht1RQJVNkcuZrV8rMzxDrM`. Vercel 3환경 rm 후 재등록 + `.env.local` 수정 + 재배포. 라이브 meta 값 일치, 신규 `/googleX-pZbLEdQz…zxDrM.html` 200, 구 토큰 경로는 404 로 전환. 네이버·robots·sitemap 회귀 무변화.
