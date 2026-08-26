@@ -59,3 +59,9 @@
 - 발견(미수정): `public/og.svg`/`og.png` 문구가 아직 "구독 공유, 즉시 발급" — 2026-08-24 발급 속도 문구 정합성 작업에서 누락된 마지막 1곳.
 - 인프라: Vercel↔Git 연결 실패 — Vercel 계정에 연결된 GitHub 는 `sbind0001` 인데 저장소는 `anhongjun0507-bit/gpt-mall` 소유라 `repo_no_access`. 웹 UI 에서 해당 GitHub 계정 연결 필요. main 브랜치 보호는 여전히 PAT 부재.
 - 정리: 두 테스트 주문 행 삭제 → orders 8→7건, auth.users 5명(e2e 계정은 탈퇴로 소멸), profiles 5행. 스크린샷은 `e2e-shots/`, 스크립트는 `e2e/` (커밋 안 함).
+
+## 2026-08-26 — 검색엔진 소유확인 토큰 주입·반영 (코드 변경 없음)
+- Vercel env 에 `GOOGLE_SITE_VERIFICATION=_GgEif4ml…mEcyM` / `NAVER_SITE_VERIFICATION=e72a5a23…16ab0a` 를 Production·Preview·Development 3환경 모두 등록(6건), `.env.local` 에도 동일 추가. Edge 미들웨어가 빌드 시점 치환이라 `vercel --prod --token` 재배포까지 실행.
+- 라이브 검증: 홈 HTML 에 두 meta 모두 값 일치 출력, HTML 파일 방식 `/google_GgEif4ml…mEcyM.html` 200(text/plain)·`/navere72a5a23…16ab0a.html` 200(text/html) 내용 일치, 오타 토큰 `/googlewrongtoken.html` 404 유지.
+- 루트 metadata 라 meta 는 HTML 을 반환하는 전 페이지(공개 7 + cart·checkout·login·signup 등)에 동일 출력. 307 리다이렉트 라우트(account·admin 하위)는 본문이 없어 미출력 — 정상.
+- 회귀 무변화: 공개 7 `index, follow` / 비공개 7 `noindex, nofollow` 또는 307 / `/sitemap.xml` 200·7 URL / `/robots.txt` 200 / 16라우트 상태코드 동일.
