@@ -15,7 +15,7 @@ import type { Product, ProductCategory } from "@/types/database";
 export const metadata: Metadata = {
   title: "전체 상품",
   description:
-    "디지털스토어에서 판매 중인 구독 공유 상품을 한눈에 모아 보세요. 카테고리와 정렬로 필요한 상품만 골라 보고, 주문 확인 후 계정 정보를 빠르게 받아보실 수 있습니다.",
+    "디지털스토어에서 판매 중인 디지털 이용권 상품을 한눈에 모아 보세요. 카테고리와 정렬로 필요한 상품만 골라 보고, 주문 확인 후 이용권 정보를 순차적으로 받아보실 수 있습니다.",
   alternates: { canonical: "/products" },
 };
 

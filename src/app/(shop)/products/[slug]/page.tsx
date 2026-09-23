@@ -236,7 +236,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
           </TabsContent>
           <TabsContent value="notice" className="mt-6 text-body text-muted-foreground leading-relaxed whitespace-pre-line">
-            {`• 본 상품은 구독 공유 상품으로, 결제 후 이용 계정 정보가 발급됩니다.\n• 발급된 계정 정보는 환불 불가합니다 (정책 참조).\n• 이용 중 발생한 문제는 카카오톡 상담을 통해 해결해 드립니다.`}
+            {`• 본 상품은 디지털 이용권 상품으로, 결제 후 이용권 정보가 발급됩니다.\n• 발급된 계정 정보는 환불 불가합니다 (정책 참조).\n• 이용 중 발생한 문제는 카카오톡 상담을 통해 해결해 드립니다.`}
           </TabsContent>
           <TabsContent value="refund" className="mt-6 text-body text-muted-foreground leading-relaxed whitespace-pre-line">
             {`• 계정 정보 발급 전 결제 취소 시 100% 환불.\n• 발급 후에는 단순 변심에 의한 환불 불가 (디지털 콘텐츠 특성상).\n• 발급된 계정을 정상 이용할 수 없는 경우 무상 교체 또는 환불.\n• 환불 요청은 카카오톡 채널을 통해 7일 이내에 접수.`}
