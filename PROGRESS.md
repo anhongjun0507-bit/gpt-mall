@@ -1,3 +1,9 @@
+## 2026-09-23 — 모바일 가격 잘림·한국어 단어 쪼개짐 수정
+- 원인: ProductCard 가격 줄 `flex items-baseline gap-2` 에 wrap 없음 → 판매가+정가 합계(157px)가 카드 본문(118~137px)을 넘고 카드 `overflow-hidden` 이 잘라 "₩348,00"(360·390·430). 체크아웃 "자세히" 는 `<p class="flex">` 안에서 문장 텍스트와 별개 flex 아이템이 돼 min-content 로 좁아지며 글자 단위 줄바꿈. 전역 keep-all 없었음.
+- 수정(`70c53f0`): 카드 가격 줄 `flex-wrap min-w-0` + 금액 `whitespace-nowrap`, 판매가 `clamp(1rem,17cqi,1.125rem)`(가격 줄 container-type — 320px 7자리 대응, 360+ 는 18px 그대로). 상세 가격 영역 flex-wrap·nowrap. (`6044072`): body `word-break: keep-all; overflow-wrap: anywhere`, "자세히" 를 문장과 한 span 으로 묶음.
+- 검증(e2e/step8·8b·8c, 라이브): tsc 0·build 0 / 360·390·430·1280 × 홈·/products·상세2 가격요소 72개 잘림 0(수정 전 24) / DB 판매가·정가 문자열 일치 / 인위 ₩1,180,000·₩1,480,000 주입 320~1280 잘림 0 / "자세히" 1줄(h 39→14) / 1280 홈·목록·상세 픽셀 동일, 체크아웃만 "자세히" 앞 간격 8px gap→공백 1칸 / 17라우트·index·noindex 유지.
+- 참고: 로컬 next start 와 Vercel 은 next/image(hero-banner.webp) 재인코딩이 달라 홈 히어로 픽셀이 미세하게 다름 — 레이아웃 무관.
+
 ## 2026-09-23 — 상품 라인 개편 STEP 2B: 이용권 정보 표현·체크아웃 404·캡컷 게이트 (개편 마무리)
 - "계정 정보" → "이용권 정보"(`693b25d`): 상품상세 유의사항·환불 탭 2곳, 체크아웃 사이드 환불 안내, 무통장 입금 안내(DepositGuide), 주문 상세 입금 안내·버튼·보조문구 3곳 + `checkout/actions.ts` 주석 "구독 공유"→"디지털 이용권". 회원탈퇴 안내 "계정 정보는 삭제되며"(회원 계정 의미)는 유지.
 - 체크아웃 404(`ea61336`): 사이드 환불 안내 "자세히" `<Link href="/help/refund">` 가 없는 라우트라 Next Link prefetch(`/help/refund?_rsc=…`, referer /checkout)가 404. 푸터 "환불 정책"과 같은 `/terms` 로 교체. 재현(e2e/step7a.mjs) 후 404 0건. 남는 `ERR_ABORTED` 는 페이지 이동 시 취소된 RSC prefetch·Cloudflare `/cdn-cgi/rum` 비콘으로 404 아님.
