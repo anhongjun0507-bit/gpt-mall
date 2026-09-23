@@ -515,10 +515,13 @@ export function CheckoutForm() {
               </p>
               <p className="flex items-start gap-2">
                 <Info className="h-3.5 w-3.5 mt-0.5 shrink-0 text-accent-gold" />
-                디지털 상품은 이용권 정보 발급 전까지만 환불 가능합니다.{" "}
-                <Link href="/terms" className="underline hover:text-foreground">
-                  자세히
-                </Link>
+                {/* 문장과 링크를 한 flex 아이템으로 — 링크가 따로 좁은 칸이 되면 "자세히"가 글자 단위로 쪼개진다 */}
+                <span>
+                  디지털 상품은 이용권 정보 발급 전까지만 환불 가능합니다.{" "}
+                  <Link href="/terms" className="whitespace-nowrap underline hover:text-foreground">
+                    자세히
+                  </Link>
+                </span>
               </p>
             </div>
           </div>

@@ -139,6 +139,9 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss03", "ss04", "cv11";  /* Pretendard tabular numbers + 미세 자간 */
+    /* 한국어는 어절 단위로 줄바꿈하고, 공백 없는 긴 URL·영문만 필요할 때 끊는다 */
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
 
   /* 텍스트 드래그 선택 색상 — 골드로 브랜드 톤 일관성 */
