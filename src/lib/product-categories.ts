@@ -9,7 +9,8 @@ export const PRODUCT_CATEGORIES: ReadonlyArray<{
 }> = [
   { key: "ai_assistant", label: "AI 어시스턴트", shortLabel: "AI Assistant" },
   { key: "ai_image",     label: "이미지",        shortLabel: "AI Image" },
-  { key: "ai_coding",    label: "코딩",          shortLabel: "AI Coding" },
+  // 키 ai_coding 은 DB check 제약값이라 유지하고 라벨만 교육으로 쓴다.
+  { key: "ai_coding",    label: "교육",          shortLabel: "Education" },
   { key: "ai_video",     label: "영상",          shortLabel: "AI Video" },
   { key: "ai_voice",     label: "음성",          shortLabel: "AI Voice" },
   { key: "productivity", label: "생산성",        shortLabel: "Productivity" },
