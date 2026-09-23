@@ -1,3 +1,8 @@
+## 2026-09-23 — 상품 라인 개편 STEP 1: 문구·FAQ·메타 (완료)
+- 주력 상품 유튜브·제미나이 → 슈퍼듀오링고·캡컷. OG 부제/보조줄 교체·og.png 재생성(`@resvg/resvg-js` + Noto CJK), 홈 라벨 "Digital Store"·태그라인 "당신의 가치를 10배 높게."·sr-only h1, 카테고리 라벨 코딩→교육(키 `ai_coding` 은 DB check 제약이라 유지), 루트 title/description·/faq description, FAQ 10→9문항(가족 그룹·국가 삭제, 활성화 링크 신설), sitemap `/`·`/products`·`/faq` lastmod = FAQ 커밋 시각 2026-09-23T03:50:39Z. 커밋 5개, 마지막 `d24368d`, 프로덕션 배포 완료.
+- 검증(e2e/step5.mjs): tsc 0·build 0 / og.png 200 1200×630 / FAQ DOM 9 = JSON-LD 9 완전일치 / 공개 index,follow·비공개 noindex / 교육 필터 동작 / 17라우트 정상.
+- 보류(STEP 2·클라이언트 판단): 활성 `gemini-pro` 카드가 `/`·`/products` 에 제미나이 노출(is_active), `duolingo` 카테고리가 `ai_video`(교육 필터 0건)·description "[실시간] 발송", "구독 공유" 잔존(푸터·체크아웃·주문완료·상품상세 고지·/products description·약관), OG 상단 라벨 PREMIUM SUBSCRIPTIONS, FAQ 6·7번(이메일·개인정보)은 계정 지급 상품 기준 서술.
+
 ## 2026-08-24 — 상품 문구 DB 반영 (코드 변경 없음)
 - Supabase `products` 4개 전부 `short_description` 클라이언트 컨펌 문구로 교체. `youtube-premium.description` 의 "- 빠른 초대장 전송, 사용즉시 적용" → "- 초대장 전송 후 수락하면 적용됩니다" (나머지 3개 description 은 속도 단정 표현 없어 원문 유지).
 - `name`·`is_active` 미변경(false/true/false/false 그대로) — 월 환산가 "N개월" 패턴·판매 여부 유지.
