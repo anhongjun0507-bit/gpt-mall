@@ -87,19 +87,19 @@ export default async function HomePage() {
         <Container className="relative">
           {/* 페이지 대표 제목. 배너는 아트워크 + 태그라인뿐이라 시각적으로는 숨기고
              문서 구조상 h1 만 남긴다 (페이지 내 h1 은 이것 하나). */}
-          <h1 className="sr-only">유튜브 프리미엄·제미나이 Pro 구독 공유</h1>
+          <h1 className="sr-only">슈퍼듀오링고·캡컷 디지털 이용권</h1>
           <div className="flex h-16 md:h-20 items-center justify-between gap-4">
             <div className="min-w-0">
               {/* 라벨은 데스크탑에서만 — 모바일에선 줄바꿈되며 배너가 두꺼워진다 */}
               <div className="hidden md:inline-flex items-center gap-2">
                 <span aria-hidden className="w-6 h-px bg-accent-gold" />
                 <span className="text-xs tracking-[0.25em] uppercase text-accent-gold font-semibold">
-                  SUBSCRIPTION SHARING
+                  Digital Store
                 </span>
               </div>
               <p className="md:mt-1 text-base md:text-2xl font-extrabold tracking-tight">
-                당신의 작업을{" "}
-                <span className="text-accent-gold">10배 빠르게</span>.
+                당신의 가치를{" "}
+                <span className="text-accent-gold">10배 높게</span>.
               </p>
             </div>
 
