@@ -103,7 +103,7 @@ export function DepositGuide({
       <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
         {overdue
           ? "입금 기한이 지났습니다. 입금 전이라면 카카오톡 채널로 문의해주세요."
-          : "입금 확인 후 카카오톡으로 계정 정보를 보내드립니다. 기한 내 미입금 시 주문이 취소될 수 있습니다."}
+          : "입금 확인 후 카카오톡으로 이용권 정보를 보내드립니다. 기한 내 미입금 시 주문이 취소될 수 있습니다."}
       </p>
     </section>
   );

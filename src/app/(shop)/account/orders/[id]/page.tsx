@@ -247,7 +247,7 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
               {order.status === "awaiting_deposit" && (
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   위 입금 안내의 계좌로 입금해주세요. 입금이 확인되면 카카오톡으로
-                  계정 정보를 보내드립니다.
+                  이용권 정보를 보내드립니다.
                 </p>
               )}
               {order.status === "pending" && (
@@ -264,10 +264,10 @@ export default async function AccountOrderDetailPage({ params }: PageProps) {
                 <>
                   <Button variant="outline" className="w-full" disabled>
                     <KeyRound className="h-4 w-4 mr-2" />
-                    계정 정보 다시 보기
+                    이용권 정보 다시 보기
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    계정 정보 발급 모듈 준비 후 활성화됩니다.
+                    이용권 정보 발급 모듈 준비 후 활성화됩니다.
                   </p>
                 </>
               )}
