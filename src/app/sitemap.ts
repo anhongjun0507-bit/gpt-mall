@@ -8,8 +8,8 @@ import { SITE_URL } from "@/lib/site";
 // 배포마다 전 경로가 갱신돼 lastmod 신호가 무의미해지므로 수동 상수로 둔다.
 const STATIC_LAST_MODIFIED: Record<string, string> = {
   "/": "2026-09-23T03:50:39Z",
-  "/products": "2026-09-23T03:50:39Z",
-  "/faq": "2026-09-23T03:50:39Z",
+  "/products": "2026-09-23T04:00:06Z",
+  "/faq": "2026-09-23T04:00:10Z",
   "/terms": "2026-08-18T08:22:55Z",
   "/privacy": "2026-08-24T08:48:48Z",
   "/business-info": "2026-08-18T08:22:55Z",
