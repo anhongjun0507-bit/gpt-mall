@@ -1,5 +1,9 @@
 ## 2026-09-23 — 상품 라인 개편 STEP 2A: 듀오링고 정비·안내 문구·FAQ 범위
 - DB `products.duolingo` 1행만: category `ai_video`→`ai_coding`(라벨 "교육"), description 의 "- 주문시 [실시간] 발송됩니다." → "- 결제 확인 후 활성화 링크를 순차적으로 안내해 드립니다."(나머지 원문 유지). name "듀오링고 슈퍼 12개월"(12개월 포함)·short_description "슈퍼 듀오링고 12개월"(속도·금지어 없음) 미변경. 코드 변경 없음.
+- "구독 공유"→"디지털 이용권"(`70bbd0c`): 푸터·체크아웃 SMS 안내 2곳·주문완료 제목/본문·상품상세 고지("이용 계정 정보"→"이용권 정보")·/products description("빠르게"→"순차적으로"). `checkout/actions.ts` 코드 주석 1곳·약관·개인정보처리방침(§2 "공유계정 발급·전달")은 미수정.
+- FAQ 5·6번 "개별 이용 계정 지급 방식" 범위 한정 + sitemap `/products`=04:00:06Z·`/faq`=04:00:10Z(`72a940e`). 프로덕션 배포 완료.
+- 검증(e2e/step6.mjs): tsc 0·build 0 / ai_coding=[duolingo]·ai_video=[] / 듀오링고 상세 속도 0·월 958원 / 공개 HTML 구독공유 0(약관 2: meta description) / FAQ 9=LD 9 완전일치 / 유튜브·가족그룹 0 / 금지어 0 / index·noindex 유지 / 17라우트 정상 / 스크린샷 30~32(1280·390) 넘침 없음.
+- 보류(클라이언트 판단): 약관 "공유계정" 제4·10·11·14조 + meta description "구독 공유 계정 제공 방식", FAQ 7·8번 "대체 계정"·"공유계정", 상세 신뢰 배지 "빠른 발급", 환불 탭·체크아웃 사이드 "계정 정보 발급" 표현(링크 방식과 불일치).
 
 ## 2026-09-23 — 상품 라인 개편 STEP 1: 문구·FAQ·메타 (완료)
 - 주력 상품 유튜브·제미나이 → 슈퍼듀오링고·캡컷. OG 부제/보조줄 교체·og.png 재생성(`@resvg/resvg-js` + Noto CJK), 홈 라벨 "Digital Store"·태그라인 "당신의 가치를 10배 높게."·sr-only h1, 카테고리 라벨 코딩→교육(키 `ai_coding` 은 DB check 제약이라 유지), 루트 title/description·/faq description, FAQ 10→9문항(가족 그룹·국가 삭제, 활성화 링크 신설), sitemap `/`·`/products`·`/faq` lastmod = FAQ 커밋 시각 2026-09-23T03:50:39Z. 커밋 5개, 마지막 `d24368d`, 프로덕션 배포 완료.
