@@ -77,17 +77,19 @@ export function ProductCard({
         <h3 className="mt-1.5 font-semibold text-base line-clamp-2 leading-snug group-hover:text-accent-gold transition-gold">
           {name}
         </h3>
-        <div className="mt-2 flex items-baseline gap-2">
+        {/* 좁은 폭에선 정가가 다음 줄로 내려간다 — 금액은 한 덩어리로 유지(잘림 금지).
+            판매가는 칸 폭(cqi)에 맞춰 필요할 때만 줄어든다 (320px 에서 7자리 금액 대응) */}
+        <div className="mt-2 flex min-w-0 flex-wrap items-baseline gap-x-2 [container-type:inline-size]">
           <span
             className={cn(
-              "text-lg font-bold",
+              "whitespace-nowrap text-[length:clamp(1rem,17cqi,1.125rem)] leading-7 font-bold",
               hasDiscount ? "text-accent-gold" : "text-foreground"
             )}
           >
             {formatKRW(price)}
           </span>
           {hasDiscount && (
-            <span className="text-sm text-muted-foreground line-through">
+            <span className="whitespace-nowrap text-sm text-muted-foreground line-through">
               {formatKRW(originalPrice!)}
             </span>
           )}

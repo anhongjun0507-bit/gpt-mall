@@ -123,8 +123,8 @@ export function ProductOptions({ product }: Props) {
       {/* ─── 가격 영역 ─── */}
       <div className="py-6 border-y border-border">
         {hasDiscount && (
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-sm text-muted-foreground line-through tabular-nums">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
+            <span className="whitespace-nowrap text-sm text-muted-foreground line-through tabular-nums">
               {formatKRW(product.original_price!)}
             </span>
             <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-accent-gold text-foreground text-xs font-bold">
@@ -134,7 +134,7 @@ export function ProductOptions({ product }: Props) {
         )}
         <p
           className={cn(
-            "text-3xl font-bold tabular-nums",
+            "whitespace-nowrap text-3xl font-bold tabular-nums",
             hasDiscount ? "text-accent-gold" : "text-foreground"
           )}
         >
