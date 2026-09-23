@@ -516,7 +516,7 @@ export function CheckoutForm() {
               <p className="flex items-start gap-2">
                 <Info className="h-3.5 w-3.5 mt-0.5 shrink-0 text-accent-gold" />
                 디지털 상품은 이용권 정보 발급 전까지만 환불 가능합니다.{" "}
-                <Link href="/help/refund" className="underline hover:text-foreground">
+                <Link href="/terms" className="underline hover:text-foreground">
                   자세히
                 </Link>
               </p>
