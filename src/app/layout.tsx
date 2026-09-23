@@ -6,9 +6,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE_URL } from "@/lib/site";
 import { BUSINESS_INFO } from "@/lib/business-info";
 
-const SITE_TITLE = "디지털스토어 — 유튜브 프리미엄·제미나이 Pro 구독 공유";
+const SITE_TITLE = "디지털스토어 — 슈퍼듀오링고·캡컷 디지털 이용권";
 const SITE_DESCRIPTION =
-  "유튜브 프리미엄, 제미나이 Pro 등 인기 구독 서비스를 함께 쓰는 계정으로 이용하실 수 있게 중개해 드립니다. 주문 확인 후 계정 정보를 빠르게 안내드립니다.";
+  "슈퍼듀오링고, 캡컷 이용권을 합리적인 가격에 만나보세요. 주문 확인 후 상품별 이용 방법을 순차적으로 안내해 드립니다.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

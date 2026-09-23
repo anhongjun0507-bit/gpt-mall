@@ -13,7 +13,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 export const metadata: Metadata = {
   title: "자주 묻는 질문",
   description:
-    "디지털스토어 이용 전 자주 묻는 질문을 모았습니다. 구독 공유 방식과 발급 소요 시간, 가족 그룹 초대 조건, 계정 이용 시 주의사항, 환불 기준과 문의 방법을 안내드립니다.",
+    "디지털스토어 이용 전 자주 묻는 질문을 모았습니다. 상품별 제공 방식과 발급 소요 시간, 계정 이용 시 주의사항, 환불 기준과 문의 방법을 안내드립니다.",
   alternates: { canonical: "/faq" },
 };
 
