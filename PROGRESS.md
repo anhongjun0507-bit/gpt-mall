@@ -1,3 +1,11 @@
+## 2026-09-23 — 상품 라인 개편 STEP 2B: 이용권 정보 표현·체크아웃 404·캡컷 게이트 (개편 마무리)
+- "계정 정보" → "이용권 정보"(`693b25d`): 상품상세 유의사항·환불 탭 2곳, 체크아웃 사이드 환불 안내, 무통장 입금 안내(DepositGuide), 주문 상세 입금 안내·버튼·보조문구 3곳 + `checkout/actions.ts` 주석 "구독 공유"→"디지털 이용권". 회원탈퇴 안내 "계정 정보는 삭제되며"(회원 계정 의미)는 유지.
+- 체크아웃 404(`ea61336`): 사이드 환불 안내 "자세히" `<Link href="/help/refund">` 가 없는 라우트라 Next Link prefetch(`/help/refund?_rsc=…`, referer /checkout)가 404. 푸터 "환불 정책"과 같은 `/terms` 로 교체. 재현(e2e/step7a.mjs) 후 404 0건. 남는 `ERR_ABORTED` 는 페이지 이동 시 취소된 RSC prefetch·Cloudflare `/cdn-cgi/rum` 비콘으로 404 아님.
+- 캡컷: 자료(가격·정가·이미지·재고) 전부 빈 값 → 게이트에 따라 1·6개월 모두 미생성. 기존 products 5행에 캡컷/CapCut 행 없음 확인. `stock` 스키마 기본값 0(0001_initial_schema.sql). 코드 변경 없음.
+- sitemap: 이번 변경 파일에 STATIC_LAST_MODIFIED 대상 정적 페이지 없음 → 상수 미변경. 상품 URL 은 `is_active=true` 조회로 자동 반영(현재 8 URL).
+- 검증(e2e/step7.mjs, 프로덕션 배포 후): tsc 0·build 0 / 공개 HTML "계정 정보" 0·구독공유 0(약관 2: meta description)·유튜브·가족그룹 0 / 금지어 0 / FAQ 9=LD 9 완전일치 / index·noindex 유지 / 17라우트 정상·capcut-1m·6m 404 / 스크린샷 40~42(1280·390) 가로 넘침 없음.
+- 보류: 390px 카드에서 제미나이 정가 "₩348,000" 끝자리 잘림, 체크아웃 390px "자세히" 2줄 줄바꿈(둘 다 기존), 환불 탭 "발급된 계정을 정상 이용할 수 없는 경우 무상 교체"(링크 방식과 불일치 가능), 상품 sitemap lastmod 는 DB updated_at 기준이라 상세 템플릿 문구 변경 미반영.
+
 ## 2026-09-23 — 상품 라인 개편 STEP 2A: 듀오링고 정비·안내 문구·FAQ 범위
 - DB `products.duolingo` 1행만: category `ai_video`→`ai_coding`(라벨 "교육"), description 의 "- 주문시 [실시간] 발송됩니다." → "- 결제 확인 후 활성화 링크를 순차적으로 안내해 드립니다."(나머지 원문 유지). name "듀오링고 슈퍼 12개월"(12개월 포함)·short_description "슈퍼 듀오링고 12개월"(속도·금지어 없음) 미변경. 코드 변경 없음.
 - "구독 공유"→"디지털 이용권"(`70bbd0c`): 푸터·체크아웃 SMS 안내 2곳·주문완료 제목/본문·상품상세 고지("이용 계정 정보"→"이용권 정보")·/products description("빠르게"→"순차적으로"). `checkout/actions.ts` 코드 주석 1곳·약관·개인정보처리방침(§2 "공유계정 발급·전달")은 미수정.
